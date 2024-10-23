@@ -12,16 +12,16 @@
                         <div class="col-12 col-xl-8">
                             <!-- article content -->
                             <div class="article__content">
-                                <h1>The Fast and the Furious</h1>
+                                <h1>{{$movie->title}}</h1>
 
                                 <ul class="list">
                                     <li>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
-                                        178
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
+                                        {{$movie->views}}
                                     </li>
                                     <li>Hành động</li>
-                                    <li>2021</li>
-                                    <li>1 giờ 42 phút</li>
+                                    <li>{{$movie->release_year}}</li>
+                                    <li>{{$movie->duration}}</li>
                                 </ul>
                             </div>
                             <!-- end article content -->
@@ -33,47 +33,20 @@
                                 controls
                                 crossorigin
                                 playsinline
-                                poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"
+                                poster="{{$movie->thumbnail}}"
                                 id="player"
-                            >
-                                <!-- Video files -->
-                                <source
-                                    src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
-                                    type="video/mp4"
-                                    size="576"
-                                />
-                                <source
-                                    src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4"
-                                    type="video/mp4"
-                                    size="720"
-                                />
-                                <source
-                                    src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4"
-                                    type="video/mp4"
-                                    size="1080"
-                                />
-
-                                <!-- Caption files -->
-                                <track
-                                    kind="captions"
-                                    label="English"
-                                    srclang="en"
-                                    src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
-                                    default
-                                />
-                                <track
-                                    kind="captions"
-                                    label="Français"
-                                    srclang="fr"
-                                    src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt"
-                                />
-
+                                >
+                            @foreach ($urls as $url)
+                            <source
+                                src="{{$url->url}}" 
+                                size="{{$url->resolution}}"
+                            />
+                            @endforeach
                                 <!-- Fallback for browsers that don't support the <video> element -->
                                 <a
                                     href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
                                     download
                                     >Tải về</a
-                                >
                                 >
                             </video>
 
@@ -81,21 +54,33 @@
                                 class="article__actions article__actions--details"
                             >
                                 <div class="article__download">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#2f80ed"><path d="M590-300h60v-60h30q17 0 28.5-11.5T720-400v-160q0-17-11.5-28.5T680-600H560q-17 0-28.5 11.5T520-560v160q0 17 11.5 28.5T560-360h30v60Zm-350-60h60v-80h80v80h60v-240h-60v100h-80v-100h-60v240Zm340-60v-120h80v120h-80ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z"/></svg>
-                                    Chất lượng:
-                                    <a href="#" >480p</a>
-                                    <a href="#" >720p</a>
-                                    <a href="#" ><svg class="svg__premium" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffe600"><path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/></svg>1080p</a>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
+                                    Tải về:
+                                    @foreach ($urls as $url)
+                                        @if ($url->premium === 0)
+                                            <a href="{{$url->url}}">{{$url->resolution}}p</a>  
+                                        @else
+                                            <a href="{{$url->url}}"><svg class="svg__premium" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffe600"><path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/></svg>{{$url->resolution}}p</a>
+                                        @endif
+                                    @endforeach
                                 </div>
-
-                                <!-- add .active class -->
-                                <button
-                                    class="article__favorites"
-                                    type="button"
-                                >
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
-                                    Thêm vào xem sau
-                                </button>
+                                <div class="article__additional">
+                                    <!-- add .active class -->
+                                    <button
+                                        title="Thích video này"
+                                        type="button"
+                                    >
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
+                                        0
+                                    </button>
+                                    <button
+                                        title="Thêm vào danh sách xem sau"
+                                        type="button"
+                                    >
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
+                                        Xem sau
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <!-- end video player -->
@@ -103,16 +88,16 @@
                         {{-- information --}}
                         <div class="row p-4">
                             <div class="col-12 col-xl-7">
-                                <p class="mb-0" style="color: #fff;">Một thực tế đã được chứng minh từ lâu là độc giả sẽ bị phân tâm bởi nội dung có thể đọc được của một trang khi nhìn vào bố cục của nó. các điểm của việc sử dụng Lorem Ipsum là nó có sự phân bố chữ cái ít nhiều bình thường, trái ngược với việc sử dụng 'Nội dung ở đây, nội dung đây', làm cho nó trông giống như tiếng Anh có thể đọc được.</p>
+                                <p class="mb-0" style="color: #fff;">{{$movie->description}}</p>
                             </div>
                             <div class="col-12 col-xl-5"  style="border-left:1px solid #fff">
                                 <div class="row" style="color: #fff">
                                     <p class="col-12 col-xl-3">Diễn viên:</p>
-                                    <p class="col-12 col-xl-9">Seth Rogen, Angelina Jolie, Jackie Chan, Dustin Hoffman, Jack Black, Ian McShane</p>
+                                    <p class="col-12 col-xl-9">{{$movie->cast}}</p>
                                 </div>
                                 <div class="row" style="color: #fff">
                                     <p class="col-12 col-xl-3">Đạo diễn:</p>
-                                    <p class="col-12 col-xl-9">Seth Rogen</p>
+                                    <p class="col-12 col-xl-9">{{$movie->director}}</p>
                                 </div>
                             </div>
                         </div>
@@ -132,9 +117,10 @@
                                     Các tập
                                 </h3>
                                 <div class="episodes">
-                                    <a href="" class="item active">Tập 1</a>
-                                    <a href="" class="item">Tập 2</a>
-                                    <a href="" class="item">Tập 3</a>
+                                    <button class="item active">Tập 1</button>
+                                    @foreach ($episodes as $episode)
+                                        <a href="" class="item">Tập {{$episode->episode}}</a> 
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

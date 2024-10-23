@@ -288,12 +288,12 @@
                 class="home__nav home__nav--prev"
                 data-nav="#flixtv-hero"
                 type="button"
-            ></button>
+            ><img src="{{"images/Prev-button.svg"}}" alt=""></button>
             <button
                 class="home__nav home__nav--next"
                 data-nav="#flixtv-hero"
                 type="button"
-            ></button>
+            ><img src="{{"images/Next-button.svg"}}" alt=""></button>
         </div>
         <!-- end home -->
 
