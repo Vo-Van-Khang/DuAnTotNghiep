@@ -1,14 +1,25 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Movies;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\Movies;
 
 class MovieController extends Controller
 {
+    public function get_id($id){
+        $movie = DB::table("movies")->select("*")->where("id", $id)->first();
+        $urls = DB::table("urls")->select("*")->where("media_id", $id)->get();
+        $episodes = DB::table("episodes")->select("*")->where("id_movie", $id)->orderBy("episode","asc")->get();
+        // dd($urls);
+        return view("clients.detail",[
+            "movie"=>$movie,
+            "urls"=>$urls,
+            "episodes"=>$episodes
+        ]);
+    }
     Public function index(){
         $movies = Movies::with('categories')->get();
         return view('/clients/HomePage', ['movies' => $movies]);

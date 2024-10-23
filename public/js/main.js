@@ -367,7 +367,13 @@ $(document).ready(function() {
     ==============================*/
     function initializePlayer() {
         if ($('#player').length) {
-            const player = new Plyr('#player');
+            const player = new Plyr('#player',{
+                i18n: {
+                    quality: 'Chất lượng',
+                    speed: 'Tốc độ',
+                    normal: 'Bình thường'
+                }
+            });
         } else {
             return false;
         }
