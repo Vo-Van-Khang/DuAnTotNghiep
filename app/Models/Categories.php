@@ -16,4 +16,8 @@ class Categories extends Model
       'name',
       'created_at'
     ];
+    public function movies()
+    {
+        return $this->hasMany(Movies::class, 'id_category'); // Sử dụng model Movies
+    }
 }

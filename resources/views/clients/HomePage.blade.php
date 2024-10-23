@@ -399,10 +399,12 @@
                         </div>
 
                         <div class="row row--grid">
+                            @foreach ($movies as $movie)
                             <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
                                 <div class="card">
+
                                     <a href="/detail" class="card__cover">
-                                        <img src="{{asset("images/card/1.png")}}" alt="" />
+                                        <img src="{{ asset($movie->thumbnail) }}" alt="" />
                                         <svg
                                             width="22"
                                             height="22"
@@ -426,7 +428,7 @@
                                             />
                                         </svg>
                                     </a>
-                                    <button class="card__add" type="button">
+                                    {{-- <button class="card__add" type="button">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 24 24"
@@ -435,8 +437,8 @@
                                                 d="M16,2H8A3,3,0,0,0,5,5V21a1,1,0,0,0,.5.87,1,1,0,0,0,1,0L12,18.69l5.5,3.18A1,1,0,0,0,18,22a1,1,0,0,0,.5-.13A1,1,0,0,0,19,21V5A3,3,0,0,0,16,2Zm1,17.27-4.5-2.6a1,1,0,0,0-1,0L7,19.27V5A1,1,0,0,1,8,4h8a1,1,0,0,1,1,1Z"
                                             />
                                         </svg>
-                                    </button>
-                                    <span class="card__rating"
+                                    </button> --}}
+                                    {{-- <span class="card__rating"
                                         ><svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 24 24"
@@ -446,20 +448,19 @@
                                             />
                                         </svg>
                                         8.3</span
-                                    >
+                                    > --}}
                                     <h3 class="card__title">
-                                        <a href="details.html"
-                                            >The Good Lord Bird</a
-                                        >
+                                        <a href="/detail" >{{$movie->title}}</a>
                                     </h3>
                                     <ul class="card__list">
-                                        <li>Miễn phí</li>
-                                        <li>Hành động</li>
-                                        <li>2019</li>
+                                    <li>{{$movie->categories ? $movie->categories->name : 'Không có danh mục'}}</li>
+                                        <li>{{$movie->release_year}}</li>
                                     </ul>
+
+
                                 </div>
                             </div>
-
+                            @endforeach
                             <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
                                 <div class="card">
                                     <a href="details.html" class="card__cover">
@@ -1499,7 +1500,7 @@
         </div>
         <!-- end catalog -->
 
-       
+
 
         <!-- plan -->
         <section class="section section--pb0 section--gradient">

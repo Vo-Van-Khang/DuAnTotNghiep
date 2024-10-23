@@ -26,4 +26,8 @@ class Movies extends Model
       'duration',
       'created_at'
     ];
+    public function categories()
+    {
+        return $this->belongsTo(Categories::class, 'id_category'); 
+    }
 }

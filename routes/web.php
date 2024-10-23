@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MovieController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/user/list', function () {
@@ -17,7 +18,8 @@ Route::get('/admin/category/add', function () {
 Route::get('/admin/slides/list', function () {
     return view('admins.slides.list');
 });
-Route::view('/', 'clients.homepage')->name("index");
+Route::get("/", [MovieController::class, 'index'])->name('index');
+// Route::view('/', 'clients.homepage')->name("index");
 Route::view('/about', 'clients.about')->name("about");
 Route::view('/contact', 'clients.contact')->name("contact");
 Route::view('/detail', 'clients.detail')->name("detail");
