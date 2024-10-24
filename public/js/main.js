@@ -95,7 +95,7 @@ $(document).ready(function() {
         touchDrag: true,
         dots: true,
         loop: true,
-        autoplay: false,
+        autoplay: true,
         smartSpeed: 600,
         margin: 20,
         autoHeight: true,
@@ -120,7 +120,7 @@ $(document).ready(function() {
                 mouseDrag: false,
                 dots: false,
                 startPosition: 1,
-                slideBy: 3,
+                slideBy: 1,
             },
         }
     });

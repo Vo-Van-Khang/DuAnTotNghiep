@@ -17,4 +17,8 @@ class Slides extends Model
       'status',
       'id_movie'
     ];
+    public function get_movies()
+    {
+        return $this->belongsTo(Movies::class, 'id_movie'); 
+    }
 }

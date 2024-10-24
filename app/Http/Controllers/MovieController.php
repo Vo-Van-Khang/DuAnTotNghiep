@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use stdClass;
 use App\Models\Movies;
+use App\Models\Slides;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -54,8 +55,10 @@ class MovieController extends Controller
             "episode_focus" => $episode_focus
         ]);
     }
-    Public function index(){
-        $movies = Movies::with('categories')->get();
-        return view('/clients/HomePage', ['movies' => $movies]);
+    public function index(){
+        $movies = Movies::with('get_categories')->get();
+        $slides = Slides::with('get_movies')->where('status', 'show')->get();
+        $categories = DB::table("categories")->get();
+        return view('/clients/HomePage', ['movies' => $movies, 'slides' => $slides, 'categories' => $categories]);
     }
 }
