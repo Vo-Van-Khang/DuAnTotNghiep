@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\MovieController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MovieController;
+use App\Http\Controllers\EpisodeController;
 
 Route::get('/admin/user/list', function () {
     return view('admins.user.list');
@@ -30,3 +31,4 @@ Route::view('/category', 'clients.category')->name("category");
 Route::view('/privacy', 'clients.privacy')->name("privacy");
 
 Route::get('/movie/{id}', [MovieController::class,'get_id'])->name("movie");
+Route::get('/movie/{movie}/episode/{episode}', [EpisodeController::class,'get_by_movie'])->name("episode");

@@ -18,9 +18,9 @@
             >
                 <h6 class="footer__title">Đum Đúm</h6>
                 <div class="footer__nav">
-                    <a href="about.html">Về chúng tôi</a>
-                    <a href="profile.html">Chính sách bảo mật</a>
-                    <a href="contacts.html">Liên hệ</a>
+                    <a href="{{route('about')}}">Về chúng tôi</a>
+                    <a href="{{route('privacy')}}">Chính sách bảo mật</a>
+                    <a href="{{route('contact')}}">Liên hệ</a>
                 </div>
             </div>
 
@@ -75,10 +75,7 @@
             <div class="col-12">
                 <div class="footer__content">
                     <div class="footer__links">
-                        <a href="privacy.html">Chính sách bảo mật</a>
-                        <a href="privacy.html"
-                            >Điều khoản và điều kiện</a
-                        >
+                        <a href="{{route('privacy')}}">Chính sách bảo mật</a>
                     </div>
                     <small class="footer__copyright"
                         >© Đum Đúm. Created by
