@@ -51,5 +51,4 @@
 			</div>
 		</div>
 	</div>
-	<!-- end main content -->
 @endsection

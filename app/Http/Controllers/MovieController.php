@@ -61,4 +61,9 @@ class MovieController extends Controller
         $categories = DB::table("categories")->get();
         return view('/clients/HomePage', ['movies' => $movies, 'slides' => $slides, 'categories' => $categories]);
     }
+
+    public function list__admin(){
+        $movies = Movies::get();
+        return view('admins.movie.list', ['movies' => $movies]);
+    }
 }

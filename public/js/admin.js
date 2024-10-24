@@ -74,7 +74,7 @@ $(document).ready(function () {
 		placeholder: "Choose genre / genres"
 	});
 
-	$('#subscription, #rights').select2();
+	$('#subscription, #rights,#status,#id_category').select2();
 
 	/*==============================
 	Upload cover
@@ -196,3 +196,56 @@ $(document).ready(function () {
 	});
 
 });
+document.getElementById('add__url').addEventListener('click', function() {
+    const container = document.getElementById('url__items');
+
+    // Create a new item__url div
+    const newItem = document.createElement('div');
+    newItem.className = 'row item__url';
+    newItem.innerHTML = `
+        <div class="col-12 d-flex">
+            <h4 class="sign__title-small">Đường dẫn ${container.children.length + 1}</h4>
+            <button class="btn remove__url__item">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path d="M200-440v-80h560v80H200Z"/>
+                </svg>
+            </button>
+        </div>
+        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+            <div class="sign__group">
+                <label class="sign__label">Video</label>
+                <input type="file" name="url[]" class="sign__input">
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+            <div class="sign__group">
+                <label class="sign__label">Độ phân giải</label>
+                <select class="sign__select" name="resolution[]">
+                    <option value="360">360p</option>
+                    <option value="480">480p</option>
+                    <option value="720">720p</option>
+                    <option value="1080">1080p</option>
+                    <option value="2160">2160p</option>
+                </select>
+            </div>
+        </div>
+    `;
+
+    // Append the new item to the container
+    container.appendChild(newItem);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Thêm sự kiện click cho các nút xóa
+    document.getElementById('url__items').addEventListener('click', function(event) {
+        // Kiểm tra xem nút nhấn có phải là nút xóa không
+        if (event.target.closest('.remove__url__item')) {
+            // Tìm item__url cha và xóa nó
+            const itemUrl = event.target.closest('.item__url');
+            if (itemUrl) {
+                itemUrl.remove();
+            }
+        }
+    });
+});
+

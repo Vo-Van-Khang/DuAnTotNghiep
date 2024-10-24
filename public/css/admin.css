@@ -2034,6 +2034,15 @@ body::-webkit-scrollbar-thumb {
   color: #fff;
   margin-bottom: 20px;
 }
+.sign__title-small{
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Rubik', sans-serif;
+  color: #fff;
+  margin-top: 5px;
+  width: fit-content;
+  margin-right: auto;
+}
 .sign__label {
   font-weight: 400;
   font-size: 14px;
@@ -2048,7 +2057,7 @@ body::-webkit-scrollbar-thumb {
   color: #fff;
   font-size: 14px;
   width: 100%;
-  padding: 8px 20px;
+  padding: 10px 20px;
 }
 .sign__input:focus {
   background-color: #151f30;
@@ -2072,6 +2081,16 @@ body::-webkit-scrollbar-thumb {
   width: 100%;
   padding: 15px 20px;
   resize: none;
+}
+.sign__select{
+  background-color: #151f30;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  position: relative;
+  color: #fff;
+  font-size: 14px;
+  width: 100%;
+  padding: 10px 20px;
 }
 .sign__textarea:focus {
   background-color: #151f30;
@@ -2627,4 +2646,8 @@ body::-webkit-scrollbar-thumb {
   color: #fff;
   border: 0;
   font-size: 14px;
+}
+.item__url{
+  border: 2px solid #151f30;
+  border-radius:5px;
 }

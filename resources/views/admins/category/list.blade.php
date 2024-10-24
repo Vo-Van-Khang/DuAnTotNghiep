@@ -48,6 +48,7 @@
 											</a>
 										</div>
 									</td>
+								</tr>
 							
 							</tbody>
 						</table>

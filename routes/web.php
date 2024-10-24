@@ -16,6 +16,10 @@ Route::get('/admin/category/list', function () {
 Route::get('/admin/category/add', function () {
     return view('admins.category.add');
 });
+Route::get('/admin/movie/list', [MovieController::class,'list__admin'])->name("admin.movie.list");
+Route::get('/admin/movie/add', function () {
+    return view('admins.movie.add');
+});
 Route::get('/admin/slides/list', function () {
     return view('admins.slides.list');
 });
