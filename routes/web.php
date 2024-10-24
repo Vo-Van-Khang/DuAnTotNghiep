@@ -29,4 +29,4 @@ Route::view('/forgot', 'users.forgot')->name("forgot");
 Route::view('/category', 'clients.category')->name("category");
 Route::view('/privacy', 'clients.privacy')->name("privacy");
 
-Route::get('/movie/{id}', [MovieController::class,'get_id'])->name("detail");
+Route::get('/movie/{id}', [MovieController::class,'get_id'])->name("movie");
