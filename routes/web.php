@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\EpisodeController;
+use App\Http\Controllers\WatchLaterController;
 
 Route::get('/admin/user/list', function () {
     return view('admins.user.list');
@@ -37,3 +39,7 @@ Route::view('/privacy', 'clients.privacy')->name("privacy");
 
 Route::get('/movie/{id}', [MovieController::class,'get_id'])->name("movie");
 Route::get('/movie/{movie}/episode/{episode}', [EpisodeController::class,'get_by_movie'])->name("episode");
+
+Route::post('/watch_later/add', [WatchLaterController::class,'add']);
+Route::delete('/watch_later/remove', [WatchLaterController::class,'remove']);
+Route::get('/ajax/movie/check/{id}', [AjaxController::class,'check_movie']);

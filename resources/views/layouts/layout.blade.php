@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="{{asset("css/plyr.css")}}" />
         <link rel="stylesheet" href="{{asset("css/main.css")}}" />
 
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Favicons -->
         <link
             rel="icon"

@@ -46,13 +46,20 @@ class MovieController extends Controller
         $episode_focus = new stdClass();
         $episode_focus->episode = 1;
 
+        if(true){
+            $check_watch_later = DB::table("watch_laters")->where("id_movie",$movie->id)->where("id_user",1)->count();
+        }else{
+            $check_watch_later = 0;
+        } 
+
         return view("clients.movie",[
             "movie"=>$movie,
             "urls"=>$urls,
             "episodes"=>$episodes,
             "similars" => $similars,
             "categories" => $categories,
-            "episode_focus" => $episode_focus
+            "episode_focus" => $episode_focus,
+            "check_watch_later" => $check_watch_later
         ]);
     }
     public function index(){
