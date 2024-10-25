@@ -324,7 +324,13 @@ body::-webkit-scrollbar-thumb {
     fill: inherit;
     margin-top: 3px;
 }
-
+.header__nav-link--premium svg{
+    fill: #ffc312;
+    width: 20px;
+    height: auto;
+    transition: 0.5s;
+    margin-right: 4px;
+}
 .header__nav-link--live:hover svg,
 .header__nav-link--live[aria-expanded="true"] svg {
     stroke: inherit;
@@ -1964,7 +1970,6 @@ body::-webkit-scrollbar-thumb {
     top: 0;
     height: 22px;
     width: 34px;
-    background: url("../img/breadcrumb.svg") no-repeat center/12px auto;
 }
 
 .breadcrumb__item:hover {
@@ -3239,6 +3244,12 @@ body::-webkit-scrollbar-thumb {
 
 .plan__list li.green svg {
     stroke: #29b474;
+}
+
+.plan__list li.green_sub svg {
+    width: 20px;
+    height: auto;
+    margin-right: 10px;
 }
 
 .plan__price {
@@ -5401,7 +5412,7 @@ body::-webkit-scrollbar-thumb {
 .sign__input {
     background-color: #151f30;
     border: 1px solid transparent;
-    border-radius: 16px;
+    border-radius: 5px;
     height: 44px;
     position: relative;
     color: #fff;
@@ -5416,10 +5427,10 @@ body::-webkit-scrollbar-thumb {
 }
 
 .sign__select {
-    background: url("../img/arrow2.svg") no-repeat center right 20px #151f30;
+    background: url("../images/arrow.svg") no-repeat center right 20px #151f30;
     background-size: 16px auto;
     border: 1px solid transparent;
-    border-radius: 16px;
+    border-radius: 5px;
     height: 44px;
     position: relative;
     color: #fff;
@@ -5551,7 +5562,7 @@ body::-webkit-scrollbar-thumb {
     margin: 15px auto;
     width: 100%;
     height: 50px;
-    border-radius: 16px;
+    border-radius: 8px;
     background-color: #2f80ed;
     font-size: 14px;
     color: #e0e0e0;

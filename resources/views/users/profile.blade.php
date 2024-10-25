@@ -12,7 +12,7 @@
                         </div>
                         <div class="profile__meta">
                             <h3>Phương Thảo</h3>
-                            <span>Đum Đúm ID: 11104</span>
+                            <span>Gói: <span style="color: #ffc312">Premium</span></span>
                         </div>
                     </div>
 
@@ -42,7 +42,7 @@
                                 role="tab"
                                 aria-controls="tab-2"
                                 aria-selected="false"
-                                >Yêu thích</a
+                                >Xem sau</a
                             >
                         </li>
 
@@ -108,6 +108,7 @@
                                             <th>TÊN GÓI</th>
                                             <th>NGÀY MUA</th>
                                             <th>NGÀY HẾT HẠN</th>
+                                            <th>TÌNH TRẠNG</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -131,6 +132,13 @@
                                                     class="main__table-text main__table-text--rate"
                                                 >
                                                     11/12/2024
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div
+                                                    class="main__table-text main__table-text--red"
+                                                >
+                                                    Đã hết hạn
                                                 </div>
                                             </td>
                                         </tr>
@@ -381,14 +389,7 @@
                                 </svg>
                             </a>
                             <button class="card__add" type="button">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        d="M16,2H8A3,3,0,0,0,5,5V21a1,1,0,0,0,.5.87,1,1,0,0,0,1,0L12,18.69l5.5,3.18A1,1,0,0,0,18,22a1,1,0,0,0,.5-.13A1,1,0,0,0,19,21V5A3,3,0,0,0,16,2Zm1,17.27-4.5-2.6a1,1,0,0,0-1,0L7,19.27V5A1,1,0,0,1,8,4h8a1,1,0,0,1,1,1Z"
-                                    />
-                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
                             </button>
                             <span class="card__rating"
                                 ><svg
