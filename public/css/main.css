@@ -4078,6 +4078,9 @@ body::-webkit-scrollbar-thumb {
 .article__additional> button svg{
     fill:#2f80ed
 }
+.article__additional> .active svg{
+    fill:#ffc312
+}
 .article__additional> button:hover{
     color: #2f80ed;
 }

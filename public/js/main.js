@@ -468,54 +468,186 @@ $(document).ready(function() {
 
 
 });
-function check_like_watch_later() {
-    let id = parseInt(document.querySelector("#information__movie").getAttribute('id_movie'));  
-    fetch(`/ajax/movie/check/${id}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const watchLaterButton = data.check_watch_later > 0
-                ? `<button id="remove__watch__later" title="Xóa khỏi danh sách xem sau" type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                            <path d="M280-440h400v-80H280v80ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
-                        </svg>
-                        Xóa khỏi xem sau
-                    </button>`
-                : `<button id="add__to__watch__later" title="Thêm vào danh sách xem sau" type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                            <path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/>
-                        </svg>
-                        Xem sau
-                    </button>`;
+// function check_watch_later() {
+//     let id = parseInt(document.querySelector("#information__movie").getAttribute('id_movie'));  
+//     fetch(`/ajax/watch_later/check/${id}`, {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         }
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.success) {
+//             const watchLaterButtonHTML = data.check_watch_later > 0
+//                 ? `<button id="remove__watch__later" title="Xóa khỏi danh sách xem sau" type="button">
+//                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+//                             <path d="M280-440h400v-80H280v80ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-320Z"/>
+//                         </svg>
+//                         Xóa khỏi xem sau
+//                     </button>`
+//                 : `<button id="add__to__watch__later" title="Thêm vào danh sách xem sau" type="button">
+//                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+//                             <path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/>
+//                         </svg>
+//                         Xem sau
+//                     </button>`;
 
-            document.querySelector('.article__additional').innerHTML = `
-                <button title="Thích video này" type="button">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                        <path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/>
-                    </svg>
-                    0
-                </button>
-                ${watchLaterButton}`;
+//             const articleAdditional = document.querySelector('.article__additional');
 
-            // Gán sự kiện cho các nút mới
-            add_click_event();
-        } else {
-            console.log("fail");
-        }
-    })
-    .catch(error => console.error("Lỗi:", error));
-}
+//             // Xóa các nút cũ và thêm nút mới
+//             articleAdditional.querySelectorAll("#remove__watch__later, #add__to__watch__later").forEach(btn => btn.remove());
+//             articleAdditional.insertAdjacentHTML('beforeend', watchLaterButtonHTML);
 
-function add_click_event() {
-    if (document.querySelector('#add__to__watch__later') != null) {
-        document.querySelector('#add__to__watch__later').addEventListener('click', () => {
+//             add_click_event();
+//         } else {
+//             console.log("fail");
+//         }
+//     })
+//     .catch(error => console.error("Lỗi:", error));
+// }
+
+// function check_like() {
+//     let id = parseInt(document.querySelector("#information__movie").getAttribute('id_movie'));  
+//     fetch(`/ajax/like/check/${id}`, {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         }
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.success) {
+//             const likeButtonHTML = data.check_like > 0
+//                 ? `<button id="remove__like" class="active" title="Bỏ thích video này" type="button">
+//                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
+//                         <span id="likes">${data.likes}</span>
+//                     </button>`
+//                 : `<button id="add__to__like" title="Thích video này" type="button">
+//                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
+//                         <span id="likes">${data.likes}</span>
+//                     </button>`;
+
+//             const articleAdditional = document.querySelector('.article__additional');
+
+//             // Xóa các nút cũ và thêm nút mới
+//             articleAdditional.querySelectorAll("#remove__like, #add__to__like").forEach(btn => btn.remove());
+//             articleAdditional.insertAdjacentHTML('afterbegin', likeButtonHTML);
+
+//             add_like_click_event();
+//         } else {
+//             console.log("fail");
+//         }
+//     })
+//     .catch(error => console.error("Lỗi:", error));
+// }
+
+// function add_click_event() {
+//     if (document.querySelector('#add__to__watch__later') != null) {
+//         document.querySelector('#add__to__watch__later').addEventListener('click', () => {
+//             let id = document.querySelector("#information__movie").getAttribute('id_movie');
+//             fetch('/watch_later/fetch/add', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+//                 },
+//                 body: JSON.stringify({ id_movie: id })
+//             })
+//             .then(response => response.json())
+//             .then(data => {
+//                 if (data.success) {
+//                     check_watch_later();
+//                 } else {
+//                     console.log("fail");
+//                 }
+//             })
+//             .catch(error => console.error(error));
+//         });
+//     }
+
+//     if (document.querySelector('#remove__watch__later') != null) {
+//         document.querySelector('#remove__watch__later').addEventListener('click', () => {
+//             let id = document.querySelector("#information__movie").getAttribute('id_movie');
+//             fetch('/watch_later/fetch/remove', {
+//                 method: 'DELETE',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+//                 },
+//                 body: JSON.stringify({ id_movie: id })
+//             })
+//             .then(response => response.json())
+//             .then(data => {
+//                 if (data.success) {
+//                     check_watch_later();
+//                 } else {
+//                     console.log("fail");
+//                 }
+//             })
+//             .catch(error => console.error(error));
+//         });
+//     }
+// }
+
+// function add_like_click_event() {
+//     if (document.querySelector('#add__to__like') != null) {
+//         document.querySelector('#add__to__like').addEventListener('click', () => {
+//             let id = document.querySelector("#information__movie").getAttribute('id_movie');
+//             fetch('/like/fetch/add', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+//                 },
+//                 body: JSON.stringify({ id_movie: id })
+//             })
+//             .then(response => response.json())
+//             .then(data => {
+//                 if (data.success) {
+//                     check_like();
+//                 } else {
+//                     console.log("fail");
+//                 }
+//             })
+//             .catch(error => console.error(error));
+//         });
+//     }
+
+//     if (document.querySelector('#remove__like') != null) {
+//         document.querySelector('#remove__like').addEventListener('click', () => {
+//             let id = document.querySelector("#information__movie").getAttribute('id_movie');
+//             fetch('/like/fetch/remove', {
+//                 method: 'DELETE',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+//                 },
+//                 body: JSON.stringify({ id_movie: id })
+//             })
+//             .then(response => response.json())
+//             .then(data => {
+//                 if (data.success) {
+//                     check_like();
+//                 } else {
+//                     console.log("fail");
+//                 }
+//             })
+//             .catch(error => console.error(error));
+//         });
+//     }
+// }
+
+// document.addEventListener("DOMContentLoaded", () => {
+//     check_watch_later();
+//     check_like();
+// });
+function add_like_click_event() {
+    const addLikeButton = document.querySelector('#add__to__like');
+    if (addLikeButton) {
+        addLikeButton.addEventListener('click', () => {
             let id = document.querySelector("#information__movie").getAttribute('id_movie');
-            fetch('/watch_later/add', {
+            fetch('/like/fetch/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -526,19 +658,34 @@ function add_click_event() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    check_like_watch_later();
+                    const likeButtonHTML = `
+                        <button id="remove__like" class="active" title="Bỏ thích video này" type="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                <path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/>
+                            </svg>
+                            <span id="likes">${data.likes}</span>
+                        </button>`;
+
+                    const articleAdditional = document.querySelector('.article__additional');
+                    addLikeButton.remove();
+                    articleAdditional.insertAdjacentHTML('afterbegin', likeButtonHTML);
+                    
+                    add_like_click_event();
                 } else {
                     console.log("fail");
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(error);
+            });
         });
     }
 
-    if (document.querySelector('#remove__watch__later') != null) {
-        document.querySelector('#remove__watch__later').addEventListener('click', () => {
+    const removeLikeButton = document.querySelector('#remove__like');
+    if (removeLikeButton) {
+        removeLikeButton.addEventListener('click', () => {
             let id = document.querySelector("#information__movie").getAttribute('id_movie');
-            fetch('/watch_later/remove', {
+            fetch('/like/fetch/remove', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -549,16 +696,109 @@ function add_click_event() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    check_like_watch_later();
+                    const likeButtonHTML = `
+                        <button id="add__to__like" title="Thích video này" type="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                <path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/>
+                            </svg>
+                            <span id="likes">${data.likes}</span>
+                        </button>`;
+
+                    const articleAdditional = document.querySelector('.article__additional');
+                    removeLikeButton.remove();
+                    articleAdditional.insertAdjacentHTML('afterbegin', likeButtonHTML);
+                    
+                    add_like_click_event();
                 } else {
                     console.log("fail");
                 }
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(error);
+            });
+        });
+    }
+}
+function add_watch_later_click_event() {
+    const addWatchLaterButton = document.querySelector('#add__to__watch__later');
+    if (addWatchLaterButton) {
+        addWatchLaterButton.addEventListener('click', () => {
+            let id = document.querySelector("#information__movie").getAttribute('id_movie');
+            fetch('/watch_later/fetch/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ id_movie: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const WatchLaterButtonHTML = `
+                            <button id="remove__watch__later" class="active"
+                                title="Xóa khỏi danh sách xem sau"
+                                type="button"
+                            >
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
+                                Đã thêm xem sau
+                            </button>`;
+
+                    const articleAdditional = document.querySelector('.article__additional');
+                    addWatchLaterButton.remove();
+                    articleAdditional.insertAdjacentHTML('beforeend', WatchLaterButtonHTML);
+                    add_watch_later_click_event();
+                } else {
+                    console.log("fail");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        });
+    }
+
+    const removeWatchLaterButton = document.querySelector('#remove__watch__later');
+    if (removeWatchLaterButton) {
+        removeWatchLaterButton.addEventListener('click', () => {
+            let id = document.querySelector("#information__movie").getAttribute('id_movie');
+            fetch('/watch_later/fetch/remove', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ id_movie: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const WatchLaterButtonHTML = `
+                                <button id="add__to__watch__later"
+                                    title="Thêm vào danh sách xem sau"
+                                    type="button"
+                                >
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
+                                    Xem sau
+                                </button>`;
+
+                    const articleAdditional = document.querySelector('.article__additional');
+                    removeWatchLaterButton.remove();
+                    articleAdditional.insertAdjacentHTML('beforeend', WatchLaterButtonHTML);
+                    add_watch_later_click_event();
+                } else {
+                    console.log("fail");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
         });
     }
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
-    check_like_watch_later();
+    add_like_click_event();
+    add_watch_later_click_event();
 });

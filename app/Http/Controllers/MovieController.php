@@ -23,6 +23,11 @@ class MovieController extends Controller
         ->where("type", 'movie')
         ->get();
         
+        $likes = DB::table("likes")
+        ->select("*")
+        ->where("id_movie", $id)
+        ->count();
+
         $episodes = DB::table("episodes")
         ->select("*")  
         ->where("id_movie", $id)
@@ -52,13 +57,21 @@ class MovieController extends Controller
             $check_watch_later = 0;
         } 
 
+        if(true){
+            $check_like = DB::table("likes")->where("id_movie",$movie->id)->where("id_user",1)->count();
+        }else{
+            $check_like = 0;
+        } 
+
         return view("clients.movie",[
             "movie"=>$movie,
             "urls"=>$urls,
+            "likes"=>$likes,
             "episodes"=>$episodes,
             "similars" => $similars,
             "categories" => $categories,
             "episode_focus" => $episode_focus,
+            "check_like" => $check_like,
             "check_watch_later" => $check_watch_later
         ]);
     }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\WatchLaterController;
@@ -40,6 +41,8 @@ Route::view('/privacy', 'clients.privacy')->name("privacy");
 Route::get('/movie/{id}', [MovieController::class,'get_id'])->name("movie");
 Route::get('/movie/{movie}/episode/{episode}', [EpisodeController::class,'get_by_movie'])->name("episode");
 
-Route::post('/watch_later/add', [WatchLaterController::class,'add']);
-Route::delete('/watch_later/remove', [WatchLaterController::class,'remove']);
-Route::get('/ajax/movie/check/{id}', [AjaxController::class,'check_movie']);
+Route::post('/watch_later/fetch/add', [WatchLaterController::class,'add']);
+Route::delete('/watch_later/fetch/remove', [WatchLaterController::class,'remove']);
+
+Route::post('/like/fetch/add', [LikeController::class,'add']);
+Route::delete('/like/fetch/remove', [LikeController::class,'remove']);
