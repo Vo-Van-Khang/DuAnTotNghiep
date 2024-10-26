@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\WatchLaterController;
@@ -34,7 +35,7 @@ Route::view('/subscription', 'clients.subscription')->name("subscription");
 Route::view('/signin', 'users.SignIn')->name("signin");
 Route::view('/signup', 'users.SignUp')->name("signup");
 Route::view('/forgot', 'users.forgot')->name("forgot");
-Route::view('/profile', 'users.profile')->name("profile");
+Route::get('/profile', [UserController::class,'get'])->name("profile");
 Route::view('/category', 'clients.category')->name("category");
 Route::view('/privacy', 'clients.privacy')->name("privacy");
 
@@ -46,3 +47,5 @@ Route::delete('/watch_later/fetch/remove', [WatchLaterController::class,'remove'
 
 Route::post('/like/fetch/add', [LikeController::class,'add']);
 Route::delete('/like/fetch/remove', [LikeController::class,'remove']);
+
+Route::delete('/watch_later/remove/{id}', [WatchLaterController::class,'remove_by_id']);
