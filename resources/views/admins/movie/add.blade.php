@@ -15,7 +15,8 @@
                 <div class="">
                     <!-- biểu mẫu chi tiết -->
                     <div class="">
-                        <form action="#" class="sign__form sign__form--profile sign__form--first">
+                        <form action="{{route('admin.movie.add')}}" enctype="multipart/form-data" class="sign__form sign__form--profile sign__form--first" method="post">
+                            @csrf 
                             <div class="row">
                                 <div class="col-12">
                                     <h4 class="sign__title">Chi tiết</h4>
@@ -24,49 +25,49 @@
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Tiêu đề</label>
-                                        <input type="text" name="" class="sign__input" placeholder="Tiêu đề">
+                                        <input type="text" name="tilte" class="sign__input" placeholder="Tiêu đề" value="{{old('title')}}">
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Hình ảnh</label>
-                                        <input type="file" name="" class="sign__input">
+                                        <input type="file" name="thumbnail" class="sign__input" value="{{old('thumbnail')}}">
                                     </div>
                                 </div>
                                 
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Diễn viên</label>
-                                        <input type="text" name="" class="sign__input" placeholder="Diễn viên">
+                                        <input type="text" name="cast" class="sign__input" placeholder="Diễn viên" value="{{old('cast')}}">
                                     </div>
                                 </div>
                                 
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Đạo diễn</label>
-                                        <input type="text" name="" class="sign__input" placeholder="Đạo diễn">
+                                        <input type="text" name="director" class="sign__input" placeholder="Đạo diễn" value="{{old('derector')}}">
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Năm phát hành</label>
-                                        <input type="number " name="" class="sign__input" placeholder="Năm phát hành">
+                                        <input type="number " name="release_year" class="sign__input" placeholder="Năm phát hành" value="{{old('release_year')}}">
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Nước sản xuất</label>
-                                        <input type="text" name="" class="sign__input" placeholder="Nước sản xuất">
+                                        <input type="text" name="country" class="sign__input" placeholder="Nước sản xuất" value="{{old('country')}}">
                                     </div>
                                 </div>
 
                                <div class="col-12 col-md-6 col-lg-12 col-xl-12">
                                     <div class="sign__group">
                                         <label class="sign__label">Mô tả</label>
-                                        <textarea class="sign__textarea" name="" id="" cols="30" rows="10" placeholder="Mô tả"></textarea>
+                                        <textarea class="sign__textarea" name="description" id="" cols="30" rows="10" placeholder="Mô tả" value="{{old('description')}}"></textarea>
                                     </div>
                                 </div>
 
@@ -108,7 +109,7 @@
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                             <div class="sign__group">
                                                 <label class="sign__label">Video</label>
-                                                <input type="file" name="url[]" class="sign__input">
+                                                <input type="file" name="url[]" class="sign__input" value="{{old('url[]')}}">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-6">
@@ -127,7 +128,7 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button class="sign__btn" type="button">Lưu</button>
+                                <button class="sign__btn" type="submit">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -137,4 +138,13 @@
         </div>
     </div>
 </div>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 @endsection
