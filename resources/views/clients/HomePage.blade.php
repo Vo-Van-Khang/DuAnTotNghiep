@@ -196,7 +196,7 @@
                                         8.3</span
                                     > --}}
                                     <h3 class="card__title">
-                                        <a href="/detail" >{{$movie->title}}</a>
+                                        <a href="{{route('movie',$movie->id)}}" >{{$movie->title}}</a>
                                     </h3>
                                     <ul class="card__list">
                                     <li>{{$movie->get_categories ? $movie->get_categories->name : 'Không có danh mục'}}</li>

@@ -8,6 +8,7 @@ use App\Models\Slides;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
 {
@@ -86,4 +87,59 @@ class MovieController extends Controller
         $movies = Movies::get();
         return view('admins.movie.list', ['movies' => $movies]);
     }
+    public function admin_create(Request $request)
+{
+    // Validate the incoming request data
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'thumbnail' => 'required|file|mimes:jpeg,jpg,png',
+        'cast' => 'required|string|max:255',
+        'director' => 'required|string|max:255',
+        'release_year' => 'required|integer|min:1900|max:' . date('Y'),
+        'country' => 'required|string|max:255',
+        'description' => 'required|string',
+        'url.*' => 'nullable|file|mimes:mp4,mkv,avi', // Validate video file type
+        'resolution.*' => 'nullable|string',
+    ]);
+
+    // Upload the image file to public/images
+    $imagePath = $request->file('thumbnail')->store('images', 'public'); // Lưu vào public/images
+
+    // Insert movie details into the database
+    $movieId = DB::table('movies')->insertGetId([
+        'title' => $request->input('title'),
+        'thumbnail' => $imagePath, // Store the image URL in the database
+        'cast' => $request->input('cast'),
+        'director' => $request->input('director'),
+        'release_year' => $request->input('release_year'),
+        'country' => $request->input('country'),
+        'description' => $request->input('description'),
+        'status' => $request->input('status'),
+        'id_category' => $request->input('id_category'),
+        'duration' => "96 phút" // Duration can be adjusted based on actual video length
+    ]);
+
+    // Upload video files and their resolutions
+    if ($request->hasFile('url')) {
+        foreach ($request->file('url') as $index => $file) {
+            if ($file) {
+                // Upload each video file
+                $videoPath = $file->store('videos', 's3');
+                Storage::disk('s3')->setVisibility($videoPath, 'public');
+                $videoUrl = Storage::disk('s3')->url($videoPath);
+                
+                // Save video URL to the 'urls' table
+                DB::table('urls')->insert([
+                    'url' => $videoUrl,
+                    'resolution' => $request->input("resolution.$index"), // Get the corresponding resolution for each video
+                    'type' => 'movie', 
+                    'media_id' => $movieId  // Reference to the movie ID
+                ]);
+            }
+        }
+    }
+
+    return redirect()->route("admin.movie.list")->with('success', 'Phim đã được thêm thành công!');
+}
+
 }
