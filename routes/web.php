@@ -8,12 +8,13 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\WatchLaterController;
 
-Route::get('/admin/user/list', function () {
-    return view('admins.user.list');
-});
-Route::get('/admin/user/add', function () {
-    return view('admins.user.update');
-});
+
+Route::get('/admin/user/list',[UserController::class , 'show'])->name('admin.user.list');
+Route::get('/admin/user/update/{id}', [UserController::class, 'edit'])->name('admin.user.update');
+Route::post('/admin/user/update',[UserController::class , 'update'])->name('admin.user.update');
+Route::get('/admin/user/delete/{id}', [UserController::class, 'delete'])->name('admin.user.delete');
+
+
 Route::get('/admin/category/list', function () {
     return view('admins.category.list');
 });
@@ -30,6 +31,8 @@ Route::get('/admin/slides/list', function () {
     return view('admins.slides.list');
 });
 Route::get("/", [MovieController::class, 'index'])->name('index');
+Route::get("/all", [MovieController::class, 'allMovie'])->name('allMovie');
+Route::get("/search", [MovieController::class, 'search'])->name('search');
 // Route::view('/', 'clients.subscription')->name("index");
 Route::view('/about', 'clients.about')->name("about");
 Route::view('/contact', 'clients.contact')->name("contact");
