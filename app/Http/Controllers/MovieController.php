@@ -87,6 +87,20 @@ class MovieController extends Controller
         $movies = Movies::get();
         return view('admins.movie.list', ['movies' => $movies]);
     }
+    Public function allMovie(){
+        $movies = Movies::with('get_categories')->get();
+        return view('/clients/all', ['movies' => $movies]);
+    }
+    Public function search(Request $request){
+        {
+            $search = $request->input('search');
+            $movies = Movies::with('get_categories')
+                ->where('title', 'LIKE', "%{$search}%")
+                ->get();
+            return view('/clients/search', ['movies'=> $movies]);
+        }
+    }
+
     public function admin_create(Request $request)
 {
     // Validate the incoming request data

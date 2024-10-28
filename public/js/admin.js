@@ -86,7 +86,7 @@ $(document).ready(function () {
 			reader.onload = function(e) {
 				$('#form__img').attr('src', e.target.result);
 			}
-		
+
 			reader.readAsDataURL(input.files[0]);
 		}
 	}
@@ -196,6 +196,12 @@ $(document).ready(function () {
 	});
 
 });
+if(document.querySelector("#modal__delete__btn") != null){
+    document.querySelector("#modal__delete__btn").addEventListener("click", ()=>{
+        let id = document.querySelector("#modal__delete__btn").getAttribute("id_user");
+        window.location = `/admin/user/delete/${id}`;
+    })
+}
 document.getElementById('add__url').addEventListener('click', function() {
     const container = document.getElementById('url__items');
 

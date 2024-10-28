@@ -83,7 +83,7 @@
                                     <p class="modal__text">Bạn có chắc chắn muốn xóa mục này vĩnh viễn không?</p>
 
                                     <div class="modal__btns">
-                                        <button href="{{route('admin.user.delete',$user->id)}}" class="modal__btn modal__btn--apply" type="button">Xóa</button>
+                                        <button href="{{route('admin.user.delete',$user->id)}}" class="modal__btn modal__btn--apply" id_user="{{$user->id}}" id="modal__delete__btn" type="button">Xóa</button>
                                         <button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
                                     </div>
                                 </div>
