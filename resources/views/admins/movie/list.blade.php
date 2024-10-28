@@ -43,22 +43,22 @@
                 <div class="main__table-text"><img src="{{$movie->thumbnail}}" alt=""></div>
               </td>
               <td>
-                <div class="main__table-text">nsx</div>
+                <div class="main__table-text">{{$movie->release_year}}</div>
               </td>
               <td>
-                <div class="main__table-text">nsx</div>
+                <div class="main__table-text">{{$movie->country}}</div>
               </td>
               <td>
-                <div class="main__table-text">nsx</div>
+                <div class="main__table-text">{{$movie->views}}</div>
               </td>
               <td>
-                <div class="main__table-text">nsx</div>
+                <div class="main__table-text">{{$movie->status}}</div>
               </td>
               <td>
-                <div class="main__table-text">nsx</div>
+                <div class="main__table-text">{{$movie->id_category}}</div>
               </td>
               <td>
-                <div class="main__table-text">nsx</div>
+                <div class="main__table-text">{{$movie->created_at}}</div>
               </td>
               <td>
                 <div class="main__table-btns">

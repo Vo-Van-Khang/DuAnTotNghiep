@@ -25,7 +25,7 @@
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Tiêu đề</label>
-                                        <input type="text" name="tilte" class="sign__input" placeholder="Tiêu đề" value="{{old('title')}}">
+                                        <input type="text" name="title" class="sign__input" placeholder="Tiêu đề" value="{{old('title')}}">
                                     </div>
                                 </div>
 
@@ -46,7 +46,7 @@
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Đạo diễn</label>
-                                        <input type="text" name="director" class="sign__input" placeholder="Đạo diễn" value="{{old('derector')}}">
+                                        <input type="text" name="director" class="sign__input" placeholder="Đạo diễn" value="{{old('director')}}">
                                     </div>
                                 </div>
 
@@ -67,14 +67,14 @@
                                <div class="col-12 col-md-6 col-lg-12 col-xl-12">
                                     <div class="sign__group">
                                         <label class="sign__label">Mô tả</label>
-                                        <textarea class="sign__textarea" name="description" id="" cols="30" rows="10" placeholder="Mô tả" value="{{old('description')}}"></textarea>
+                                        <textarea class="sign__textarea" name="description" id="" cols="30" rows="10" placeholder="Mô tả" value="">{{old('description')}}</textarea>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label" for="status">Tình trạng</label>
-                                        <select class="js-example-basic-single" id="status">
+                                        <select class="js-example-basic-single" id="status" name="status">
                                             <option value="Basic">Hiển thị</option>
                                             <option value="Premium">Ẩn</option>
                                         </select>
@@ -84,10 +84,10 @@
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label" for="id_category">ID Danh mục</label>
-                                        <select class="js-example-basic-single" id="id_category">
-                                            <option value="User">1</option>
-                                            <option value="Moderator">2</option>
-                                            <option value="Admin">3</option>
+                                        <select class="js-example-basic-single" id="id_category" name="id_category">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
                                         </select>
                                     </div>
                                 </div>

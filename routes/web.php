@@ -22,10 +22,10 @@ Route::get('/admin/category/add', function () {
     return view('admins.category.add');
 });
 Route::get('/admin/movie/list', [MovieController::class,'list__admin'])->name("admin.movie.list");
-Route::post('/admin/movie/add', [MovieController::class,'admin_create'])->name("admin.movie.add");
 Route::get('/admin/movie/add', function () {
     return view('admins.movie.add');
 })->name("admin.movie.add");
+Route::post('/admin/movie/add', [MovieController::class,'admin_create'])->name("admin.movie.add");
 
 Route::get('/admin/slides/list', function () {
     return view('admins.slides.list');
