@@ -86,7 +86,7 @@ $(document).ready(function () {
 			reader.onload = function(e) {
 				$('#form__img').attr('src', e.target.result);
 			}
-		
+
 			reader.readAsDataURL(input.files[0]);
 		}
 	}

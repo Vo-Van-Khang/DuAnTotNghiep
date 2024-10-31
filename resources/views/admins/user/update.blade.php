@@ -30,64 +30,75 @@
 					<div class="">
 						<!-- biểu mẫu chi tiết -->
 						<div class="">
-							<form action="#" class="sign__form sign__form--profile sign__form--first">
+							<form action="{{ route('admin.user.update') }}" method="POST" enctype="multipart/form-data" class="sign__form sign__form--profile sign__form--first">
+                                @csrf
 								<div class="row">
 									<div class="col-12">
 										<h4 class="sign__title">Chi tiết hồ sơ</h4>
 									</div>
-
+                                    <div class="sign__group">
+										<input id="username" type="hidden" value="{{$user->id}}" name="id" class="sign__input" >
+									</div>
 									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 										<div class="sign__group">
-											<label class="sign__label" for="username">Đăng nhập</label>
-											<input id="username" type="text" name="username" class="sign__input" placeholder="User123">
+											<label class="sign__label" for="username">Tên :</label>
+											<input id="username" type="text" value="{{$user->name}}" name="name" class="sign__input" >
 										</div>
 									</div>
-
+                                    <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                        <div class="sign__group mt-4">
+                                            <label class="sign__label" for="current_image">Ảnh hiện tại :</label>
+                                            <img id="current_image" src="{{ $user->image }}" alt="Ảnh hiện tại của người dùng" width="60">
+                                        </div>
+                                    </div>
 									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 										<div class="sign__group">
 											<label class="sign__label" for="email">Email</label>
-											<input id="email" type="text" name="email" class="sign__input" placeholder="email@email.com">
+											<input id="email" type="text" value="{{$user->email}}" name="email" class="sign__input" >
+										</div>
+									</div>
+
+                                    <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                        <div class="sign__group">
+                                            <label class="sign__label" for="new_image">Chọn ảnh mới:</label>
+                                            <input id="new_image" type="file" name="image" class="sign__input">
+                                        </div>
+                                    </div>
+
+
+									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
+										<div class="sign__group">
+											<label class="sign__label" for="status">Trạng thái :</label>
+                                            <select class="js-example-basic-single" id="status" name="status">
+                                                <option value="0" {{ $user->status == 0 ? 'selected' : '' }}>Hoạt động</option>
+                                                <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>Bị cấm</option>
+                                            </select>
 										</div>
 									</div>
 
 									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
-										<div class="sign__group">
-											<label class="sign__label" for="firstname">Tên</label>
-											<input id="firstname" type="text" name="firstname" class="sign__input" placeholder="John">
-										</div>
-									</div>
+                                        <div class="sign__group">
+                                            <label class="sign__label" for="subscription">Premium</label>
+                                            <select class="js-example-basic-single" id="subscription" name="premium">
+                                                <option value="0" {{ $user->premium == 0 ? 'selected' : '' }}>Có</option>
+                                                <option value="1" {{ $user->premium == 1 ? 'selected' : '' }}>Không</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
 									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
-										<div class="sign__group">
-											<label class="sign__label" for="lastname">Họ</label>
-											<input id="lastname" type="text" name="lastname" class="sign__input" placeholder="Doe">
-										</div>
-									</div>
-
-									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
-										<div class="sign__group">
-											<label class="sign__label" for="subscription">Gói đăng ký</label>
-											<select class="js-example-basic-single" id="subscription">
-												<option value="Basic">Cơ bản</option>
-												<option value="Premium">Nâng cao</option>
-												<option value="Cinematic">Điện ảnh</option>
-											</select>
-										</div>
-									</div>
-
-									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
-										<div class="sign__group">
-											<label class="sign__label" for="rights">Quyền hạn</label>
-											<select class="js-example-basic-single" id="rights">
-												<option value="User">Người dùng</option>
-												<option value="Moderator">Người điều hành</option>
-												<option value="Admin">Quản trị viên</option>
-											</select>
-										</div>
-									</div>
+                                        <div class="sign__group">
+                                            <label class="sign__label" for="rights">Vai trò</label>
+                                            <select class="js-example-basic-single" id="rights" name="role">
+                                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>Người dùng</option>
+                                                <option value="moderator" {{ $user->role == 'moderator' ? 'selected' : '' }}>Người điều hành</option>
+                                                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Quản trị viên</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
 									<div class="col-12">
-										<button class="sign__btn" type="button">Lưu</button>
+										<button class="sign__btn" type="submit">Lưu</button>
 									</div>
 								</div>
 							</form>

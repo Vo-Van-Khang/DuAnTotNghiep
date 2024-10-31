@@ -32,9 +32,10 @@ Route::post('/admin/episode/update/{movie}/{id}', [EpisodeController::class,'adm
 Route::delete('/admin/episode/delete/{id}', [EpisodeController::class,'admin__delete']);
 Route::delete('/admin/episode/url/remove/{id}',[EpisodeController::class,'admin__remove__url']);
 
-Route::get('/admin/user/list', [UserController::class,'admin__view'])->name("admin.user.list");
-Route::get('/admin/user/add', [UserController::class,'admin__add'])->name("admin.user.add");
-Route::get('/admin/user/update/', [UserController::class,'admin__update'])->name("admin.user.update");
+Route::get('/admin/user/list',[UserController::class , 'show'])->name('admin.user.list');
+Route::get('/admin/user/update/{id}', [UserController::class, 'edit'])->name('admin.user.update');
+Route::post('/admin/user/update',[UserController::class , 'update'])->name('admin.user.update');
+Route::get('/admin/user/delete/{id}', [UserController::class, 'delete'])->name('admin.user.delete');
 
 Route::get('/admin/slide/list', [SlideController::class,'admin__view'])->name("admin.slide.list");
 Route::get('/admin/slide/add', [SlideController::class,'admin__add'])->name("admin.slide.add");

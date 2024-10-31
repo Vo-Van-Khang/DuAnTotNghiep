@@ -22,14 +22,14 @@ class MovieController extends Controller
         ->where("type", 'movie')
         ->orderBy("resolution","asc")
         ->get();
-        
+
         $likes = DB::table("likes")
         ->select("*")
         ->where("id_movie", $id)
         ->count();
 
         $episodes = DB::table("episodes")
-        ->select("*")  
+        ->select("*")
         ->where("id_movie", $id)
         ->orderBy("episode","asc")
         ->get();
@@ -55,13 +55,13 @@ class MovieController extends Controller
             $check_watch_later = DB::table("watch_laters")->where("id_movie",$movie->id)->where("id_user",1)->count();
         }else{
             $check_watch_later = 0;
-        } 
+        }
 
         if(true){
             $check_like = DB::table("likes")->where("id_movie",$movie->id)->where("id_user",1)->count();
         }else{
             $check_like = 0;
-        } 
+        }
 
         return view("clients.movie",[
             "movie"=>$movie,
@@ -88,6 +88,19 @@ class MovieController extends Controller
             "movies" => $movies,
             "selected" => "movie"
         ]);
+    }
+    Public function allMovie(){
+        $movies = Movies::with('get_categories')->get();
+        return view('/clients/all', ['movies' => $movies]);
+    }
+    Public function search(Request $request){
+        {
+            $search = $request->input('search');
+            $movies = Movies::with('get_categories')
+                ->where('title', 'LIKE', "%{$search}%")
+                ->get();
+            return view('/clients/search', ['movies'=> $movies]);
+        }
     }
 
     public function admin__add(){
