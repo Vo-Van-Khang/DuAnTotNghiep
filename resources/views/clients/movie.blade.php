@@ -4,7 +4,6 @@
         controls
         crossorigin
         playsinline
-        poster="{{$movie->thumbnail}}"
         id="player"
         >
         @foreach ($urls as $url)

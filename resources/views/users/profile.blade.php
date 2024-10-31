@@ -364,10 +364,10 @@
                     @foreach ($watch_laters as $watch_later)
                         @foreach ($movies as $movie)
                             @if ($watch_later->id_movie == $movie->id)
-                                <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                                <div class="col-6 col-sm-4 col-lg-3 col-xl-3">
                                     <div class="card card--favorites">
                                         <a href="{{route('movie',$movie->id)}}" class="card__cover">
-                                            <img src="{{asset("images/card/1.png")}}" alt="" />
+                                            <img src="{{asset($movie->thumbnail)}}" alt="" />
                                             <svg
                                                 width="22"
                                                 height="22"

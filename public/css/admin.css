@@ -625,11 +625,17 @@ body::-webkit-scrollbar-thumb {
   border: 0px solid transparent;
 }
 .main__table tbody td:first-child .main__table-text {
-  border-radius: 16px 0 0 16px;
+  border-radius: 5px 0 0 5px;
 }
 .main__table tbody td:last-child .main__table-text,
 .main__table tbody td:last-child .main__table-btns {
-  border-radius: 0 16px 16px 0;
+  border-radius: 0 5px 5px 0;
+}
+.main__table__collapse tbody td:first-child .main__table-text{
+  border-radius: 5px 0 0 5px;
+}
+.main__table__collapse tbody td:last-child .main__table-text{
+  border-radius: 0 5px 5px 0;
 }
 .main__table--dash {
   width: 100%;

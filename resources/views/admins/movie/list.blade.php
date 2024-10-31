@@ -6,7 +6,7 @@
     <!-- tiêu đề chính -->
     <div class="col-12">
       <div class="main__title">
-        <h2>Danh mục</h2>
+        <h2>Phim</h2>
 
       </div>
     </div>
@@ -18,10 +18,7 @@
           <thead>
             <tr>
               <th title="Tiêu đề"> Tiêu đề </th>
-              <th title="Mô tả"> Mô tả </th>
               <th title="Hình ảnh"> Hình ảnh </th>
-              <th title="Năm sản xuất"> Năm sản xuất </th>
-              <th title="Nước sản xuất"> Nước sản xuất </th>
               <th title="Lượt xem"> Lượt xem </th>
               <th title="Tình trạng"> Tình trạng </th>
               <th title="ID danh mục"> ID danh mục </th>
@@ -32,43 +29,41 @@
 
           <tbody>
             @foreach ($movies as $movie)
-            <tr>
+            <tr class="tr__remove">
               <td>
-                <div class="main__table-text">{{$movie->title}}</div>
+                <div title="{{$movie->title}}" class="main__table-text"><a class="limit__text" href="{{route('movie',$movie->id)}}">{{$movie->title}}</a></div>
               </td>
               <td>
-                <div class="main__table-text"><a href="#">{{$movie->description}}</a></div>
+                <div class="main__table-text"><img src="{{asset($movie->thumbnail)}}" alt=""></div>
               </td>
               <td>
-                <div class="main__table-text"><img src="{{$movie->thumbnail}}" alt=""></div>
+                <div title="{{$movie->views}}" class="main__table-text">{{$movie->views}}</div>
               </td>
               <td>
-                <div class="main__table-text">{{$movie->release_year}}</div>
+                @if ($movie->status == 1)
+                  <div title="Hiển thị" class="movie__status main__table-text main__table-text--green">Hiển thị</div>
+                @else
+                  <div title="Ẩn" class="movie__status main__table-text main__table-text--red">Ẩn</div>    
+                @endif
               </td>
               <td>
-                <div class="main__table-text">{{$movie->country}}</div>
+                <div title="{{$movie->id_category}}" class="main__table-text">{{$movie->id_category}}</div>
               </td>
               <td>
-                <div class="main__table-text">{{$movie->views}}</div>
-              </td>
-              <td>
-                <div class="main__table-text">{{$movie->status}}</div>
-              </td>
-              <td>
-                <div class="main__table-text">{{$movie->id_category}}</div>
-              </td>
-              <td>
-                <div class="main__table-text">{{$movie->created_at}}</div>
+                <div title="{{$movie->created_at}}" class="main__table-text limit__text">{{$movie->created_at}}</div>
               </td>
               <td>
                 <div class="main__table-btns">
-                  <a href="#" class="main__table-btn main__table-btn--view">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.92,11.6C19.9,6.91,16.1,4,12,4S4.1,6.91,2.08,11.6a1,1,0,0,0,0,.8C4.1,17.09,7.9,20,12,20s7.9-2.91,9.92-7.6A1,1,0,0,0,21.92,11.6ZM12,18c-3.17,0-6.17-2.29-7.9-6C5.83,8.29,8.83,6,12,6s6.17,2.29,7.9,6C18.17,15.71,15.17,18,12,18ZM12,8a4,4,0,1,0,4,4A4,4,0,0,0,12,8Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,14Z"/></svg>
+                  <a class="main__table-btn main__table-btn--view" href="{{route("admin.episode.add",$movie->id)}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M160-120v-720h80v80h80v-80h320v80h80v-80h80v720h-80v-80h-80v80H320v-80h-80v80h-80Zm80-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm400 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80ZM400-200h160v-560H400v560Zm0-560h160-160Z"/></svg>                  
                   </a>
-                  <a href="#" class="main__table-btn main__table-btn--edit">
+                  <button class="main__table-btn main__table-btn--banned movie__status__update__btn" id_movie="{{$movie->id}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.92,11.6C19.9,6.91,16.1,4,12,4S4.1,6.91,2.08,11.6a1,1,0,0,0,0,.8C4.1,17.09,7.9,20,12,20s7.9-2.91,9.92-7.6A1,1,0,0,0,21.92,11.6ZM12,18c-3.17,0-6.17-2.29-7.9-6C5.83,8.29,8.83,6,12,6s6.17,2.29,7.9,6C18.17,15.71,15.17,18,12,18ZM12,8a4,4,0,1,0,4,4A4,4,0,0,0,12,8Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,14Z"/></svg>
+                  </button>
+                  <a href="{{route("admin.movie.update",$movie->id)}}" class="main__table-btn main__table-btn--edit">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22,7.24a1,1,0,0,0-.29-.71L17.47,2.29A1,1,0,0,0,16.76,2a1,1,0,0,0-.71.29L13.22,5.12h0L2.29,16.05a1,1,0,0,0-.29.71V21a1,1,0,0,0,1,1H7.24A1,1,0,0,0,8,21.71L18.87,10.78h0L21.71,8a1.19,1.19,0,0,0,.22-.33,1,1,0,0,0,0-.24.7.7,0,0,0,0-.14ZM6.83,20H4V17.17l9.93-9.93,2.83,2.83ZM18.17,8.66,15.34,5.83l1.42-1.41,2.82,2.82Z"/></svg>
                   </a>
-                  <a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal">
+                  <a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal remove__btn__ajax" id_remove="{{$movie->id}}" type_remove="movie">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18ZM20,6H16V5a3,3,0,0,0-3-3H11A3,3,0,0,0,8,5V6H4A1,1,0,0,0,4,8H5V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V8h1a1,1,0,0,0,0-2ZM10,5a1,1,0,0,1,1-1h2a1,1,0,0,1,1,1V6H10Zm7,14a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V8H17Zm-3-1a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"/></svg>
                   </a>
                 </div>
@@ -83,8 +78,8 @@
 
 				<!-- paginator -->
 				<div class="col-12">
-					<div class="paginator">
-						<span class="paginator__pages">10 từ 14 452</span>
+          <div class="paginator">
+            <span class="paginator__pages">10 từ 14 452</span>
 
 						<ul class="paginator__paginator">
 							<li>
@@ -97,7 +92,7 @@
 							<li><a href="#">3</a></li>
 							<li><a href="#">4</a></li>
 							<li>
-								<a href="#">
+                <a href="#">
 									<svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.1992 5.3645L0.75 5.3645" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.17822 0.602051L13.1993 5.36417L8.17822 10.1271" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
 								</a>
 							</li>
@@ -108,32 +103,19 @@
 			</div>
 		</div>
 	
-	<!-- end main content -->
+    <!-- end main content -->
+    
+    <!-- modal delete -->
+     <div id="modal-delete" class="zoom-anim-dialog mfp-hide modal">
+       <h6 class="modal__title">Xóa mục</h6>
 
-	<!-- modal status -->
-	<div id="modal-status" class="zoom-anim-dialog mfp-hide modal">
-		<h6 class="modal__title">Thay đổi trạng thái</h6>
+       <p class="modal__text">Bạn có chắc chắn muốn xóa mục này không?</p>
 
-		<p class="modal__text">Bạn có chắc chắn muốn thay đổi trạng thái ngay lập tức không?</p>
-
-		<div class="modal__btns">
-			<button class="modal__btn modal__btn--apply" type="button">Áp dụng</button>
-			<button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
-		</div>
-	</div>
-	<!-- end modal status -->
-
-	<!-- modal delete -->
-	<div id="modal-delete" class="zoom-anim-dialog mfp-hide modal">
-		<h6 class="modal__title">Xóa mục</h6>
-
-		<p class="modal__text">Bạn có chắc chắn muốn xóa mục này vĩnh viễn không?</p>
-
-		<div class="modal__btns">
-			<button class="modal__btn modal__btn--apply" type="button">Xóa</button>
-			<button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
-		</div>
-	</div>
-	<!-- end modal delete -->
-@endsection
-
+       <div class="modal__btns">
+          <button class="modal__btn modal__btn--dismiss" id="modal__remove__btn" type="button">Xóa</button>
+          <button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
+       </div>
+     </div>
+     <!-- end modal delete -->
+    @endsection
+    

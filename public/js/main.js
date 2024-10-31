@@ -827,10 +827,10 @@ function attachRemoveEvent() {
                             const watchLater = data.watch_laters.find(wl => wl.id_movie === movie.id);
                             const Category = data.categories.find(c => c.id === movie.id_category);
                             const template = `
-                                <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                                <div class="col-6 col-sm-4 col-lg-3 col-xl-3">
                                     <div class="card card--favorites">
                                         <a href="/movie/${movie.id}" class="card__cover">
-                                            <img src="images/card/1.png" alt="" />
+                                            <img src="${movie.thumbnail}" alt="" />
                                             <svg
                                                 width="22"
                                                 height="22"

@@ -17,4 +17,19 @@ class UserController extends Controller
             'movies'=>$movies
         ]);
     }
+    public function admin__view(){
+        return view('admins.user.list', [
+            "selected" => "user"
+        ]);
+    }
+    public function admin__add(){
+        return view('admins.user.add', [
+            "selected" => "movie"
+        ]);
+    }
+    public function admin__update(){
+        return view('admins.user.update', [
+            "selected" => "user"
+        ]);
+    }
 }
