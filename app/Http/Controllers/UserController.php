@@ -35,7 +35,10 @@ class UserController extends Controller
     }
     public function show(){
         $users = db::table('users')->select('*')->get();
-        return view('admins/user/list', ['users' => $users]);
+        return view('admins/user/list', [
+            'users' => $users,
+            'selected' => 'user'
+        ]);
     }
 
     public function edit($id){

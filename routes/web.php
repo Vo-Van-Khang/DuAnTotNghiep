@@ -52,6 +52,7 @@ Route::view('/signin', 'users.SignIn')->name("signin");
 Route::view('/signup', 'users.SignUp')->name("signup");
 Route::view('/forgot', 'users.forgot')->name("forgot");
 Route::get('/profile', [UserController::class,'get'])->name("profile");
+Route::get('/search', [MovieController::class,'search'])->name("search");
 
 Route::get('/movie/{id}', [MovieController::class,'get_id'])->name("movie");
 Route::get('/movie/{movie}/episode/{episode}', [EpisodeController::class,'get_by_movie'])->name("episode");
