@@ -25,7 +25,7 @@ class Validate extends FormRequest
             'name' =>'sometimes|required',
             'email' => 'sometimes|required|email',
             'password' => 'sometimes|required|min:8',
-            'thumbnail_add' => 'sometimes|required|file|mimes:jpeg,jpg,svg,webp,png|max:2048',
+            'thumbnail_add' => 'sometimes|required|file|mimes:jpeg,jpg,svg,webp,png',
             'title' => 'sometimes|required|string|max:255',
             'cast' => 'sometimes|required|string|max:255',
             'director' => 'sometimes|required|string|max:255',
@@ -38,7 +38,7 @@ class Validate extends FormRequest
             "episode" => "sometimes|required|min:1",
         ];
         if ($this->hasFile('thumbnail')) {
-            $rules['thumbnail'] = 'file|mimes:jpeg,jpg,svg,webp,png|max:2048';
+            $rules['thumbnail'] = 'file|mimes:jpeg,jpg,svg,webp,png';
         }   
         return $rules;
     }
@@ -55,10 +55,8 @@ class Validate extends FormRequest
 
             'thumbnail_add.required' => 'Hình ảnh là bắt buộc.',
             'thumbnail_add.mimes' => 'Hình ảnh phải thuộc loại: jpeg, png, jpg, svg, webp.',
-            'thumbnail_add.max' => 'Kích thước hình ảnh không vượt quá 2048 kb.',
 
             'thumbnail.mimes' => 'Hình ảnh phải thuộc loại: jpeg, png, jpg, svg, webp.',
-            'thumbnail.max' => 'Kích thước hình ảnh không vượt quá 2048 kb.',
 
             'title.required' => 'Tiêu đề là bắt buộc.',
             'title.string' => 'Tiêu đề phải là một chuỗi.',

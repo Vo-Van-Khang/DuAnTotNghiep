@@ -137,13 +137,13 @@
                                 </div>
                             </td>
                         </tr>
-                        @endforeach
-                        @else
+                    @endforeach
+                    @else
                         <tr>
                             <td></td>
-                        <td></td>
-                        <td class="main__table-text">Không có dữ liệu</td>
-                    </tr>
+                            <td></td>
+                            <td class="main__table-text">Không có dữ liệu</td>
+                        </tr>
                 @endif
             </tbody>
         </table>

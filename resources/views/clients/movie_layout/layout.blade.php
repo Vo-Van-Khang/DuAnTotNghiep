@@ -106,7 +106,11 @@
                                 </h3>
                                 <div class="episodes">
                                     @if ($episode_focus->episode == 1)
-                                        <button class="item active">Tập 1</button>  
+                                        @if ($episodes->count() > 0)
+                                            <button class="item active">Tập 1</button>     
+                                        @else
+                                            <button class="item active">Movie</button>        
+                                        @endif 
                                     @else
                                         <a href="{{ route('movie', $movie->id) }}" class="item">Tập 1</a> 
                                     @endif
@@ -131,21 +135,7 @@
                             <!-- categories -->
                             <div class="categories">
                                 <h3 class="categories__title">Thể loại</h3>
-                                <a
-                                    href="../html/category.html"
-                                    class="categories__item"
-                                    >Hành động</a
-                                >
-                                <a
-                                    href="../html/category.html"
-                                    class="categories__item"
-                                    >Giật gân</a
-                                >
-                                <a
-                                    href="../html/category.html"
-                                    class="categories__item"
-                                    >Tội phạm</a
-                                >
+                                    <a class="categories__item" href="{{route("category")}}">{{$movie->get_categories->name}}</a>
                             </div>
                             <!-- end categories -->
 

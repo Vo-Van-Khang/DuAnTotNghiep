@@ -196,6 +196,16 @@ $(document).ready(function () {
 	});
 
 });
+
+window.addEventListener('load',()=>{
+    document.querySelector('#loader').style.display = "none";
+})
+if(document.querySelector('form') != null){
+	document.querySelector('form').addEventListener('submit', function(event) {
+		document.getElementById('loader').style.display = 'flex';
+	});
+}
+
 const limitText = document.querySelectorAll(".limit__text");
 limitText.forEach((i)=>{
 	if(i.textContent.length > 30){
@@ -325,13 +335,14 @@ if(document.querySelector('.movie__status__update__btn') != null){
 	})
 }
 if(document.querySelector('.remove__btn__ajax') != null){
-	document.querySelectorAll('.remove__btn__ajax').forEach((button,index)=>{
+	document.querySelectorAll('.remove__btn__ajax').forEach((button)=>{
 		let id_remove = null;
 		let type_remove = null;
 		button.addEventListener('click',()=>{
 			id_remove = button.getAttribute('id_remove');
 			type_remove = button.getAttribute('type_remove');
 			document.querySelector('#modal__remove__btn').addEventListener('click',()=>{
+				console.log(id_remove);
 				fetch(`/admin/${type_remove}/delete/${id_remove}`,{
 					method: 'DELETE',
 					headers: {
@@ -342,7 +353,8 @@ if(document.querySelector('.remove__btn__ajax') != null){
 				.then(response => response.json())
 				.then(data =>{
 					if(data.success){
-						document.querySelectorAll('.tr__remove')[index].remove();
+						let item = document.querySelector(`.tr__remove[id_remove="${id_remove}"]`);
+						if (item) item.remove();
 					}else{
 						console.log("Xóa không thành công");
 					}

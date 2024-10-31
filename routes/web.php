@@ -42,6 +42,7 @@ Route::get('/admin/slide/add', [SlideController::class,'admin__add'])->name("adm
 Route::get('/admin/slide/update/', [SlideController::class,'admin__update'])->name("admin.slide.update");
 
 Route::get("/", [MovieController::class, 'index'])->name('index');
+// Route::view("/", "loader")->name('index');
 Route::view('/about', 'clients.about')->name("about");
 Route::view('/contact', 'clients.contact')->name("contact");
 Route::view('/subscription', 'clients.subscription')->name("subscription");

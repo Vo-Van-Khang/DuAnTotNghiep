@@ -9,6 +9,10 @@
 	<link rel="stylesheet" href="{{asset('css/bootstrap-reboot.min.css')}}">
 	<link rel="stylesheet" href="{{asset('css/bootstrap-grid.min.css')}}">
 	
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Itim&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}">
@@ -148,7 +152,8 @@
 		@yield('content')
 	</main>
 	<!-- kết thúc nội dung chính -->
-
+	
+	@include('layouts.shared.loader')
 	<!-- JS -->
 	<script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
 	<script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>

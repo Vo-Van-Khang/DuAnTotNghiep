@@ -6337,3 +6337,107 @@ body::-webkit-scrollbar-thumb {
 .plyr--video .plyr__control svg {
     filter: none;
 }
+/* LOADER */
+.loader__container{
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #151f309e;
+    z-index: 1000;
+}
+.loader__container .logo{
+    position: relative;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 5px;
+}
+.loader__container .text{
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    margin: 10px 0;
+}
+.loader__container .text p{
+    margin: 0;
+    font-family: "Itim", cursive;
+    color: #fff;
+    font-size: 17px;
+}
+.loader__container .text .items{
+    display: flex;
+    gap: 3px;
+}
+.loader__container .text .items div{
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #fff;
+    margin-bottom: 4px;
+    animation: loader__text 1s infinite ease-in-out;
+}
+.loader__container .text .items div:nth-child(2){
+    animation-delay: 0.2s;
+}
+.loader__container .text .items div:nth-child(2){
+    animation-delay: 0.4s;
+}
+.loader__container .text .items div:nth-child(3){
+    animation-delay: 0.6s;
+}
+.loader__container .loader__items{
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 48px;
+}
+.loader__container .loader__items div{
+    border-radius: 9px;
+    width: 20px;
+    height: 20px;
+    background-image: linear-gradient(to bottom right, #ffca2a, #bcc200);
+    animation: loader__items 1.5s infinite ease-in;
+}
+.loader__container .loader__items div:nth-child(1){
+    animation-delay: 0.6s;
+}
+.loader__container .loader__items div:nth-child(2){
+    animation-delay: 0.3s;
+}
+.loader__container .loader__items div:nth-child(3){
+    animation-delay: 0s;
+}
+.loader__container .loader__items div:nth-child(4){
+    animation-delay: 0.3s;
+}
+.loader__container .loader__items div:nth-child(5){
+    animation-delay: 0.6s;
+}
+@keyframes loader__text {
+    0%{
+        transform: translateY(0px);
+    }
+    50%{
+        transform: translateY(-1px);
+    }
+    100%{
+        transform: translateY(0px);
+    }
+}
+@keyframes loader__items {
+    0%{
+        height: 20px;
+    }
+    50%{
+        height: 48px;
+    }
+    100%{
+        height: 20px;
+    }
+}
