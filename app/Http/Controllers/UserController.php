@@ -19,7 +19,7 @@ class UserController extends Controller
         ]);
     }
     public function show(){
-        $users = db::table('users')->select('*')->get();
+        $users = db::table('users')->select('*')->where("isDeleted", 0)->get();
         return view('admins/user/list', ['users' => $users]);
     }
 
@@ -52,7 +52,8 @@ class UserController extends Controller
     }
     public function delete($id){
         $userDelete = User::find($id);
-        if($userDelete->delete()){
+        $userDelete->isDeleted = 1;
+        if($userDelete->save()){
             return redirect('admin/user/list');
 }
 }

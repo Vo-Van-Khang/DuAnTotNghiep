@@ -6,6 +6,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\EpisodeController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\WatchLaterController;
 
 
@@ -14,13 +15,13 @@ Route::get('/admin/user/update/{id}', [UserController::class, 'edit'])->name('ad
 Route::post('/admin/user/update',[UserController::class , 'update'])->name('admin.user.update');
 Route::get('/admin/user/delete/{id}', [UserController::class, 'delete'])->name('admin.user.delete');
 
+Route::get('/admin/category/list', [CategoryController::class , 'get'])->name('admin.category.list');
+Route::view('/admin/category/add', 'admins.category.add');
+Route::post('/admin/category/create', [CategoryController::class , 'create'])->name('admin.category.create');
+Route::get('/admin/category/update/{id}', [CategoryController::class, 'edit'])->name('admin.category.update');
+Route::post('/admin/category/update/{id}',[CategoryController::class , 'update'])->name('admin.category.update');
 
-Route::get('/admin/category/list', function () {
-    return view('admins.category.list');
-});
-Route::get('/admin/category/add', function () {
-    return view('admins.category.add');
-});
+
 Route::get('/admin/movie/list', [MovieController::class,'list__admin'])->name("admin.movie.list");
 Route::get('/admin/movie/add', function () {
     return view('admins.movie.add');

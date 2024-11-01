@@ -198,6 +198,7 @@ $(document).ready(function () {
 });
 if(document.querySelector("#modal__delete__btn") != null){
     document.querySelector("#modal__delete__btn").addEventListener("click", ()=>{
+        document.querySelectorAll(".remove__user")
         let id = document.querySelector("#modal__delete__btn").getAttribute("id_user");
         window.location = `/admin/user/delete/${id}`;
     })

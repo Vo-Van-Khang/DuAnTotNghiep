@@ -91,7 +91,7 @@
                                             <label class="sign__label" for="rights">Vai trò</label>
                                             <select class="js-example-basic-single" id="rights" name="role">
                                                 <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>Người dùng</option>
-                                                <option value="moderator" {{ $user->role == 'moderator' ? 'selected' : '' }}>Người điều hành</option>
+                                                <option value="staff" {{ $user->role == 'staff' ? 'selected' : '' }}>Người điều hành</option>
                                                 <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Quản trị viên</option>
                                             </select>
                                         </div>
