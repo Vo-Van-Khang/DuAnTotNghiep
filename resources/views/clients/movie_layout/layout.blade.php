@@ -35,7 +35,7 @@
                                 <div class="article__additional">
                                     <!-- add .active class -->
                                     @if ($check_like > 0)
-                                        <button id="remove__like" class="active"
+                                        <button id="like__button" class="active"
                                             title="Bỏ thích video này"
                                             type="button"
                                         >
@@ -43,7 +43,7 @@
                                             <span id="likes">{{$likes}}</span>
                                         </button>
                                     @else
-                                        <button id="add__to__like"
+                                        <button id="like__button"
                                             title="Thích video này"
                                             type="button"
                                         >
@@ -52,20 +52,20 @@
                                         </button>
                                     @endif
                                     @if ($check_watch_later > 0)
-                                        <button id="remove__watch__later" class="active"
+                                        <button id="watch__later__button" class="active"
                                             title="Xóa khỏi danh sách xem sau"
                                             type="button"
                                         >
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
-                                            Đã thêm xem sau
+                                            <span id="watch__later__text"> Đã thêm xem sau</span>
                                         </button>
                                     @else
-                                        <button id="add__to__watch__later"
+                                        <button id="watch__later__button"
                                             title="Thêm vào danh sách xem sau"
                                             type="button"
                                         >
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
-                                            Xem sau
+                                            <span id="watch__later__text"> Xem sau</span>
                                         </button>
                                     @endif
                                 </div>
@@ -142,10 +142,10 @@
                             <!-- share -->
                             <div class="share">
                                 <h3 class="share__title">Chia sẻ</h3>
-                                <a href="#" class="share__link share__link--fb"
-                                    ><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/></svg>
-                                    Sao chép đường dẫn</a
-                                >
+                                <button class="share__link share__link--fb" id="copy__url">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z"/></svg>
+                                    Sao chép đường dẫn
+                                </button>
                             </div>
                             <!-- end share -->
                         </div>

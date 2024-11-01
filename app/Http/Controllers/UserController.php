@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movies;
+use App\Models\Watch_laters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -11,11 +12,9 @@ use App\Models\User;
 class UserController extends Controller
 {
     public function get(){
-        $watch_laters = DB::table("watch_laters")->where("id_user",1)->get();
-        $movies = Movies::get();
+        $watch_laters = Watch_laters::with('get_movies')->where("id_user", 1)->get();
         return view('users.profile',[
-            'watch_laters'=>$watch_laters,
-            'movies'=>$movies
+            'watch_laters'=>$watch_laters
         ]);
     }
     public function admin__view(){

@@ -116,7 +116,7 @@
             <tbody>
                 @if ($episodes->count() > 0)
                     @foreach ($episodes as $episode)   
-                        <tr class="tr__remove">
+                        <tr class="tr__remove" id_remove="{{$episode->id}}">
                             <td>
                                 <div class="main__table-text">{{$episode->id}}</div>
                             </td>

@@ -202,7 +202,7 @@ window.addEventListener('load',()=>{
 })
 if(document.querySelector('form') != null){
 	document.querySelector('form').addEventListener('submit', function(event) {
-		document.getElementById('loader').style.display = 'flex';
+		document.querySelector('#loader').style.display = 'flex';
 	});
 }
 
@@ -306,6 +306,9 @@ if(document.querySelector('.movie__status__update__btn') != null){
 		let id = button.getAttribute('id_movie');
 		let movie__status = document.querySelectorAll('.movie__status');
 		button.addEventListener('click',()=>{
+
+			document.querySelector('#loader').style.display = 'flex';
+
 			fetch(`/admin/movie/status/update/${id}`,{
 				method: 'POST',
 				headers: {
@@ -320,9 +323,11 @@ if(document.querySelector('.movie__status__update__btn') != null){
 					if(data.show){
 						movie__status[index].innerText = "Hiển thị";
 						movie__status[index].classList = "movie__status main__table-text main__table-text--green";
+						document.querySelector('#loader').style.display = 'none';
 					}else{
 						movie__status[index].innerText = "Ẩn";
 						movie__status[index].classList = "movie__status main__table-text main__table-text--red";
+						document.querySelector('#loader').style.display = 'none';
 					}
 				}else{
 					console.log("Sửa không thành công");
@@ -342,7 +347,9 @@ if(document.querySelector('.remove__btn__ajax') != null){
 			id_remove = button.getAttribute('id_remove');
 			type_remove = button.getAttribute('type_remove');
 			document.querySelector('#modal__remove__btn').addEventListener('click',()=>{
-				console.log(id_remove);
+
+				document.querySelector('#loader').style.display = 'flex';
+				
 				fetch(`/admin/${type_remove}/delete/${id_remove}`,{
 					method: 'DELETE',
 					headers: {
@@ -354,7 +361,7 @@ if(document.querySelector('.remove__btn__ajax') != null){
 				.then(data =>{
 					if(data.success){
 						let item = document.querySelector(`.tr__remove[id_remove="${id_remove}"]`);
-						if (item) item.remove();
+						if (item) item.remove(); document.querySelector('#loader').style.display = 'none';
 					}else{
 						console.log("Xóa không thành công");
 					}

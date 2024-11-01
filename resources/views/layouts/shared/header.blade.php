@@ -12,7 +12,7 @@
 
                     <a href="{{route("index")}}" class="header__logo">
                         <img
-                            src="{{asset("images/logo.png")}}"
+                            src="{{asset("images/storage/logo.png")}}"
                             alt="Movies & TV Shows, Online cinema HTML Template"
                         />
                     </a>

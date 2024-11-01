@@ -58,10 +58,7 @@ Route::get('/search', [MovieController::class,'search'])->name("search");
 Route::get('/movie/{id}', [MovieController::class,'get_id'])->name("movie");
 Route::get('/movie/{movie}/episode/{episode}', [EpisodeController::class,'get_by_movie'])->name("episode");
 
-Route::post('/watch_later/fetch/add', [WatchLaterController::class,'add']);
-Route::delete('/watch_later/fetch/remove', [WatchLaterController::class,'remove']);
-
-Route::post('/like/fetch/add', [LikeController::class,'add']);
-Route::delete('/like/fetch/remove', [LikeController::class,'remove']);
+Route::post('/movie/like/{id}', [LikeController::class,'like']);
+Route::post('/movie/watch_later/{id}', [WatchLaterController::class,'watch_later']);
 
 Route::delete('/watch_later/remove/{id}', [WatchLaterController::class,'remove_by_id']);

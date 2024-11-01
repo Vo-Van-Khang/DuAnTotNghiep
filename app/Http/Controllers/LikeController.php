@@ -8,24 +8,22 @@ use App\Http\Controllers\Controller;
 
 class LikeController extends Controller
 {
-    public function add(){
-        DB::table("likes")->insert([
-            "id_movie" => request('id_movie'),
-            "id_user" => 1
+    public function like($id){
+        $check = DB::table("likes")->where("id_movie", $id)->where("id_user",1)->count();
+        if($check > 0){
+            DB::table("likes")->where("id_movie",$id)->where("id_user",1)->delete();
+        }else{
+            DB::table("likes")->where("id_movie",$id)->insert([
+                "id_user" => 1,
+                "id_movie" => $id
+            ]);
+        }
+        $likes = DB::table("likes")->where("id_movie", $id)->count();
+        return response()->json([
+            "check" => $check,
+            "likes" => $likes,
+            "success" => true
         ]);
-        $likes = DB::table("likes")->where("id_movie",request('id_movie'))->count();
-        return response()->json([
-            "likes" => $likes,
-            "success" => true
-        ]);;
-    }
-    public function remove(){
-        DB::table("likes")->where("id_movie",request('id_movie'))->where("id_user",1)->delete();
-        $likes = DB::table("likes")->where("id_movie",request('id_movie'))->count();
-        return response()->json([
-            "likes" => $likes,
-            "success" => true
-        ]);;
     }
     
 }

@@ -26,10 +26,10 @@
         <link
             rel="icon"
             type="image/png"
-            href="{{asset("images/logo.png")}}"
+            href="{{asset("images//storage/logo.png")}}"
             sizes="32x32"
         />
-        <link rel="apple-touch-icon" href="{{asset("images/logo.png")}}" />
+        <link rel="apple-touch-icon" href="{{asset("images/storage/logo.png")}}" />
 
         <meta name="description" content="" />
         <meta name="keywords" content="" />

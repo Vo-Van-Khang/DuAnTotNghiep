@@ -20,8 +20,8 @@
 	<link rel="stylesheet" href="{{asset('css/admin.css')}}">
 
 	<!-- Favicons -->
-	<link rel="icon" type="image/png" href="{{asset('images/logo.png')}}" sizes="32x32">
-	<link rel="apple-touch-icon" href="{{asset('images/logo.png')}}">
+	<link rel="icon" type="image/png" href="{{asset('images/storage/logo.png')}}" sizes="32x32">
+	<link rel="apple-touch-icon" href="{{asset('images/storage/logo.png')}}">
 
 	<meta name="description" content="">
 	<meta name="keywords" content="">
@@ -35,7 +35,7 @@
 		<div class="header__content">
 			<!-- logo tiêu đề -->
 			<a href="index.html" class="header__logo">
-				<img src="{{asset('images/logo.png')}}" alt="">
+				<img src="{{asset('images/storage/logo.png')}}" alt="">
 			</a>
 			<!-- kết thúc logo tiêu đề -->
 
@@ -54,7 +54,7 @@
 	<div class="sidebar">
 		<!-- logo thanh bên -->
 		<a href="/" class="sidebar__logo">
-			<img src="{{asset('images/logo.png')}}" alt="">
+			<img src="{{asset('images/storage/logo.png')}}" alt="">
 		</a>
 		<!-- kết thúc logo thanh bên -->
 
@@ -139,7 +139,11 @@
 			</li>
 
 			<li class="sidebar__nav-item">
-				<a href="thongbao.html" @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "notification"])><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416l384 0c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8l0-18.8c0-77.4-55-142-128-156.8L256 32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3l-64 0-64 0c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z"/></svg> <span>Thông báo</span></a>
+				<a href="thongbao.html" @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "notification"])><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z"/></svg><span>Thông báo</span></a>
+			</li>
+
+			<li class="sidebar__nav-item">
+				<a href="" @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "trash"])><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg><span>Thùng rác</span></a>
 			</li>
 		</ul>
 		<!-- kết thúc thanh điều hướng bên -->

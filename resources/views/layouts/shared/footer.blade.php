@@ -5,7 +5,7 @@
                 class="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 order-4 order-md-1 order-lg-4 order-xl-1"
             >
                 <div class="footer__flixtv">
-                    <img width="100px" src="{{asset('images/logo.png')}}" alt="" />
+                    <img width="100px" src="{{asset('images/storage/logo.png')}}" alt="" />
                 </div>
                 <p class="footer__tagline">
                     Phim & Chương trình truyền hình, Rạp chiếu phim trực

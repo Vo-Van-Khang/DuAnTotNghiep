@@ -1,5 +1,5 @@
 <div class="loader__container" id="loader">
-    <img src="{{asset('images/logo.png')}}" alt="" class="logo">
+    <img src="{{asset('images/storage/logo.png')}}" alt="" class="logo">
     <div class="loader__items">
         <div></div>
         <div></div>
