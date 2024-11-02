@@ -498,8 +498,8 @@ if (document.querySelector('#copy__url')) {
 if(document.querySelector('#like__button') != null){
     const like__button = document.querySelector('#like__button');
     like__button.addEventListener('click', () => {
+        
         document.querySelector('#loader').style.display = 'flex';
-
         let id = document.querySelector("#information__movie").getAttribute('id_movie');
         fetch(`/movie/like/${id}`, {
             method: 'POST',
@@ -534,8 +534,8 @@ if(document.querySelector('#like__button') != null){
 if(document.querySelector('#watch__later__button') != null){
     const watch__later__button = document.querySelector('#watch__later__button');
     watch__later__button.addEventListener('click', () => {
-        document.querySelector('#loader').style.display = 'flex';
 
+        document.querySelector('#loader').style.display = 'flex';
         let id = document.querySelector("#information__movie").getAttribute('id_movie');
         fetch(`/movie/watch_later/${id}`, {
             method: 'POST',
@@ -574,6 +574,8 @@ if(document.querySelector('.remove__watch__later__id') != null){
     remove__watch__later__button.forEach((button) => {
         button.addEventListener('click', () => {
             if (confirm("Bạn có muốn xóa phim xem sau này không?")) {
+
+                document.querySelector('#loader').style.display = 'flex';
                 let id = button.getAttribute("id_watch_later");
                 fetch(`/watch_later/remove/${id}`, {
                     method: 'DELETE',
@@ -587,6 +589,7 @@ if(document.querySelector('.remove__watch__later__id') != null){
                     if (data.success) {
                         let item__remove = document.querySelector(`.item__remove[id_watch_later="${id}"]`);
                         item__remove.remove();
+                        document.querySelector('#loader').style.display = 'none';
                     } else {
                         console.log("fail");
                     }

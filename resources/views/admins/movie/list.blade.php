@@ -17,13 +17,13 @@
         <table class="main__table">
           <thead>
             <tr>
-              <th title="Tiêu đề"> Tiêu đề </th>
-              <th title="Hình ảnh"> Hình ảnh </th>
-              <th title="Lượt xem"> Lượt xem </th>
-              <th title="Tình trạng"> Tình trạng </th>
-              <th title="ID danh mục"> ID danh mục </th>
-              <th title="Ngày tạo"> Ngày tạo </th>
-              <th > Hành động </th>
+              <th> Tiêu đề </th>
+              <th> Hình ảnh </th>
+              <th> Lượt xem </th>
+              <th> Tình trạng </th>
+              <th> Danh mục </th>
+              <th> Ngày tạo </th>
+              <th> Hành động </th>
             </tr>
           </thead>
 
@@ -32,33 +32,33 @@
               @foreach ($movies as $movie)
               <tr class="tr__remove" id_remove="{{$movie->id}}">
                 <td>
-                  <div title="{{$movie->title}}" class="main__table-text"><a class="limit__text" href="{{route('movie',$movie->id)}}">{{$movie->title}}</a></div>
+                  <div class="main__table-text"><a target="_blank" class="limit__text" href="{{route('movie',$movie->id)}}">{{$movie->title}}</a></div>
                 </td>
                 <td>
                   <div class="main__table-text"><img src="{{asset($movie->thumbnail)}}" alt=""></div>
                 </td>
                 <td>
-                  <div title="{{$movie->views}}" class="main__table-text">{{$movie->views}}</div>
+                  <div class="main__table-text">{{$movie->views}}</div>
                 </td>
                 <td>
                   @if ($movie->status == 1)
-                    <div title="Hiển thị" class="movie__status main__table-text main__table-text--green">Hiển thị</div>
+                    <div title="Hiển thị" class="status__item__update main__table-text main__table-text--green">Hiển thị</div>
                   @else
-                    <div title="Ẩn" class="movie__status main__table-text main__table-text--red">Ẩn</div>    
+                    <div title="Ẩn" class="status__item__update main__table-text main__table-text--red">Ẩn</div>    
                   @endif
                 </td>
                 <td>
-                  <div title="{{$movie->id_category}}" class="main__table-text">{{$movie->id_category}}</div>
+                  <div class="main__table-text">{{$movie->get_categories->name}}</div>
                 </td>
                 <td>
-                  <div title="{{$movie->created_at}}" class="main__table-text limit__text">{{$movie->created_at}}</div>
+                  <div class="main__table-text limit__text">{{$movie->created_at}}</div>
                 </td>
                 <td>
                   <div class="main__table-btns">
                     <a class="main__table-btn main__table-btn--view" href="{{route("admin.episode.add",$movie->id)}}">
                       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M160-120v-720h80v80h80v-80h320v80h80v-80h80v720h-80v-80h-80v80H320v-80h-80v80h-80Zm80-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm400 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80ZM400-200h160v-560H400v560Zm0-560h160-160Z"/></svg>                  
                     </a>
-                    <button class="main__table-btn main__table-btn--banned movie__status__update__btn" id_movie="{{$movie->id}}">
+                    <button class="main__table-btn main__table-btn--banned status__update__btn" id_status="{{$movie->id}}" type_status="movie">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.92,11.6C19.9,6.91,16.1,4,12,4S4.1,6.91,2.08,11.6a1,1,0,0,0,0,.8C4.1,17.09,7.9,20,12,20s7.9-2.91,9.92-7.6A1,1,0,0,0,21.92,11.6ZM12,18c-3.17,0-6.17-2.29-7.9-6C5.83,8.29,8.83,6,12,6s6.17,2.29,7.9,6C18.17,15.71,15.17,18,12,18ZM12,8a4,4,0,1,0,4,4A4,4,0,0,0,12,8Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,14Z"/></svg>
                     </button>
                     <a href="{{route("admin.movie.update",$movie->id)}}" class="main__table-btn main__table-btn--edit">

@@ -594,6 +594,18 @@ body::-webkit-scrollbar-thumb {
   color: #151f30;
   background-color: #fff;
 }
+.main__title--table{
+  display: flex;
+  color: #fff;
+  justify-content: space-between;
+  padding: 10px 0;
+  padding-right: 40px;
+  border-bottom: 1px solid #2f80ed1a;
+  margin-bottom: 15px;
+}
+.main__title--table svg{
+  cursor: pointer;
+}
 .main__table-wrap {
   position: relative;
   width: 100%;
@@ -615,6 +627,7 @@ body::-webkit-scrollbar-thumb {
   line-height: 100%;
   margin-bottom: 0;
   border: none;
+  text-transform: uppercase;
 }
 .main__table tbody tr {
   border-bottom: 10px solid #131720;
