@@ -416,7 +416,11 @@ $(document).ready(function() {
         mainClass: 'my-mfp-zoom-in',
     });
 
-    $('.modal__close').on('click', function(e) {
+    $('.modal__btn--apply').on('click', function(e) {
+        e.preventDefault();
+        $.magnificPopup.close();
+    });
+    $('.modal__btn--dismiss').on('click', function(e) {
         e.preventDefault();
         $.magnificPopup.close();
     });
@@ -569,35 +573,46 @@ if(document.querySelector('#watch__later__button') != null){
     });
 }
 
-if(document.querySelector('.remove__watch__later__id') != null){
-    const remove__watch__later__button = document.querySelectorAll('.remove__watch__later__id');
-    remove__watch__later__button.forEach((button) => {
-        button.addEventListener('click', () => {
-            if (confirm("Bạn có muốn xóa phim xem sau này không?")) {
 
-                document.querySelector('#loader').style.display = 'flex';
-                let id = button.getAttribute("id_watch_later");
-                fetch(`/watch_later/remove/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        let item__remove = document.querySelector(`.item__remove[id_watch_later="${id}"]`);
-                        item__remove.remove();
-                        document.querySelector('#loader').style.display = 'none';
-                    } else {
-                        console.log("fail");
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-            }
+if (document.querySelector('.remove__btn') != null) {
+    let id_remove = null;
+    let type_remove = null;
+
+    document.querySelectorAll('.remove__btn').forEach((button) => {
+        button.addEventListener('click', () => {
+            id_remove = button.getAttribute('id_remove');
+            type_remove = button.getAttribute('type_remove');
         });
     });
+
+    function remove() {
+        if (!id_remove || !type_remove) return;
+
+        document.querySelector('#loader').style.display = 'flex';
+
+        fetch(`/${type_remove}/remove/${id_remove}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let item = document.querySelector(`.item__remove[id_remove="${id_remove}"][type_remove="${type_remove}"]`);
+                if (item) item.remove();
+                document.querySelector('#loader').style.display = 'none';
+            } else {
+                console.log("Xóa không thành công");
+            }
+            id_remove = null;
+            type_remove = null;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    document.querySelector('#modal__remove__btn').addEventListener('click', remove);
 }

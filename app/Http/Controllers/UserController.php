@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Histories;
 use App\Models\Movies;
 use App\Models\Watch_laters;
 use Illuminate\Http\Request;
@@ -13,8 +14,11 @@ class UserController extends Controller
 {
     public function get(){
         $watch_laters = Watch_laters::with('get_movies')->where("id_user", 1)->get();
+        $histories = Histories::with('get_movies')->where("id_user", 1)->get();
+        // dd($histories);
         return view('users.profile',[
-            'watch_laters'=>$watch_laters
+            'watch_laters'=>$watch_laters,
+            'histories'=>$histories,
         ]);
     }
     public function admin__view(){

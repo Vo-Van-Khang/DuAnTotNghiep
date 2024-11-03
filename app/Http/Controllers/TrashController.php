@@ -38,6 +38,7 @@ class TrashController extends Controller
     }
 
     public function admin__movie__remove($id_remove){
+        $movie = DB::table("movies")->where("id",$id_remove);
 
         $urlMovie = DB::table("urls")->where("media_id", $id_remove)->where("type", "movie")->first();
         if ($urlMovie) {
@@ -46,7 +47,9 @@ class TrashController extends Controller
             DB::table("urls")->where("id", $urlMovie->id)->delete();
         }
 
-        DB::table("movies")->where("id",$id_remove)->delete();
+        if (file_exists(public_path($movie->value('thumbnail')))) {
+            unlink(public_path($movie->value('thumbnail')));
+        }
         $episodes = DB::table("episodes")->where("id_movie",$id_remove)->get();
 
         foreach ($episodes as $episode) {
@@ -60,6 +63,8 @@ class TrashController extends Controller
 
             DB::table("episodes")->where("id", $episode->id)->delete();
         }
+        $movie->delete();
+
         return response()->json([
             "success" => true
         ]);

@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\TrashController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\SlideController;
+use App\Http\Controllers\TrashController;
 use App\Http\Controllers\EpisodeController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\WatchLaterController;
 
@@ -69,3 +70,4 @@ Route::post('/movie/like/{id}', [LikeController::class,'like']);
 Route::post('/movie/watch_later/{id}', [WatchLaterController::class,'watch_later']);
 
 Route::delete('/watch_later/remove/{id}', [WatchLaterController::class,'remove_by_id']);
+Route::delete('/history/remove/{id}', [HistoryController::class,'remove_by_id']);

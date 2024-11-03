@@ -318,7 +318,7 @@
        <p class="modal__text">Bạn có chắc chắn muốn phục hồi mục này không?</p>
 
        <div class="modal__btns">
-          <button class="modal__btn modal__btn--dismiss" id="modal__restore__btn" type="button">Có</button>
+          <button class="modal__btn modal__btn--apply" id="modal__restore__btn" type="button">Có</button>
           <button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
        </div>
      </div>
@@ -331,7 +331,7 @@
        <p class="modal__text">Bạn có chắc chắn muốn xóa mục này vĩnh viễn không?</p>
 
        <div class="modal__btns">
-          <button class="modal__btn modal__btn--dismiss" id="modal__remove__btn" type="button">Xóa</button>
+          <button class="modal__btn modal__btn--apply" id="modal__remove__btn" type="button">Xóa</button>
           <button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
        </div>
      </div>

@@ -53,6 +53,10 @@ $(document).ready(function () {
 		mainClass: 'my-mfp-zoom-in',
 	});
 
+	$('.modal__btn--apply').on('click', function (e) {
+		e.preventDefault();
+		$.magnificPopup.close();
+	});
 	$('.modal__btn--dismiss').on('click', function (e) {
 		e.preventDefault();
 		$.magnificPopup.close();
@@ -470,6 +474,6 @@ if(document.querySelector('.trash__remove__btn') != null){
 				console.error(error);
 			});
 	}
-    document.querySelector('#modal__restore__btn').addEventListener('click', trashRemove);
+    document.querySelector('#modal__remove__btn').addEventListener('click', trashRemove);
 }
 

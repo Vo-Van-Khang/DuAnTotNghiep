@@ -38,24 +38,38 @@
             Đum Đúm – Phim & Chương trình truyền hình, Rạp chiếu phim trực tuyến
         </title>
     </head>
-
     <body>
-        <!-- header (relative style) -->
-        @include('layouts.shared.header')
-        <!-- end header -->
-        @yield('content')
-        @include('layouts.shared.footer')
-        <!-- end footer -->
-        @include('layouts.shared.loader')
+        <!-- page 404 -->
+        <div class="page-404 section--full-bg" data-bg="img/bg.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-404__wrap">
+                            <div class="page-404__content">
+                                <h1 class="page-404__title">404</h1>
+                                <p class="page-404__text">
+                                    Trang của bạn đang tìm không có sẵn!
+                                </p>
+                                <a href="{{route('index')}}" class="page-404__btn"
+                                    >Quay trở lại</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end page 404 -->
+
         <!-- JS -->
-        <script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
-        <script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>
-        <script src="{{asset("js/owl.carousel.min.js")}}"></script>
-        <script src="{{asset("js/slider-radio.js")}}"></script>
-        <script src="{{asset("js/select2.min.js")}}"></script>
-        <script src="{{asset("js/smooth-scrollbar.js")}}"></script>
-        <script src="{{asset("js/jquery.magnific-popup.min.js")}}"></script>
-        <script src="{{asset("js/plyr.min.js")}}"></script>
-        <script src="{{asset("js/main.js")}}"></script>
+        <script src="js/jquery-3.5.1.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/slider-radio.js"></script>
+        <script src="js/select2.min.js"></script>
+        <script src="js/smooth-scrollbar.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/plyr.min.js"></script>
+        <script src="js/main.js"></script>
     </body>
 </html>
