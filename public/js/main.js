@@ -481,6 +481,39 @@ if(document.querySelector('form') != null){
         document.querySelector('#loader').style.display = 'flex';
 	});
 }
+let change__theme__btn = document.querySelector("#change__theme");
+let is__dark__mode = false;
+
+change__theme__btn.addEventListener('click', () => {
+    if (is__dark__mode) {
+        // Chế độ sáng
+        document.body.style.setProperty('--color-131720', '#131720'); // Màu chữ tối
+        document.body.style.setProperty('--color-151f30', '#151f30'); // Nền sáng
+        document.body.style.setProperty('--color-2f80ed', '#2f80ed'); // Màu chính
+        document.body.style.setProperty('--color-3b5998', '#3b5998'); // Màu thứ 2
+        document.body.style.setProperty('--color-4c6c91', '#4c6c91'); // Màu phụ
+        document.body.style.setProperty('--color-55acee', '#55acee'); // Màu phụ 2
+        document.body.style.setProperty('--color-668cb7', '#668cb7'); // Màu phụ 3
+        document.body.style.setProperty('--color-e0e0e0', '#e0e0e0'); // Màu chữ tối
+        document.body.style.setProperty('--color-f2f2f2', '#f2f2f2'); // Nền sáng
+        document.body.style.setProperty('--color-fff', '#fff'); // Màu trắng
+    } else {
+        // Chế độ tối
+        document.body.style.setProperty('--color-131720', '#ece8df'); // Màu chữ sáng
+        document.body.style.setProperty('--color-151f30', '#e0e0e0'); // Nền tối
+        document.body.style.setProperty('--color-2f80ed', '#2f80ed'); // Màu chính
+        document.body.style.setProperty('--color-3b5998', '#3b5998'); // Màu thứ 2
+        document.body.style.setProperty('--color-4c6c91', '#4c6c91'); // Màu phụ
+        document.body.style.setProperty('--color-55acee', '#55acee'); // Màu phụ 2
+        document.body.style.setProperty('--color-668cb7', '#668cb7'); // Màu phụ 3
+        document.body.style.setProperty('--color-e0e0e0', '#151f30'); // Màu sáng
+        document.body.style.setProperty('--color-f2f2f2', '#0d0d0d'); // Màu sáng
+        document.body.style.setProperty('--color-fff', '#000000'); // Màu trắng
+    }
+
+    is__dark__mode = !is__dark__mode; // Đảo trạng thái
+});
+
 
 if (document.querySelector('#copy__url')) {
     const copy__url__button = document.querySelector('#copy__url');
