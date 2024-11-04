@@ -210,6 +210,17 @@ if(document.querySelector('form') != null){
 	});
 }
 
+if(document.querySelector('.message_box') !== null){
+    const hide_message = document.querySelector('.hide_message');
+    const message_box = document.querySelector('.message_box');
+    hide_message.addEventListener('click',() => {
+        message_box.style.display = "none";
+    })
+    message_box.addEventListener("animationend",()=>{
+        message_box.style.display = "none";
+    })
+}
+
 const limitText = document.querySelectorAll(".limit__text");
 limitText.forEach((i)=>{
 	if(i.textContent.length > 30){

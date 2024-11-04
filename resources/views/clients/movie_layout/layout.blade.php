@@ -4,7 +4,7 @@
         <section
             class="section section--head section--head-fixed section--gradient section--details-bg"
         >
-            <div class="section__bg" data-bg="img/details.jpg"></div>
+            <div class="section__bg"></div>
             <div class="container">
                 <!-- article -->
                 <div class="article" id="information__movie" id_movie="{{$movie->id}}">

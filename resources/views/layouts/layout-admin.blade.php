@@ -156,7 +156,7 @@
 		@yield('content')
 	</main>
 	<!-- kết thúc nội dung chính -->
-	
+    @include('layouts.shared.message')
 	@include('layouts.shared.loader')
 	<!-- JS -->
 	<script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>

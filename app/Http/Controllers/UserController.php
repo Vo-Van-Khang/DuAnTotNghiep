@@ -13,8 +13,8 @@ use App\Models\User;
 class UserController extends Controller
 {
     public function get(){
-        $watch_laters = Watch_laters::with('get_movies')->where("id_user", 1)->get();
-        $histories = Histories::with('get_movies')->where("id_user", 1)->get();
+        $watch_laters = Watch_laters::with('get_movies')->where("id_user", 1)->orderBy("id","desc")->get();
+        $histories = Histories::with('get_movies')->where("id_user", 1)->orderBy("created_at","desc")->get();
         // dd($histories);
         return view('users.profile',[
             'watch_laters'=>$watch_laters,

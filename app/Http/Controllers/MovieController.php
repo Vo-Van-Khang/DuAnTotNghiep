@@ -84,7 +84,20 @@ class MovieController extends Controller
         $movies = Movies::with('get_categories')->where("status", 1)->where("isDeleted", 0)->get();
         $slides = Slides::with('get_movies')->where('status', 'show')->get();
         $categories = DB::table("categories")->get();
-        return view('/clients/HomePage', ['movies' => $movies, 'slides' => $slides, 'categories' => $categories]);
+
+        $watch_later_movies = [];
+        if (true) {
+            $watch_later_movies = DB::table("watch_laters")
+                ->where("id_user", 1)
+                ->pluck("id_movie")
+                ->toArray();
+        }
+        return view('/clients/HomePage', [
+            'movies' => $movies, 
+            'slides' => $slides, 
+            'categories' => $categories,
+            "watch_later_movies" => $watch_later_movies
+        ]);
     }
 
     public function admin__view(){

@@ -481,38 +481,54 @@ if(document.querySelector('form') != null){
         document.querySelector('#loader').style.display = 'flex';
 	});
 }
-let change__theme__btn = document.querySelector("#change__theme");
-let is__dark__mode = false;
 
-change__theme__btn.addEventListener('click', () => {
-    if (is__dark__mode) {
-        // Chế độ sáng
-        document.body.style.setProperty('--color-131720', '#131720'); // Màu chữ tối
-        document.body.style.setProperty('--color-151f30', '#151f30'); // Nền sáng
-        document.body.style.setProperty('--color-2f80ed', '#2f80ed'); // Màu chính
-        document.body.style.setProperty('--color-3b5998', '#3b5998'); // Màu thứ 2
-        document.body.style.setProperty('--color-4c6c91', '#4c6c91'); // Màu phụ
-        document.body.style.setProperty('--color-55acee', '#55acee'); // Màu phụ 2
-        document.body.style.setProperty('--color-668cb7', '#668cb7'); // Màu phụ 3
-        document.body.style.setProperty('--color-e0e0e0', '#e0e0e0'); // Màu chữ tối
-        document.body.style.setProperty('--color-f2f2f2', '#f2f2f2'); // Nền sáng
-        document.body.style.setProperty('--color-fff', '#fff'); // Màu trắng
-    } else {
-        // Chế độ tối
-        document.body.style.setProperty('--color-131720', '#ece8df'); // Màu chữ sáng
-        document.body.style.setProperty('--color-151f30', '#e0e0e0'); // Nền tối
-        document.body.style.setProperty('--color-2f80ed', '#2f80ed'); // Màu chính
-        document.body.style.setProperty('--color-3b5998', '#3b5998'); // Màu thứ 2
-        document.body.style.setProperty('--color-4c6c91', '#4c6c91'); // Màu phụ
-        document.body.style.setProperty('--color-55acee', '#55acee'); // Màu phụ 2
-        document.body.style.setProperty('--color-668cb7', '#668cb7'); // Màu phụ 3
-        document.body.style.setProperty('--color-e0e0e0', '#151f30'); // Màu sáng
-        document.body.style.setProperty('--color-f2f2f2', '#0d0d0d'); // Màu sáng
-        document.body.style.setProperty('--color-fff', '#000000'); // Màu trắng
-    }
+if(document.querySelector('.message_box') !== null){
+    const hide_message = document.querySelector('.hide_message');
+    const message_box = document.querySelector('.message_box');
+    hide_message.addEventListener('click',() => {
+        message_box.style.display = "none";
+    })
+    message_box.addEventListener("animationend",()=>{
+        message_box.style.display = "none";
+    })
+}
 
-    is__dark__mode = !is__dark__mode; // Đảo trạng thái
-});
+if(document.querySelector('.watch__later__button') != null){
+    const watch__later__button = document.querySelectorAll('.watch__later__button');
+    watch__later__button.forEach((button) => {
+        button.addEventListener('click', () => {
+            document.querySelector('#loader').style.display = 'flex';
+            let id = button.getAttribute('id_movie');
+            fetch(`/movie/watch_later/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+
+                    if(data.check > 0){
+                        button.classList = "home__add watch__later__button";
+                        button.title = "Thêm vào danh sách xem sau";
+                    }else{
+                        button.classList = "home__add watch__later__button active";
+                        button.title = "Xoá khỏi xem sau";
+                    }
+
+                    document.querySelector('#loader').style.display = 'none';
+                } else {
+                    console.log("fail");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        });
+    })
+}
 
 
 if (document.querySelector('#copy__url')) {
@@ -591,7 +607,7 @@ if(document.querySelector('#watch__later__button') != null){
                     document.querySelector("#watch__later__text").innerText = "Xem sau";
                 }else{
                     watch__later__button.className = "active";
-                    watch__later__button.title = "Bỏ thích video này";
+                    watch__later__button.title = "Xoá khỏi xem sau";
                     document.querySelector("#watch__later__text").innerText = "Đã thêm xem sau";
                 }
 
