@@ -330,16 +330,30 @@ if(document.querySelector('.status__update__btn') != null){
 			.then(response => response.json())
 			.then(data =>{
 				if(data.success){
-					if(data.show){
-						status__item__update[index].innerText = "Hiển thị";
-						status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
-						
-						document.querySelector('#loader').style.display = 'none';
+					if(type_status != "user"){
+						if(data.show){
+							status__item__update[index].innerText = "Hiển thị";
+							status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
+							
+							document.querySelector('#loader').style.display = 'none';
+						}else{
+							status__item__update[index].innerText = "Ẩn";
+							status__item__update[index].classList = "status__item__update main__table-text main__table-text--red";
+							
+							document.querySelector('#loader').style.display = 'none';
+						}
 					}else{
-						status__item__update[index].innerText = "Ẩn";
-						status__item__update[index].classList = "status__item__update main__table-text main__table-text--red";
-						
-						document.querySelector('#loader').style.display = 'none';
+						if(!data.ban){
+							status__item__update[index].innerText = "Hoạt động";
+							status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
+							
+							document.querySelector('#loader').style.display = 'none';
+						}else{
+							status__item__update[index].innerText = "Bị cấm";
+							status__item__update[index].classList = "status__item__update main__table-text main__table-text--red";
+							
+							document.querySelector('#loader').style.display = 'none';
+						}
 					}
 				}else{
 					console.log("Sửa không thành công");
