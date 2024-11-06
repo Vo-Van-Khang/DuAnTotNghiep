@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use stdClass;
 use App\Models\Movies;
 use App\Models\Slides;
+use App\Models\Comments;
 use Illuminate\Http\Request;
 use App\Http\Requests\Validate;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +32,7 @@ class MovieController extends Controller
             $check_like = 0;
         }
 
-        $movie = Movies::with('get_categories')->find($id);
+        $movie = Movies::with('category')->find($id);
 
         $urls = DB::table("urls")
         ->select("*")
@@ -65,6 +66,8 @@ class MovieController extends Controller
         ->select("*")
         ->get();
 
+        $comments = Comments::with("user")->where("id_movie",$id)->orderBy("created_at","desc")->get();;
+
         $episode_focus = new stdClass();
         $episode_focus->episode = 1;
 
@@ -75,14 +78,15 @@ class MovieController extends Controller
             "episodes"=>$episodes,
             "similars" => $similars,
             "categories" => $categories,
+            "comments" => $comments,
             "episode_focus" => $episode_focus,
             "check_like" => $check_like,
             "check_watch_later" => $check_watch_later
         ]);
     }
     public function index(){
-        $movies = Movies::with('get_categories')->where("status", 1)->where("isDeleted", 0)->get();
-        $slides = Slides::with('get_movies')->where('status', 'show')->get();
+        $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->get();
+        $slides = Slides::with('movie')->where('status', 1)->where('isDeleted', 0)->get();
         $categories = DB::table("categories")->get();
 
         $watch_later_movies = [];
@@ -101,20 +105,20 @@ class MovieController extends Controller
     }
 
     public function admin__view(){
-        $movies = Movies::with('get_episodes')->where("isDeleted",0)->get();
+        $movies = Movies::with('category')->where("isDeleted",0)->get();
         return view('admins.movie.list', [
             "movies" => $movies,
             "selected" => "movie"
         ]);
     }
     Public function allMovie(){
-        $movies = Movies::with('get_categories')->get();
+        $movies = Movies::with('category')->get();
         return view('/clients/all', ['movies' => $movies]);
     }
     Public function search(Request $request){
         {
             $search = $request->input('search');
-            $movies = Movies::with('get_categories')
+            $movies = Movies::with('category')
                 ->where('title', 'LIKE', "%{$search}%")
                 ->get();
             return view('/clients/search', ['movies'=> $movies]);
@@ -143,51 +147,73 @@ class MovieController extends Controller
 
   
 
-    public function admin__create(Validate $request){
-        $request->validated();
+    public function admin__create(Request $request){
 
-        $imagePath = "";
-        if ($request->hasFile('thumbnail_add')) {
-            $image = $request->file('thumbnail_add');
-            $uniqueName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = 'images/thumbnails/' . $uniqueName;
-            $image->move(public_path('images/thumbnails'), $uniqueName);
-        }
-        
-        // Insert movie details into the database
-        $movieId = DB::table('movies')->insertGetId([
-            'title' => $request->input('title'),
-            'thumbnail' => $imagePath, // Store the image URL in the database
-            'cast' => $request->input('cast'),
-            'director' => $request->input('director'),
-            'release_year' => $request->input('release_year'),
-            'country' => $request->input('country'),
-            'description' => $request->input('description'),
-            'status' => $request->input('status'),
-            'id_category' => $request->input('id_category'),
-            'duration' => $request->input('duration')// Duration can be adjusted based on actual video length
-        ]);
+    $validated = $request->validate([
+        'thumbnail_add' => 'required|file|mimes:jpeg,jpg,svg,webp,png',
+        'title' => 'required|string|max:255',
+        'cast' => 'required|string|max:255',
+        'director' => 'required|string|max:255',
+        'release_year' => 'required|integer|min:1900|max:' . date('Y'),
+        'country' => 'required|string|max:255',
+        'description' => 'required|string',
+        'duration' => 'required|integer|min:1',
+        'episode' => 'sometimes|required|min:1',
+    ], [
+        'thumbnail_add.required' => 'Hình ảnh là bắt buộc.',
+        'thumbnail_add.mimes' => 'Hình ảnh phải thuộc loại: jpeg, png, jpg, svg, webp.',
+        'title.required' => 'Tiêu đề là bắt buộc.',
+        'cast.required' => 'Diễn viên là bắt buộc.',
+        'director.required' => 'Đạo diễn là bắt buộc.',
+        'release_year.required' => 'Năm phát hành là bắt buộc.',
+        'country.required' => 'Quốc gia là bắt buộc.',
+        'description.required' => 'Mô tả là bắt buộc.',
+        'duration.required' => 'Thời lượng là bắt buộc.',
+        'episode.required' => 'Tập phim là bắt buộc.',
+    ]);
 
-        if ($request->hasFile('url')) {
-            foreach ($request->file('url') as $index => $file) {
-                if ($file) {
-                    $videoPath = $file->store('videos', 's3');
-                    Storage::disk('s3')->setVisibility($videoPath, 'public');
-                    $videoUrl = Storage::disk('s3')->url($videoPath);
+    $imagePath = "";
+    if ($request->hasFile('thumbnail_add')) {
+        $image = $request->file('thumbnail_add');
+        $uniqueName = time() . '_' . $image->getClientOriginalName();
+        $imagePath = 'images/thumbnails/' . $uniqueName;
+        $image->move(public_path('images/thumbnails'), $uniqueName);
+    }
 
-                    DB::table('urls')->insert([
-                        'url' => $videoUrl,
-                        'resolution' => $request->input("resolution.$index"), 
-                        'type' => 'movie', 
-                        'premium' => $request->input("premium.$index"), 
-                        'media_id' => $movieId 
-                    ]);
-                }
+    $movieId = DB::table('movies')->insertGetId([
+        'title' => $validated['title'],
+        'thumbnail' => $imagePath,
+        'cast' => $validated['cast'],
+        'director' => $validated['director'],
+        'release_year' => $validated['release_year'],
+        'country' => $validated['country'],
+        'description' => $validated['description'],
+        'status' => $validated['status'],
+        'id_category' => $validated['id_category'],
+        'duration' => $validated['duration'],
+    ]);
+
+    if ($request->hasFile('url')) {
+        foreach ($request->file('url') as $index => $file) {
+            if ($file) {
+                $videoPath = $file->store('videos', 's3');
+                Storage::disk('s3')->setVisibility($videoPath, 'public');
+                $videoUrl = Storage::disk('s3')->url($videoPath);
+
+                DB::table('urls')->insert([
+                    'url' => $videoUrl,
+                    'resolution' => $request->input("resolution.$index"), 
+                    'type' => 'movie', 
+                    'premium' => $request->input("premium.$index"), 
+                    'media_id' => $movieId 
+                ]);
             }
         }
-
-        return redirect()->route("admin.movie.list")->with('success', 'Phim đã được thêm thành công!');
     }
+
+    return redirect()->route("admin.movie.list")->with('success', 'Phim đã được thêm thành công!');
+}
+
     public function admin__update(Validate $request, $id) {
         $request->validated();
 

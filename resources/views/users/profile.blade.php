@@ -248,8 +248,8 @@
                                                         <div
                                                             class="main__table-text"
                                                         >
-                                                            <a href="{{$history->id_movie}}"
-                                                                >{{$history->get_movies->title}}</a
+                                                            <a href="{{route("movie", $history->id_movie)}}"
+                                                                >{{$history->movie->title}}</a
                                                             >
                                                         </div>
                                                     </td>
@@ -295,8 +295,8 @@
                         @foreach ($watch_laters as $watch_later)
                             <div class="col-6 col-sm-4 col-lg-3 col-xl-3 item__remove" id_remove="{{$watch_later->id}}" type_remove="watch_later">
                                 <div class="card card--favorites">
-                                    <a href="{{route('movie',$watch_later->get_movies->id)}}" class="card__cover">
-                                        <img src="{{asset($watch_later->get_movies->thumbnail)}}" alt="" />
+                                    <a href="{{route('movie',$watch_later->movie->id)}}" class="card__cover">
+                                        <img src="{{asset($watch_later->movie->thumbnail)}}" alt="" />
                                         <svg
                                             width="22"
                                             height="22"
@@ -325,16 +325,16 @@
                                     </a>
                                     <span class="card__rating"
                                         ><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
-                                        {{$watch_later->get_movies->views}}</span
+                                        {{$watch_later->movie->views}}</span
                                     >
                                     <h3 class="card__title">
-                                        <a href="{{route('movie',$watch_later->get_movies->id)}}"
-                                            >{{$watch_later->get_movies->title}}</a
+                                        <a href="{{route('movie',$watch_later->movie->id)}}"
+                                            >{{$watch_later->movie->title}}</a
                                         >
                                     </h3>
                                     <ul class="card__list">
-                                        <li>{{$watch_later->get_movies->get_categories->name}}</li>
-                                        <li>{{$watch_later->get_movies->release_year}}</li>
+                                        <li>{{$watch_later->movie->category->name}}</li>
+                                        <li>{{$watch_later->movie->release_year}}</li>
                                     </ul>
                                 </div>
                             </div>

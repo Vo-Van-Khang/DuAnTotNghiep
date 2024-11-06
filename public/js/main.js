@@ -476,6 +476,12 @@ $(document).ready(function() {
 window.addEventListener('load',()=>{
     document.querySelector('#loader').style.display = "none";
 })
+
+if(document.querySelector(".page-404__btn")){
+    document.querySelector(".page-404__btn").addEventListener("click",()=>{
+        window.history.back();
+    })
+}
 if(document.querySelector('form') != null){
 	document.querySelector('form').addEventListener('submit', function(event) {
         document.querySelector('#loader').style.display = 'flex';
@@ -644,7 +650,7 @@ if (document.querySelector('.remove__btn') != null) {
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
+            }
         })
         .then(response => response.json())
         .then(data => {
@@ -664,4 +670,100 @@ if (document.querySelector('.remove__btn') != null) {
     }
 
     document.querySelector('#modal__remove__btn').addEventListener('click', remove);
+}
+
+if (document.querySelector(".comment__submit__btn")) {
+    let comment__submit__btn = document.querySelector(".comment__submit__btn");
+    let comment__content = document.querySelector("#comment__content");
+    let comment__error = document.querySelector("#comment__error");
+    let comments__list = document.querySelector(".comments__list");
+    let comment__count = document.querySelector(".comment__count");
+    comment__submit__btn.addEventListener("click",(button)=>{
+        let id = button.target.getAttribute('id_movie');
+
+        if(comment__content.value != ""){
+            comment__error.style.display = "none";
+
+            fetch(`/movie/${id}/comment/add`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ comment__content: comment__content.value })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let template = `<li class="comments__item">
+                                        <div class="comments__autor">
+                                            <img
+                                                class="comments__avatar"
+                                                src="../images/users/${data.user.image}"
+                                                alt=""
+                                            />
+                                            <span class="comments__name"
+                                                >${data.user.name}</span
+                                            >
+                                            <span class="comments__time"
+                                                >${data.comment.created_at}</span
+                                            >
+                                        </div>
+                                        <p class="comments__text">
+                                            ${data.comment.content}
+                                        </p>
+                                        <div class="comments__actions">
+                                            
+
+                                            <button type="button">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="512"
+                                                    height="512"
+                                                    viewBox="0 0 512 512"
+                                                >
+                                                    <polyline
+                                                        points="400 160 464 224 400 288"
+                                                        style="
+                                                            fill: none;
+                                                            stroke-linecap: round;
+                                                            stroke-linejoin: round;
+                                                            stroke-width: 32px;
+                                                        "
+                                                    />
+                                                    <path
+                                                        d="M448,224H154C95.24,224,48,273.33,48,332v20"
+                                                        style="
+                                                            fill: none;
+                                                            stroke-linecap: round;
+                                                            stroke-linejoin: round;
+                                                            stroke-width: 32px;
+                                                        "
+                                                    /></svg
+                                                ><span>Trả Lời</span>
+                                            </button>
+                                        </div>
+                                    </li>`;
+                    comments__list.insertAdjacentHTML('afterbegin', template);
+                    let newComment = comments__list.querySelector('.comments__item');
+                    newComment.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',    
+                        inline: 'nearest'      
+                    });
+                    comment__count.innerText = parseInt(comment__count.textContent) + 1;
+                    comment__content.value = "";
+                }else{
+                    console.log("Thêm bình luận không thành công");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        }else{
+            comment__error.style.display = "block";
+            comment__error.innerText = "Nội dung không được để trống!"
+        }
+    })
 }

@@ -13,8 +13,8 @@
                     <div class="profile__user">
                         <!-- hoặc đỏ -->
                         <div class="profile__meta profile__meta--green">
-                            <h3>ID: 2</h3>
-                            <span>ID phim: 3</span>
+                            <h3>ID: {{$slide->id}}</h3>
+                            <span>Phim: {{$slide->movie->title}}</span>
                         </div>
                     </div>
                     <!-- kết thúc người dùng hồ sơ -->
@@ -27,7 +27,8 @@
                         <div class="">
                             <!-- biểu mẫu chi tiết -->
                             <div class="">
-                                <form action="#" class="sign__form sign__form--profile sign__form--first">
+                                <form action="{{route('admin.slide.update',$slide->id)}}" method="POST" enctype="multipart/form-data"  class="sign__form sign__form--profile sign__form--first">
+                                @csrf
                                     <div class="row">
                                         <div class="col-12">
                                             <h4 class="sign__title">Chi tiết</h4>
@@ -36,16 +37,17 @@
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                             <div class="sign__group">
                                                 <label class="sign__label">ID</label>
-                                                <input disabled type="text" name="" class="sign__input" placeholder="Auto">
+                                                <input disabled type="text" class="sign__input" value="{{$slide->id}}">
                                             </div>
                                         </div>
 
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                             <div class="sign__group sign__group__select">
-                                                <label class="sign__label">ID phim</label>
-                                                <select class="select__admin">
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
+                                                <label class="sign__label">Phim</label>
+                                                <select class="select__admin" name="id_movie">
+                                                    @foreach ($movies as $movie)
+                                                        <option @selected($slide->id_movie == $movie->id) value="{{$movie->id}}">{{$movie->title}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -54,8 +56,8 @@
                                             <div class="sign__group">
                                                 <label class="sign__label" for="">Hình ảnh</label>
                                                 <div>
-                                                    <img class="sign__image" src="{{asset('images/anh.png')}}" alt="">
-                                                    <input type="file" name="" class="sign__input">
+                                                    <img class="sign__image" src="{{asset($slide->image)}}" alt="">
+                                                    <input type="file" name="thumbnail" class="sign__input">
                                                 </div>
                                             </div>
                                         </div>
@@ -65,9 +67,9 @@
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                             <div class="sign__group sign__group__select">
                                                 <label class="sign__label" >Tình trạng</label>
-                                                <select class="select__admin">
-                                                    <option value="display">Hiển thị</option>
-                                                    <option value="hidden">Ẩn</option>
+                                                <select class="select__admin" name="status">
+                                                    <option @selected($slide->status == 1) value="1">Hiển thị</option>
+                                                    <option @selected($slide->status == 0) value="0">Ẩn</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -75,7 +77,7 @@
                                 
 
                                         <div class="col-12">
-                                            <button class="sign__btn" type="button">Lưu</button>
+                                            <button class="sign__btn">Lưu</button>
                                         </div>
                                     </div>
                                 </form>

@@ -50,8 +50,8 @@
                                 <p class="page-404__text">
                                     Trang của bạn đang tìm không có sẵn!
                                 </p>
-                                <a href="{{route('index')}}" class="page-404__btn"
-                                    >Quay trở lại</a
+                                <button class="page-404__btn"
+                                    >Quay trở lại</
                                 >
                             </div>
                         </div>
@@ -61,15 +61,16 @@
         </div>
         <!-- end page 404 -->
 
+        @include('layouts.shared.loader')
         <!-- JS -->
-        <script src="js/jquery-3.5.1.min.js"></script>
-        <script src="js/bootstrap.bundle.min.js"></script>
-        <script src="js/owl.carousel.min.js"></script>
-        <script src="js/slider-radio.js"></script>
-        <script src="js/select2.min.js"></script>
-        <script src="js/smooth-scrollbar.js"></script>
-        <script src="js/jquery.magnific-popup.min.js"></script>
-        <script src="js/plyr.min.js"></script>
-        <script src="js/main.js"></script>
+        <script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
+        <script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>
+        <script src="{{asset("js/owl.carousel.min.js")}}"></script>
+        <script src="{{asset("js/slider-radio.js")}}"></script>
+        <script src="{{asset("js/select2.min.js")}}"></script>
+        <script src="{{asset("js/smooth-scrollbar.js")}}"></script>
+        <script src="{{asset("js/jquery.magnific-popup.min.js")}}"></script>
+        <script src="{{asset("js/plyr.min.js")}}"></script>
+        <script src="{{asset("js/main.js")}}"></script>
     </body>
 </html>

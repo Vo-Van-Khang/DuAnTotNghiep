@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Response;
 use App\Models\Movies;
+use App\Models\Slides;
 use App\Models\Comments;
 use Illuminate\Http\Request;
 use App\Models\Notifications;
@@ -18,11 +19,13 @@ class TrashController extends Controller
         $users = DB::table("users")->where("isDeleted",1)->get();
         $comments = Comments::where("isDeleted",1)->get();
         $notifications = Notifications::where("isDeleted",1)->get();
+        $slides = Slides::where("isDeleted",1)->get();
         return view("admins.trash.list",[
             "movies" => $movies,
             "users" => $users,
             "comments" => $comments,
             "notifications" => $notifications,
+            "slides" => $slides,
             "selected" => "trash"
         ]);
     }
@@ -37,38 +40,50 @@ class TrashController extends Controller
         ]);
     }
 
-    public function admin__movie__remove($id_remove){
-        $movie = DB::table("movies")->where("id",$id_remove);
-
-        $urlMovie = DB::table("urls")->where("media_id", $id_remove)->where("type", "movie")->first();
-        if ($urlMovie) {
-            $moviePath = parse_url($urlMovie->url, PHP_URL_PATH);
-            Storage::disk('s3')->delete($moviePath);
-            DB::table("urls")->where("id", $urlMovie->id)->delete();
-        }
-
-        if (file_exists(public_path($movie->value('thumbnail')))) {
-            unlink(public_path($movie->value('thumbnail')));
-        }
-        $episodes = DB::table("episodes")->where("id_movie",$id_remove)->get();
-
-        foreach ($episodes as $episode) {
-
-            $urlEpisode = DB::table("urls")->where("media_id", $episode->id)->where("type", "episode")->first();
-            if ($urlEpisode) {
-                $episodePath = parse_url($urlEpisode->url, PHP_URL_PATH);
-                Storage::disk('s3')->delete($episodePath);
-                DB::table("urls")->where("id", $urlEpisode->id)->delete();
+    public function admin__movie__remove($id_remove) {
+        // Xóa movie
+        $movie = DB::table("movies")->where("id", $id_remove)->first();
+    
+        // Xóa các URL của movie
+        $urlsMovie = DB::table("urls")->where("media_id", $id_remove)->where("type", "movie")->get();
+        foreach ($urlsMovie as $urlMovie) {
+            if ($urlMovie) {
+                $moviePath = parse_url($urlMovie->url, PHP_URL_PATH);
+                Storage::disk('s3')->delete($moviePath);
+                DB::table("urls")->where("id", $urlMovie->id)->delete();
             }
-
+        }
+    
+        // Xóa thumbnail nếu có
+        if (file_exists(public_path($movie->thumbnail))) {
+            unlink(public_path($movie->thumbnail));
+        }
+    
+        // Xóa các episode liên quan đến movie
+        $episodes = DB::table("episodes")->where("id_movie", $id_remove)->get();
+        foreach ($episodes as $episode) {
+            // Xóa các URL của episode
+            $urlsEpisode = DB::table("urls")->where("media_id", $episode->id)->where("type", "episode")->get();
+            foreach ($urlsEpisode as $urlEpisode) {
+                if ($urlEpisode) {
+                    $episodePath = parse_url($urlEpisode->url, PHP_URL_PATH);
+                    Storage::disk('s3')->delete($episodePath);
+                    DB::table("urls")->where("id", $urlEpisode->id)->delete();
+                }
+            }
+    
+            // Xóa episode
             DB::table("episodes")->where("id", $episode->id)->delete();
         }
-        $movie->delete();
-
+    
+        // Xóa movie
+        DB::table("movies")->where("id", $id_remove)->delete();
+    
         return response()->json([
             "success" => true
         ]);
     }
+    
     public function admin__user__remove($id_remove){
         DB::table("users")->where("id",$id_remove)->delete();
         return response()->json([
@@ -83,6 +98,14 @@ class TrashController extends Controller
     }
     public function admin__notification__remove($id_remove){
         DB::table("notifications")->where("id",$id_remove)->delete();
+        return response()->json([
+            "success" => true
+        ]);
+    }
+    public function admin__slide__remove($id_remove){
+        $slide = DB::table("slides")->where("id",$id_remove);
+        unlink(public_path($slide->value('image')));
+        $slide->delete();
         return response()->json([
             "success" => true
         ]);

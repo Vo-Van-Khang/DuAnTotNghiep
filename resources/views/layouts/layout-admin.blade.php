@@ -34,7 +34,7 @@
 	<header class="header">
 		<div class="header__content">
 			<!-- logo tiêu đề -->
-			<a href="index.html" class="header__logo">
+			<a href="{{route("index")}}" class="header__logo">
 				<img src="{{asset('images/storage/logo.png')}}" alt="">
 			</a>
 			<!-- kết thúc logo tiêu đề -->
@@ -124,9 +124,9 @@
 
 			<li class="sidebar__nav-item">
 				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "slides"]) data-toggle="collapse" href="#collapseMenuSlides" role="button" aria-expanded="false" aria-controls="collapseMenu"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m380-300 280-180-280-180v360ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg><span>Slides</span></a>
-				<ul @class(['collapse sidebar__menu', 'show' => $selected == "slides"]) id="collapseMenuSlides">
-					<li><a href="/admin/slides/list">Danh sách</a></li>
-					<li><a href="/admin/slides/add">Thêm</a></li>
+				<ul @class(['collapse sidebar__menu', 'show' => $selected == "slide"]) id="collapseMenuSlides">
+					<li><a href="{{route('admin.slide.list')}}">Danh sách</a></li>
+					<li><a href="{{route('admin.slide.add')}}">Thêm</a></li>
 				</ul>
 			</li>
 

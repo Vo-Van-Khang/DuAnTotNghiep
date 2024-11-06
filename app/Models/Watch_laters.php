@@ -17,7 +17,7 @@ class Watch_laters extends Model
       'id_user',
       'created_at'
     ];
-    public function get_movies(){
+    public function movie(){
       return $this->belongsTo(Movies::class, 'id_movie'); 
   }
 }

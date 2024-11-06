@@ -78,7 +78,7 @@
                                     />
                                     <label for="remember"
                                         >Tôi đồng ý với
-                                        <a href="privacy.html"
+                                        <a href="{{route("privacy")}}"
                                             >Chính sách bảo mật</a
                                         ></label
                                     >

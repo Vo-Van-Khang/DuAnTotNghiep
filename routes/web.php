@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\TrashController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\CategoryController;
@@ -40,14 +41,19 @@ Route::get('/admin/user/delete/{id}', [UserController::class, 'delete'])->name('
 
 Route::get('/admin/slide/list', [SlideController::class,'admin__view'])->name("admin.slide.list");
 Route::get('/admin/slide/add', [SlideController::class,'admin__add'])->name("admin.slide.add");
-Route::get('/admin/slide/update', [SlideController::class,'admin__update'])->name("admin.slide.update");
+Route::post('/admin/slide/add', [SlideController::class,'admin__create'])->name("admin.slide.add");
+Route::get('/admin/slide/update/{id}', [SlideController::class,'admin__update__form'])->name("admin.slide.update");
+Route::post('/admin/slide/update/{id}', [SlideController::class,'admin__update'])->name("admin.slide.update");
+Route::delete('/admin/slide/delete/{id}', [SlideController::class,'admin__delete']);
+Route::post('/admin/slide/status/update/{id}',[SlideController::class,'admin__status__update']);
 
 Route::get('/admin/trash/list', [TrashController::class,'admin__view'])->name("admin.trash.list");
 Route::post('/admin/trash/restore/{id}', [TrashController::class,'admin__restore']);
 Route::post('/admin/trash/movie/remove/{id}', [TrashController::class,'admin__movie__remove']);
 Route::post('/admin/trash/user/remove/{id}', [TrashController::class,'admin__user__remove']);
-Route::post('/admin/trash/comment/remove/{id}', [TrashController::class,'admin__user__remove']);
-Route::post('/admin/trash/notification/remove/{id}', [TrashController::class,'admin__user__remove']);
+Route::post('/admin/trash/comment/remove/{id}', [TrashController::class,'admin__comment__remove']);
+Route::post('/admin/trash/notification/remove/{id}', [TrashController::class,'admin__notification__remove']);
+Route::post('/admin/trash/slide/remove/{id}', [TrashController::class,'admin__slide__remove']);
 
 //CLIENT
 Route::get("/", [MovieController::class, 'index'])->name('index');
@@ -71,3 +77,5 @@ Route::post('/movie/watch_later/{id}', [WatchLaterController::class,'watch_later
 
 Route::delete('/watch_later/remove/{id}', [WatchLaterController::class,'remove_by_id']);
 Route::delete('/history/remove/{id}', [HistoryController::class,'remove_by_id']);
+
+Route::post('/movie/{id}/comment/add', [CommentController::class,'comment__add']);

@@ -34,7 +34,7 @@ class EpisodeController extends Controller
         ->where("id_category", $id_category->id_category)
         ->get();
 
-        $movie = Movies::with('get_categories')->find($id_movie);
+        $movie = Movies::with('category')->find($id_movie);
 
 
         if(true){

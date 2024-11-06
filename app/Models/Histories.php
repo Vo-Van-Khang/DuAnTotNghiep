@@ -17,7 +17,9 @@ class Histories extends Model
       'id_user',
       'created_at'
     ];
-     public function get_movies(){
-      return $this->belongsTo(Movies::class, 'id_movie'); 
+    
+    public function movie() {
+      return $this->belongsTo(Movies::class, 'id_movie');
   }
+  
 }

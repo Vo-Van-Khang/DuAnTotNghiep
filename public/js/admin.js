@@ -398,7 +398,7 @@ if (document.querySelector('.remove__btn__ajax') != null) {
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
+            }
         })
         .then(response => response.json())
         .then(data => {

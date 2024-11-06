@@ -4593,7 +4593,9 @@ body::-webkit-scrollbar-thumb {
     top: 0;
     left: 0;
     width: 40px;
-    border-radius: 10px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .comments__name {
@@ -5489,7 +5491,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .sign__select {
-    background: url("../images/arrow.svg") no-repeat center right 20px #151f30;
+    background: url("../images/storage/arrow.svg") no-repeat center right 20px #151f30;
     background-size: 16px auto;
     border: 1px solid transparent;
     border-radius: 5px;
@@ -6227,7 +6229,7 @@ body::-webkit-scrollbar-thumb {
     width: 16px;
     top: 10px;
     right: 0;
-    background: url("../images/arrow.svg") no-repeat center right;
+    background: url("../images/storage/arrow.svg") no-repeat center right;
     background-size: 16px auto;
     margin-top: 1px;
 }

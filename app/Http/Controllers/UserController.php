@@ -13,9 +13,13 @@ use App\Models\User;
 class UserController extends Controller
 {
     public function get(){
-        $watch_laters = Watch_laters::with('get_movies')->where("id_user", 1)->orderBy("id","desc")->get();
-        $histories = Histories::with('get_movies')->where("id_user", 1)->orderBy("created_at","desc")->get();
-        // dd($histories);
+        $watch_laters = Watch_laters::whereHas('movie', function($query) {
+                $query->where('isDeleted', 0)->where('status', 1);
+            })->where("id_user", 1)->orderBy("id","desc")->get();
+        $histories = Histories::whereHas('movie', function($query) {
+                $query->where('isDeleted', 0)->where('status', 1);
+            })->where("id_user", 1)->orderBy("created_at","desc")->get();
+
         return view('users.profile',[
             'watch_laters'=>$watch_laters,
             'histories'=>$histories,

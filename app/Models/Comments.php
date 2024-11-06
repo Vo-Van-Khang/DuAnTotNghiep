@@ -18,4 +18,7 @@ class Comments extends Model
       'content',
       'created_at'
     ];
+    public function user(){
+      return $this->belongsTo(User::class, 'id_user'); 
+    }
 }

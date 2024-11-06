@@ -26,7 +26,7 @@ class Movies extends Model
       'duration',
       'created_at'
     ];
-    public function get_categories(){
+    public function category(){
         return $this->belongsTo(Categories::class, 'id_category'); 
     }
     public function get_episodes(){
