@@ -23,4 +23,10 @@ class CommentController extends Controller
             "user" => $user
         ]);
     }
+    public function remove_by_id($id){
+        DB::table("comments")->where('id',$id)->delete();
+        return response()->json([
+            "success" => true
+        ]);
+    }
 }

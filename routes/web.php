@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReplyCommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\LikeController;
@@ -79,3 +80,7 @@ Route::delete('/watch_later/remove/{id}', [WatchLaterController::class,'remove_b
 Route::delete('/history/remove/{id}', [HistoryController::class,'remove_by_id']);
 
 Route::post('/movie/{id}/comment/add', [CommentController::class,'comment__add']);
+Route::post('/movie/{id}/reply_comment/add', [ReplyCommentController::class,'reply__comment__add']);
+
+Route::delete('/comment/remove/{id}', [CommentController::class,'remove_by_id']);
+Route::delete('/reply_comment/remove/{id}', [ReplyCommentController::class,'remove_by_id']);

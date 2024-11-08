@@ -66,7 +66,7 @@ class MovieController extends Controller
         ->select("*")
         ->get();
 
-        $comments = Comments::with("user")->where("id_movie",$id)->orderBy("created_at","desc")->get();;
+        $comments = Comments::with("user")->with("reply_comments")->where("id_movie",$id)->orderBy("created_at","desc")->get();;
 
         $episode_focus = new stdClass();
         $episode_focus->episode = 1;

@@ -18,7 +18,12 @@ class Comments extends Model
       'content',
       'created_at'
     ];
+    
     public function user(){
       return $this->belongsTo(User::class, 'id_user'); 
+    }
+
+    public function reply_comments(){
+      return $this->hasMany(Reply_comments::class, 'id_comment'); 
     }
 }

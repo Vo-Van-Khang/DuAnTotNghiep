@@ -160,7 +160,7 @@
                                     class="nav nav-tabs comments__title comments__title--tabs"
                                     id="comments__tabs"
                                     role="tablist"
-                                >
+                                    >
                                     <li class="nav-item">
                                         <a
                                             class="nav-link active"
@@ -171,7 +171,7 @@
                                             aria-selected="true"
                                         >
                                             <h4>Bình luận</h4>
-                                            <span class="comment__count">{{$comments->count()}}</span>
+                                            <span class="comment__count"></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -187,19 +187,24 @@
                                         >
                                         <ul class="comments__list">
                                             @foreach ($comments as $comment)
-                                                <li class="comments__item">
+                                                <li class="comments__item item__remove" id_remove="{{$comment->id}}" type_remove="comment">
                                                     <div class="comments__autor">
-                                                        <img
-                                                            class="comments__avatar"
-                                                            src="{{$comment->user->image}}"
-                                                            alt=""
-                                                        />
-                                                        <span class="comments__name"
-                                                            >{{$comment->user->name}}</span
-                                                        >
-                                                        <span class="comments__time"
-                                                            >{{$comment->created_at}}</span
-                                                        >
+                                                        <div>
+                                                            <img
+                                                                class="comments__avatar"
+                                                                src="{{$comment->user->image}}"
+                                                                alt=""
+                                                            />
+                                                            <span class="comments__name"
+                                                                >{{$comment->user->name}}</span
+                                                            >
+                                                            <span class="comments__time"
+                                                                >{{$comment->created_at}}</span
+                                                            >
+                                                        </div>
+                                                        <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="{{$comment->id}}" type_remove="comment">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                                        </a>
                                                     </div>
                                                     <p class="comments__text">
                                                         {{$comment->content}}
@@ -207,7 +212,7 @@
                                                     <div class="comments__actions">
                                                         
 
-                                                        <button type="button">
+                                                        <button type="button" class="reply__comment__btn" name_user=" {{$comment->user->name}}" id_user="{{$comment->user->id}}" id_comment="{{$comment->id}}">
                                                             <svg
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                                 width="512"
@@ -236,59 +241,68 @@
                                                         </button>
                                                     </div>
                                                 </li> 
+                                                <div class="reply__comments__container">
+                                                    @foreach ($comment->reply_comments as $reply_comment)  
+                                                        <li
+                                                            class="comments__item comments__item--answer item__remove"
+                                                            id_remove="{{$reply_comment->id}}" type_remove="reply_comment"
+                                                            >
+                                                            <div class="comments__autor">
+                                                                <div>
+                                                                    <img
+                                                                        class="comments__avatar"
+                                                                        src="{{asset($reply_comment->user->image)}}"
+                                                                        alt=""
+                                                                    />
+                                                                    <span class="comments__name"
+                                                                        >{{$reply_comment->user->name}}</span
+                                                                    >
+                                                                    <span class="comments__time"
+                                                                        >{{$reply_comment->created_at}}</span
+                                                                    >
+                                                                </div>
+                                                                <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn"  id_remove="{{$reply_comment->id}}" type_remove="reply_comment">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                                                </a>
+                                                            </div>
+                                                            <p class="comments__text">
+                                                                <span>{{ "@" . $reply_comment->user_reply->name }}</span>
+                                                                {{$reply_comment->content}}
+                                                            </p>
+                                                            <div class="comments__actions">
+            
+                                                                <button type="button" class="reply__comment__btn" name_user=" {{$reply_comment->user->name}}" id_user="{{$reply_comment->user->id}}" id_comment="{{$comment->id}}">
+                                                                    <svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        width="512"
+                                                                        height="512"
+                                                                        viewBox="0 0 512 512"
+                                                                    >
+                                                                        <polyline
+                                                                            points="400 160 464 224 400 288"
+                                                                            style="
+                                                                                fill: none;
+                                                                                stroke-linecap: round;
+                                                                                stroke-linejoin: round;
+                                                                                stroke-width: 32px;
+                                                                            "
+                                                                        />
+                                                                        <path
+                                                                            d="M448,224H154C95.24,224,48,273.33,48,332v20"
+                                                                            style="
+                                                                                fill: none;
+                                                                                stroke-linecap: round;
+                                                                                stroke-linejoin: round;
+                                                                                stroke-width: 32px;
+                                                                            "
+                                                                        /></svg
+                                                                    ><span>Trả Lời</span>
+                                                                </button>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                </div>
                                             @endforeach
-                                            {{-- <li
-                                                class="comments__item comments__item--answer"
-                                                >
-                                                <div class="comments__autor">
-                                                    <img
-                                                        class="comments__avatar"
-                                                        src="../img/avatar.svg"
-                                                        alt=""
-                                                    />
-                                                    <span class="comments__name"
-                                                        >Thanh Thùy</span
-                                                    >
-                                                    <span class="comments__time"
-                                                        >24.08.2024, 16:41</span
-                                                    >
-                                                </div>
-                                                <p class="comments__text">
-                                                    Thanh Thùy thấy Phương Thảo
-                                                    đẹp gái quá trời luôn á
-                                                    hihihi ngại quá chòi >w<
-                                                </p>
-                                                <div class="comments__actions">
-
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="400 160 464 224 400 288"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M448,224H154C95.24,224,48,273.33,48,332v20"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Trả Lời</span>
-                                                    </button>
-                                                </div>
-                                            </li> --}}
 
                                         </ul>
 
@@ -367,13 +381,29 @@
                                                 ></textarea>
                                                 <span style="color: #df4a32; display:none" id="comment__error"></span>
                                             </div>
-                                            <button
-                                                type="button"
-                                                class="sign__btn comment__submit__btn"
-                                                id_movie="{{$movie->id}}"
-                                            >
-                                                Gửi
-                                            </button>
+                                            <div class="sign__group" style="gap: 20px">
+                                                <button
+                                                    type="button"
+                                                    class="sign__btn comment__submit__btn"
+                                                    id_movie="{{$movie->id}}"
+                                                >
+                                                    Gửi
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    class="sign__btn reply__comment__submit__btn"
+                                                    id_movie="{{$movie->id}}"
+                                                    style="display:none"
+                                                >
+                                                    Trả lời
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    class="sign__reply__btn user__reply__btn">
+                                                    <span class="user__reply">User</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>  
+                                                </button>
+                                            </div>
                                         </form>
                                     </div>
                                     <!-- end comments -->
@@ -518,4 +548,16 @@
             </div>
         </section>
         <!-- end similar -->
+    <!-- modal delete -->
+    <div id="modal-delete" class="zoom-anim-dialog mfp-hide modal">
+        <h6 class="modal__title">Xóa mục</h6>
+
+        <p class="modal__text">Bạn có chắc chắn muốn xóa mục này không?</p>
+
+        <div class="modal__btns">
+        <button class="modal__btn modal__btn--apply" id="modal__remove__btn" type="button">Xóa</button>
+        <button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
+        </div>
+    </div>
+    <!-- end modal delete -->
 @endsection
