@@ -30,8 +30,8 @@
 									</div>
 									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 										<div class="sign__group">
-											<label class="sign__label" for="firstname">Nội dung</label>
-											<input id="firstname" type="text" name="name" class="sign__input" placeholder="Nội dung">
+											<label class="sign__label" for="name">Nội dung</label>
+											<input id="name" type="text" name="name" class="sign__input" placeholder="Nội dung">
 										</div>
 									</div>
 									<div class="col-12 col-md-6 col-lg-12 col-xl-6">

@@ -196,63 +196,180 @@ $(document).ready(function () {
 	});
 
 });
-if(document.querySelector("#modal__delete__btn") != null){
-    document.querySelector("#modal__delete__btn").addEventListener("click", ()=>{
-        document.querySelectorAll(".remove__user")
-        let id = document.querySelector("#modal__delete__btn").getAttribute("id_user");
-        window.location = `/admin/user/delete/${id}`;
-    })
+window.addEventListener('load',()=>{
+    document.querySelector('#loader').style.display = "none";
+})
+if(document.querySelector('form') != null){
+	document.querySelector('form').addEventListener('submit', function(event) {
+		document.querySelector('#loader').style.display = 'flex';
+	});
 }
-document.getElementById('add__url').addEventListener('click', function() {
-    const container = document.getElementById('url__items');
 
-    // Create a new item__url div
-    const newItem = document.createElement('div');
-    newItem.className = 'row item__url';
-    newItem.innerHTML = `
-        <div class="col-12 d-flex">
-            <h4 class="sign__title-small">Đường dẫn ${container.children.length + 1}</h4>
-            <button class="btn remove__url__item">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                    <path d="M200-440v-80h560v80H200Z"/>
-                </svg>
-            </button>
-        </div>
-        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-            <div class="sign__group">
-                <label class="sign__label">Video</label>
-                <input type="file" name="url[]" class="sign__input">
-            </div>
-        </div>
-        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-            <div class="sign__group">
-                <label class="sign__label">Độ phân giải</label>
-                <select class="sign__select" name="resolution[]">
-                    <option value="360">360p</option>
-                    <option value="480">480p</option>
-                    <option value="720">720p</option>
-                    <option value="1080">1080p</option>
-                    <option value="2160">2160p</option>
-                </select>
-            </div>
-        </div>
-    `;
+const limitText = document.querySelectorAll(".limit__text");
+limitText.forEach((i)=>{
+	if(i.textContent.length > 30){
+		i.innerText = i.textContent.slice(0,31) + "...";
+	}
+})
+if(document.getElementById('add__url') != null){
+	document.getElementById('add__url').addEventListener('click', function() {
+		const container = document.getElementById('url__items');
 
-    // Append the new item to the container
-    container.appendChild(newItem);
-});
+		// Create a new item__url div
+		const newItem = document.createElement('div');
+		newItem.className = 'row item__url';
+		newItem.innerHTML = `
+			<div class="col-12 d-flex">
+				<h4 class="sign__title-small">Đường dẫn ${container.children.length + 1}</h4>
+				<button class="btn remove__url__item" type="button">
+					<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+						<path d="M200-440v-80h560v80H200Z"/>
+					</svg>
+				</button>
+			</div>
+			<div class="col-12 col-md-6 col-lg-12 col-xl-12">
+				<div class="sign__group">
+					<label class="sign__label">Video</label>
+					<input type="file" name="url[]" class="sign__input">
+				</div>
+			</div>
+			<div class="col-12 col-md-6 col-lg-12 col-xl-6">
+				<div class="sign__group">
+					<label class="sign__label">Độ phân giải</label>
+					<select class="sign__select" name="resolution[]">
+						<option value="360">360p</option>
+						<option value="480">480p</option>
+						<option value="720">720p</option>
+						<option value="1080">1080p</option>
+						<option value="2160">2160p</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-12 col-md-6 col-lg-12 col-xl-6">
+				<div class="sign__group">
+					<label class="sign__label">Premium</label>
+					<select class="sign__select" name="premium[]">
+						<option value="1">Có</option>
+						<option value="0" selected>Không</option>
+					</select>
+				</div>
+			</div>
+		`;
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Thêm sự kiện click cho các nút xóa
-    document.getElementById('url__items').addEventListener('click', function(event) {
-        // Kiểm tra xem nút nhấn có phải là nút xóa không
-        if (event.target.closest('.remove__url__item')) {
-            // Tìm item__url cha và xóa nó
-            const itemUrl = event.target.closest('.item__url');
-            if (itemUrl) {
-                itemUrl.remove();
-            }
-        }
-    });
-});
+		// Append the new item to the container
+		container.appendChild(newItem);
+	});
+
+	document.addEventListener('DOMContentLoaded', function() {
+		document.getElementById('url__items').addEventListener('click', function(event) {
+			if (event.target.closest('.remove__url__item')) {
+				// Tìm item__url cha và xóa nó
+				const itemUrlRemove = event.target.closest('.item__url');
+				if (itemUrlRemove) {
+					const itemUrl = itemUrlRemove.closest('.item__url');
+					if(itemUrl.getAttribute("id_url")){
+						let id = itemUrl.getAttribute("id_url");
+						let type = itemUrl.getAttribute("type__url");
+						// return console.log(type);
+						if(confirm("Bạn có muốn xóa đường dẫn này không?")){
+							fetch(`/admin/${type}/url/remove/${id}`,{
+								method: 'DELETE',
+								headers: {
+									'Content-Type': 'application/json',
+									'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+								}
+							})
+							.then(response => response.json())
+							.then(data => {
+								if(data.success){
+									itemUrlRemove.remove();
+								}else{
+									console.log("Xóa url thất bại");
+								}
+							})
+							.catch(error => {
+								console.error(error);
+							});
+						}
+					}else{
+
+						itemUrlRemove.remove();
+					}
+				}
+			}
+		});
+	});
+}
+if(document.querySelector('.movie__status__update__btn') != null){
+	document.querySelectorAll('.movie__status__update__btn').forEach((button,index)=>{
+		let id = button.getAttribute('id_movie');
+		let movie__status = document.querySelectorAll('.movie__status');
+		button.addEventListener('click',()=>{
+
+			document.querySelector('#loader').style.display = 'flex';
+
+			fetch(`/admin/movie/status/update/${id}`,{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+				},
+				body: JSON.stringify({ id_movie: id })
+			})
+			.then(response => response.json())
+			.then(data =>{
+				if(data.success){
+					if(data.show){
+						movie__status[index].innerText = "Hiển thị";
+						movie__status[index].classList = "movie__status main__table-text main__table-text--green";
+						document.querySelector('#loader').style.display = 'none';
+					}else{
+						movie__status[index].innerText = "Ẩn";
+						movie__status[index].classList = "movie__status main__table-text main__table-text--red";
+						document.querySelector('#loader').style.display = 'none';
+					}
+				}else{
+					console.log("Sửa không thành công");
+				}
+			})
+			.catch(error => {
+				console.error(error);
+			});
+		})
+	})
+}
+if(document.querySelector('.remove__btn__ajax') != null){
+	document.querySelectorAll('.remove__btn__ajax').forEach((button)=>{
+		let id_remove = null;
+		let type_remove = null;
+		button.addEventListener('click',()=>{
+			id_remove = button.getAttribute('id_remove');
+			type_remove = button.getAttribute('type_remove');
+			document.querySelector('#modal__remove__btn').addEventListener('click',()=>{
+
+				document.querySelector('#loader').style.display = 'flex';
+
+				fetch(`/admin/${type_remove}/delete/${id_remove}`,{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+					},
+				})
+				.then(response => response.json())
+				.then(data =>{
+					if(data.success){
+						let item = document.querySelector(`.tr__remove[id_remove="${id_remove}"]`);
+						if (item) item.remove(); document.querySelector('#loader').style.display = 'none';
+					}else{
+						console.log("Xóa không thành công");
+					}
+				})
+				.catch(error => {
+					console.error(error);
+				});
+			})
+		})
+	})
+}
 

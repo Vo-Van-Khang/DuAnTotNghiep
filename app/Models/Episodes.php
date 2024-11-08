@@ -22,4 +22,6 @@ class Episodes extends Model
       'duration',
       'created_at'
     ];
+
+   
 }

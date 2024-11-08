@@ -1,6 +1,7 @@
 @extends('layouts.layout')
 @section('content')
         <!-- home -->
+        @if ($slides->count() > 0)
         <div class="home home--static">
             <div class="home__carousel owl-carousel" id="flixtv-hero">
                 @foreach ($slides as $slide)
@@ -34,14 +35,15 @@
                 class="home__nav home__nav--prev"
                 data-nav="#flixtv-hero"
                 type="button"
-            ><img src="{{"images/Prev-button.svg"}}" alt=""></button>
+            ><img src="{{asset("images/storage/Prev-button.svg")}}" alt=""></button>
             <button
                 class="home__nav home__nav--next"
                 data-nav="#flixtv-hero"
                 type="button"
-            ><img src="{{"images/Next-button.svg"}}" alt=""></button>
+            ><img src="{{asset("images/storage/Next-button.svg")}}" alt=""></button>
         </div>
-        <!-- end home -->
+        @endif
+            <!-- end home -->
 
         <!-- catalog -->
         <div class="catalog">

@@ -17,15 +17,19 @@
         <link rel="stylesheet" href="{{asset("css/plyr.css")}}" />
         <link rel="stylesheet" href="{{asset("css/main.css")}}" />
 
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Itim&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+    
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Favicons -->
         <link
             rel="icon"
             type="image/png"
-            href="{{asset("images/logo.png")}}"
+            href="{{asset("images//storage/logo.png")}}"
             sizes="32x32"
         />
-        <link rel="apple-touch-icon" href="{{asset("images/logo.png")}}" />
+        <link rel="apple-touch-icon" href="{{asset("images/storage/logo.png")}}" />
 
         <meta name="description" content="" />
         <meta name="keywords" content="" />
@@ -42,7 +46,7 @@
         @yield('content')
         @include('layouts.shared.footer')
         <!-- end footer -->
-
+        @include('layouts.shared.loader')
         <!-- JS -->
         <script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
         <script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>
