@@ -34,7 +34,7 @@
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Tập</label>
-                                        <input type="number" name="episode" class="sign__input" placeholder="Tập" value="{{old('episode')}}">
+                                        <input type="number" name="episode" class="sign__input" placeholder="Tập" min="2" value="{{old('episode')}}">
                                         @error('episode')
                                             <span style="color: #df4a32">{{$message}}</span>
                                         @enderror

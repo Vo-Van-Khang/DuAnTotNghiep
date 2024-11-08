@@ -4,7 +4,7 @@
         <section
             class="section section--head section--head-fixed section--gradient section--details-bg"
         >
-            <div class="section__bg" data-bg="img/details.jpg"></div>
+            <div class="section__bg"></div>
             <div class="container">
                 <!-- article -->
                 <div class="article" id="information__movie" id_movie="{{$movie->id}}">
@@ -19,7 +19,7 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
                                         {{$movie->views}}
                                     </li>
-                                    <li>{{$movie->get_categories->name}}</li>
+                                    <li>{{$movie->category->name}}</li>
                                     <li>{{$movie->release_year}}</li>
                                     <li>{{$movie->duration}} phút</li>
                                 </ul>
@@ -135,7 +135,7 @@
                             <!-- categories -->
                             <div class="categories">
                                 <h3 class="categories__title">Thể loại</h3>
-                                    <a class="categories__item" href="{{route("category")}}">{{$movie->get_categories->name}}</a>
+                                    <a class="categories__item" href="{{route("category")}}">{{$movie->category->name}}</a>
                             </div>
                             <!-- end categories -->
 
@@ -160,7 +160,7 @@
                                     class="nav nav-tabs comments__title comments__title--tabs"
                                     id="comments__tabs"
                                     role="tablist"
-                                >
+                                    >
                                     <li class="nav-item">
                                         <a
                                             class="nav-link active"
@@ -171,7 +171,7 @@
                                             aria-selected="true"
                                         >
                                             <h4>Bình luận</h4>
-                                            <span>5</span>
+                                            <span class="comment__count"></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -186,788 +186,129 @@
                                         role="tabpanel"
                                         >
                                         <ul class="comments__list">
-                                            <li class="comments__item">
-                                                <div class="comments__autor">
-                                                    <img
-                                                        class="comments__avatar"
-                                                        src="../img/avatar.svg"
-                                                        alt=""
-                                                    />
-                                                    <span class="comments__name"
-                                                        >Phương Thảo</span
-                                                    >
-                                                    <span class="comments__time"
-                                                        >01.01.2024, 17:53</span
-                                                    >
-                                                </div>
-                                                <p class="comments__text">
-                                                    Hay hay dở dở dở dở hay hay
-                                                    mập mờ !!!!!!!!!!!
-                                                </p>
-                                                <div class="comments__actions">
-                                                    <div class="comments__rate">
-                                                        <button type="button">
-                                                            <svg
-                                                                width="22"
-                                                                height="22"
-                                                                viewBox="0 0 22 22"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
+                                            @foreach ($comments as $comment)
+                                                <li class="comments__item item__remove" id_remove="{{$comment->id}}" type_remove="comment">
+                                                    <div class="comments__autor">
+                                                        <div>
+                                                            <img
+                                                                class="comments__avatar"
+                                                                src="{{$comment->user->image}}"
+                                                                alt=""
+                                                            />
+                                                            <span class="comments__name"
+                                                                >{{$comment->user->name}}</span
                                                             >
-                                                                <path
-                                                                    d="M11 7.3273V14.6537"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    d="M14.6667 10.9905H7.33333"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    clip-rule="evenodd"
-                                                                    d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                            </svg>
-                                                            12
-                                                        </button>
+                                                            <span class="comments__time"
+                                                                >{{$comment->created_at}}</span
+                                                            >
+                                                        </div>
+                                                        <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="{{$comment->id}}" type_remove="comment">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                                        </a>
+                                                    </div>
+                                                    <p class="comments__text">
+                                                        {{$comment->content}}
+                                                    </p>
+                                                    <div class="comments__actions">
+                                                        
 
-                                                        <button type="button">
-                                                            7
+                                                        <button type="button" class="reply__comment__btn" name_user=" {{$comment->user->name}}" id_user="{{$comment->user->id}}" id_comment="{{$comment->id}}">
                                                             <svg
-                                                                width="22"
-                                                                height="22"
-                                                                viewBox="0 0 22 22"
-                                                                fill="none"
                                                                 xmlns="http://www.w3.org/2000/svg"
+                                                                width="512"
+                                                                height="512"
+                                                                viewBox="0 0 512 512"
                                                             >
+                                                                <polyline
+                                                                    points="400 160 464 224 400 288"
+                                                                    style="
+                                                                        fill: none;
+                                                                        stroke-linecap: round;
+                                                                        stroke-linejoin: round;
+                                                                        stroke-width: 32px;
+                                                                    "
+                                                                />
                                                                 <path
-                                                                    d="M14.6667 10.9905H7.33333"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    clip-rule="evenodd"
-                                                                    d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                            </svg>
+                                                                    d="M448,224H154C95.24,224,48,273.33,48,332v20"
+                                                                    style="
+                                                                        fill: none;
+                                                                        stroke-linecap: round;
+                                                                        stroke-linejoin: round;
+                                                                        stroke-width: 32px;
+                                                                    "
+                                                                /></svg
+                                                            ><span>Trả Lời</span>
                                                         </button>
                                                     </div>
-
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="400 160 464 224 400 288"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M448,224H154C95.24,224,48,273.33,48,332v20"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Hồi đáp</span>
-                                                    </button>
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="320 120 368 168 320 216"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M352,168H144a80.24,80.24,0,0,0-80,80v16"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <polyline
-                                                                points="192 392 144 344 192 296"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M160,344H368a80.24,80.24,0,0,0,80-80V248"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Trích dẫn</span>
-                                                    </button>
-                                                </div>
-                                            </li>
-
-                                            <li
-                                                class="comments__item comments__item--answer"
-                                            >
-                                                <div class="comments__autor">
-                                                    <img
-                                                        class="comments__avatar"
-                                                        src="../img/avatar.svg"
-                                                        alt=""
-                                                    />
-                                                    <span class="comments__name"
-                                                        >Thanh Thùy</span
-                                                    >
-                                                    <span class="comments__time"
-                                                        >24.08.2024, 16:41</span
-                                                    >
-                                                </div>
-                                                <p class="comments__text">
-                                                    Thanh Thùy thấy Phương Thảo
-                                                    đẹp gái quá trời luôn á
-                                                    hihihi ngại quá chòi >w<
-                                                </p>
-                                                <div class="comments__actions">
-                                                    <div class="comments__rate">
-                                                        <button type="button">
-                                                            <svg
-                                                                width="22"
-                                                                height="22"
-                                                                viewBox="0 0 22 22"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
+                                                </li> 
+                                                <div class="reply__comments__container">
+                                                    @foreach ($comment->reply_comments as $reply_comment)  
+                                                        <li
+                                                            class="comments__item comments__item--answer item__remove"
+                                                            id_remove="{{$reply_comment->id}}" type_remove="reply_comment"
                                                             >
-                                                                <path
-                                                                    d="M11 7.3273V14.6537"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    d="M14.6667 10.9905H7.33333"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    clip-rule="evenodd"
-                                                                    d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                            </svg>
-                                                            10
-                                                        </button>
-
-                                                        <button type="button">
-                                                            0
-                                                            <svg
-                                                                width="22"
-                                                                height="22"
-                                                                viewBox="0 0 22 22"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    d="M14.6667 10.9905H7.33333"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    clip-rule="evenodd"
-                                                                    d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="400 160 464 224 400 288"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M448,224H154C95.24,224,48,273.33,48,332v20"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Hồi đáp</span>
-                                                    </button>
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="320 120 368 168 320 216"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M352,168H144a80.24,80.24,0,0,0-80,80v16"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <polyline
-                                                                points="192 392 144 344 192 296"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M160,344H368a80.24,80.24,0,0,0,80-80V248"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Trích dẫn</span>
-                                                    </button>
+                                                            <div class="comments__autor">
+                                                                <div>
+                                                                    <img
+                                                                        class="comments__avatar"
+                                                                        src="{{asset($reply_comment->user->image)}}"
+                                                                        alt=""
+                                                                    />
+                                                                    <span class="comments__name"
+                                                                        >{{$reply_comment->user->name}}</span
+                                                                    >
+                                                                    <span class="comments__time"
+                                                                        >{{$reply_comment->created_at}}</span
+                                                                    >
+                                                                </div>
+                                                                <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn"  id_remove="{{$reply_comment->id}}" type_remove="reply_comment">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                                                </a>
+                                                            </div>
+                                                            <p class="comments__text">
+                                                                <span>{{ "@" . $reply_comment->user_reply->name }}</span>
+                                                                {{$reply_comment->content}}
+                                                            </p>
+                                                            <div class="comments__actions">
+            
+                                                                <button type="button" class="reply__comment__btn" name_user=" {{$reply_comment->user->name}}" id_user="{{$reply_comment->user->id}}" id_comment="{{$comment->id}}">
+                                                                    <svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        width="512"
+                                                                        height="512"
+                                                                        viewBox="0 0 512 512"
+                                                                    >
+                                                                        <polyline
+                                                                            points="400 160 464 224 400 288"
+                                                                            style="
+                                                                                fill: none;
+                                                                                stroke-linecap: round;
+                                                                                stroke-linejoin: round;
+                                                                                stroke-width: 32px;
+                                                                            "
+                                                                        />
+                                                                        <path
+                                                                            d="M448,224H154C95.24,224,48,273.33,48,332v20"
+                                                                            style="
+                                                                                fill: none;
+                                                                                stroke-linecap: round;
+                                                                                stroke-linejoin: round;
+                                                                                stroke-width: 32px;
+                                                                            "
+                                                                        /></svg
+                                                                    ><span>Trả Lời</span>
+                                                                </button>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
                                                 </div>
-                                            </li>
+                                            @endforeach
 
-                                            <li
-                                                class="comments__item comments__item--quote"
-                                            >
-                                                <div class="comments__autor">
-                                                    <img
-                                                        class="comments__avatar"
-                                                        src="../img/avatar.svg"
-                                                        alt=""
-                                                    />
-                                                    <span class="comments__name"
-                                                        >Văn Khang</span
-                                                    >
-                                                    <span class="comments__time"
-                                                        >11.08.2024, 11:11</span
-                                                    >
-                                                </div>
-                                                <p class="comments__text">
-                                                    <span
-                                                        >Phim thì hay Phương
-                                                        Thảo thì dễ thương</span
-                                                    >
-                                                    >Tuyệt cà là vời
-                                                </p>
-                                                <div class="comments__actions">
-                                                    <div class="comments__rate">
-                                                        <button type="button">
-                                                            <svg
-                                                                width="22"
-                                                                height="22"
-                                                                viewBox="0 0 22 22"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    d="M11 7.3273V14.6537"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    d="M14.6667 10.9905H7.33333"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    clip-rule="evenodd"
-                                                                    d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                            </svg>
-                                                            9
-                                                        </button>
-
-                                                        <button type="button">
-                                                            2
-                                                            <svg
-                                                                width="22"
-                                                                height="22"
-                                                                viewBox="0 0 22 22"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    d="M14.6667 10.9905H7.33333"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    clip-rule="evenodd"
-                                                                    d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="400 160 464 224 400 288"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M448,224H154C95.24,224,48,273.33,48,332v20"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Hồi đáp</span>
-                                                    </button>
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="320 120 368 168 320 216"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M352,168H144a80.24,80.24,0,0,0-80,80v16"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <polyline
-                                                                points="192 392 144 344 192 296"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M160,344H368a80.24,80.24,0,0,0,80-80V248"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Trích dẫn</span>
-                                                    </button>
-                                                </div>
-                                            </li>
-
-                                            <li class="comments__item">
-                                                <div class="comments__autor">
-                                                    <img
-                                                        class="comments__avatar"
-                                                        src="../img/avatar.svg"
-                                                        alt=""
-                                                    />
-                                                    <span class="comments__name"
-                                                        >Duy Đẳng</span
-                                                    >
-                                                    <span class="comments__time"
-                                                        >07.08.2024, 14:33</span
-                                                    >
-                                                </div>
-                                                <p class="comments__text">
-                                                    Phim này thì hay !!!! Đẳng
-                                                    thì ngồi coi phim hay :>
-                                                </p>
-                                                <div class="comments__actions">
-                                                    <div class="comments__rate">
-                                                        <button type="button">
-                                                            <svg
-                                                                width="22"
-                                                                height="22"
-                                                                viewBox="0 0 22 22"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    d="M11 7.3273V14.6537"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    d="M14.6667 10.9905H7.33333"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    clip-rule="evenodd"
-                                                                    d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                            </svg>
-                                                            7
-                                                        </button>
-
-                                                        <button type="button">
-                                                            4
-                                                            <svg
-                                                                width="22"
-                                                                height="22"
-                                                                viewBox="0 0 22 22"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    d="M14.6667 10.9905H7.33333"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    clip-rule="evenodd"
-                                                                    d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="400 160 464 224 400 288"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M448,224H154C95.24,224,48,273.33,48,332v20"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Hồi đáp</span>
-                                                    </button>
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="320 120 368 168 320 216"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M352,168H144a80.24,80.24,0,0,0-80,80v16"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <polyline
-                                                                points="192 392 144 344 192 296"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M160,344H368a80.24,80.24,0,0,0,80-80V248"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Hồi đáp</span>
-                                                    </button>
-                                                </div>
-                                            </li>
-
-                                            <li class="comments__item">
-                                                <div class="comments__autor">
-                                                    <img
-                                                        class="comments__avatar"
-                                                        src="../img/avatar.svg"
-                                                        alt=""
-                                                    />
-                                                    <span class="comments__name"
-                                                        >Phúc Nguyên</span
-                                                    >
-                                                    <span class="comments__time"
-                                                        >02.08.2024, 15:24</span
-                                                    >
-                                                </div>
-                                                <p class="comments__text">
-                                                    Phim đáng sợ quá, ngủ không
-                                                    được!
-                                                </p>
-                                                <div class="comments__actions">
-                                                    <div class="comments__rate">
-                                                        <button type="button">
-                                                            <svg
-                                                                width="22"
-                                                                height="22"
-                                                                viewBox="0 0 22 22"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    d="M11 7.3273V14.6537"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    d="M14.6667 10.9905H7.33333"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    clip-rule="evenodd"
-                                                                    d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                            </svg>
-                                                            2
-                                                        </button>
-
-                                                        <button type="button">
-                                                            17
-                                                            <svg
-                                                                width="22"
-                                                                height="22"
-                                                                viewBox="0 0 22 22"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    d="M14.6667 10.9905H7.33333"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                                <path
-                                                                    fill-rule="evenodd"
-                                                                    clip-rule="evenodd"
-                                                                    d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z"
-                                                                    stroke-width="1.5"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                ></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="400 160 464 224 400 288"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M448,224H154C95.24,224,48,273.33,48,332v20"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Hồi đáp</span>
-                                                    </button>
-                                                    <button type="button">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="512"
-                                                            height="512"
-                                                            viewBox="0 0 512 512"
-                                                        >
-                                                            <polyline
-                                                                points="320 120 368 168 320 216"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M352,168H144a80.24,80.24,0,0,0-80,80v16"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <polyline
-                                                                points="192 392 144 344 192 296"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            />
-                                                            <path
-                                                                d="M160,344H368a80.24,80.24,0,0,0,80-80V248"
-                                                                style="
-                                                                    fill: none;
-                                                                    stroke-linecap: round;
-                                                                    stroke-linejoin: round;
-                                                                    stroke-width: 32px;
-                                                                "
-                                                            /></svg
-                                                        ><span>Trích dẫn</span>
-                                                    </button>
-                                                </div>
-                                            </li>
                                         </ul>
 
                                         <div
                                             class="catalog__paginator-wrap catalog__paginator-wrap--comments"
-                                        >
+                                            >      
                                             <span class="catalog__pages"
                                                 >5 đến 16</span
                                             >
@@ -1033,18 +374,36 @@
                                         <form action="#" class="comments__form">
                                             <div class="sign__group">
                                                 <textarea
-                                                    id="text"
+                                                    id="comment__content"
                                                     name="text"
                                                     class="sign__textarea"
                                                     placeholder="Thêm bình luận"
                                                 ></textarea>
+                                                <span style="color: #df4a32; display:none" id="comment__error"></span>
                                             </div>
-                                            <button
-                                                type="button"
-                                                class="sign__btn"
-                                            >
-                                                Gửi
-                                            </button>
+                                            <div class="sign__group" style="gap: 20px">
+                                                <button
+                                                    type="button"
+                                                    class="sign__btn comment__submit__btn"
+                                                    id_movie="{{$movie->id}}"
+                                                >
+                                                    Gửi
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    class="sign__btn reply__comment__submit__btn"
+                                                    id_movie="{{$movie->id}}"
+                                                    style="display:none"
+                                                >
+                                                    Trả lời
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    class="sign__reply__btn user__reply__btn">
+                                                    <span class="user__reply">User</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>  
+                                                </button>
+                                            </div>
                                         </form>
                                     </div>
                                     <!-- end comments -->
@@ -1189,4 +548,16 @@
             </div>
         </section>
         <!-- end similar -->
+    <!-- modal delete -->
+    <div id="modal-delete" class="zoom-anim-dialog mfp-hide modal">
+        <h6 class="modal__title">Xóa mục</h6>
+
+        <p class="modal__text">Bạn có chắc chắn muốn xóa mục này không?</p>
+
+        <div class="modal__btns">
+        <button class="modal__btn modal__btn--apply" id="modal__remove__btn" type="button">Xóa</button>
+        <button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
+        </div>
+    </div>
+    <!-- end modal delete -->
 @endsection

@@ -26,7 +26,7 @@
         <link
             rel="icon"
             type="image/png"
-            href="{{asset("images//storage/logo.png")}}"
+            href="{{asset("images/storage/logo.png")}}"
             sizes="32x32"
         />
         <link rel="apple-touch-icon" href="{{asset("images/storage/logo.png")}}" />
@@ -47,6 +47,7 @@
         @include('layouts.shared.footer')
         <!-- end footer -->
         @include('layouts.shared.loader')
+        @include('layouts.shared.message')
         <!-- JS -->
         <script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
         <script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>

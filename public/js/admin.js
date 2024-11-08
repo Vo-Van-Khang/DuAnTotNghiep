@@ -53,6 +53,10 @@ $(document).ready(function () {
 		mainClass: 'my-mfp-zoom-in',
 	});
 
+	$('.modal__btn--apply').on('click', function (e) {
+		e.preventDefault();
+		$.magnificPopup.close();
+	});
 	$('.modal__btn--dismiss').on('click', function (e) {
 		e.preventDefault();
 		$.magnificPopup.close();
@@ -205,12 +209,25 @@ if(document.querySelector('form') != null){
 	});
 }
 
+if(document.querySelector('.message_box') !== null){
+    const hide_message = document.querySelector('.hide_message');
+    const message_box = document.querySelector('.message_box');
+    hide_message.addEventListener('click',() => {
+        message_box.style.display = "none";
+    })
+    message_box.addEventListener("animationend",()=>{
+        message_box.style.display = "none";
+    })
+}
+
 const limitText = document.querySelectorAll(".limit__text");
 limitText.forEach((i)=>{
 	if(i.textContent.length > 30){
-		i.innerText = i.textContent.slice(0,31) + "...";
+		i.title = i.textContent;
+		i.innerText = i.textContent.slice(0,30) + "...";
 	}
 })
+
 if(document.getElementById('add__url') != null){
 	document.getElementById('add__url').addEventListener('click', function() {
 		const container = document.getElementById('url__items');
@@ -272,6 +289,8 @@ if(document.getElementById('add__url') != null){
 						let type = itemUrl.getAttribute("type__url");
 						// return console.log(type);
 						if(confirm("Bạn có muốn xóa đường dẫn này không?")){
+							document.querySelector('#loader').style.display = 'flex';
+
 							fetch(`/admin/${type}/url/remove/${id}`,{
 								method: 'DELETE',
 								headers: {
@@ -283,6 +302,7 @@ if(document.getElementById('add__url') != null){
 							.then(data => {
 								if(data.success){
 									itemUrlRemove.remove();
+									document.querySelector('#loader').style.display = 'none';
 								}else{
 									console.log("Xóa url thất bại");
 								}
@@ -300,33 +320,50 @@ if(document.getElementById('add__url') != null){
 		});
 	});
 }
-if(document.querySelector('.movie__status__update__btn') != null){
-	document.querySelectorAll('.movie__status__update__btn').forEach((button,index)=>{
-		let id = button.getAttribute('id_movie');
-		let movie__status = document.querySelectorAll('.movie__status');
-		button.addEventListener('click',()=>{
 
+if(document.querySelector('.status__update__btn') != null){
+	document.querySelectorAll('.status__update__btn').forEach((button,index)=>{
+		let status__item__update = document.querySelectorAll(`.status__item__update`);
+		let id = button.getAttribute('id_status');
+		let type_status = button.getAttribute('type_status');
+
+		button.addEventListener('click',()=>{
 			document.querySelector('#loader').style.display = 'flex';
 
-			fetch(`/admin/movie/status/update/${id}`,{
+			fetch(`/admin/${type_status}/status/update/${id}`,{
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 					'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-				},
-				body: JSON.stringify({ id_movie: id })
+				}
 			})
 			.then(response => response.json())
 			.then(data =>{
 				if(data.success){
-					if(data.show){
-						movie__status[index].innerText = "Hiển thị";
-						movie__status[index].classList = "movie__status main__table-text main__table-text--green";
-						document.querySelector('#loader').style.display = 'none';
+					if(type_status != "user"){
+						if(data.show){
+							status__item__update[index].innerText = "Hiển thị";
+							status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
+
+							document.querySelector('#loader').style.display = 'none';
+						}else{
+							status__item__update[index].innerText = "Ẩn";
+							status__item__update[index].classList = "status__item__update main__table-text main__table-text--red";
+
+							document.querySelector('#loader').style.display = 'none';
+						}
 					}else{
-						movie__status[index].innerText = "Ẩn";
-						movie__status[index].classList = "movie__status main__table-text main__table-text--red";
-						document.querySelector('#loader').style.display = 'none';
+						if(!data.ban){
+							status__item__update[index].innerText = "Hoạt động";
+							status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
+
+							document.querySelector('#loader').style.display = 'none';
+						}else{
+							status__item__update[index].innerText = "Bị cấm";
+							status__item__update[index].classList = "status__item__update main__table-text main__table-text--red";
+
+							document.querySelector('#loader').style.display = 'none';
+						}
 					}
 				}else{
 					console.log("Sửa không thành công");
@@ -338,38 +375,130 @@ if(document.querySelector('.movie__status__update__btn') != null){
 		})
 	})
 }
-if(document.querySelector('.remove__btn__ajax') != null){
-	document.querySelectorAll('.remove__btn__ajax').forEach((button)=>{
-		let id_remove = null;
-		let type_remove = null;
+
+if (document.querySelector('.remove__btn__ajax') != null) {
+    let id_remove = null;
+    let type_remove = null;
+
+    document.querySelectorAll('.remove__btn__ajax').forEach((button) => {
+        button.addEventListener('click', () => {
+            id_remove = button.getAttribute('id_remove');
+            type_remove = button.getAttribute('type_remove');
+        });
+    });
+
+    function adminRemove() {
+        if (!id_remove || !type_remove) return;
+
+        document.querySelector('#loader').style.display = 'flex';
+
+        fetch(`/admin/${type_remove}/delete/${id_remove}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let item = document.querySelector(`.tr__remove[id_remove="${id_remove}"]`);
+                if (item) item.remove();
+                document.querySelector('#loader').style.display = 'none';
+            } else {
+                console.log("Xóa không thành công");
+            }
+            id_remove = null;
+            type_remove = null;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    document.querySelector('#modal__remove__btn').addEventListener('click', adminRemove);
+}
+
+
+if (document.querySelector('.trash__restore__btn') != null) {
+    let id_trash = null;
+    let type_trash = null;
+
+    document.querySelectorAll('.trash__restore__btn').forEach((button) => {
+        button.addEventListener('click', () => {
+            id_trash = button.getAttribute('id_trash');
+            type_trash = button.getAttribute('type_trash');
+        });
+    });
+
+    function trashRestore() {
+        if (!id_trash || !type_trash) return;
+
+        document.querySelector('#loader').style.display = 'flex';
+
+        fetch(`/admin/trash/restore/${id_trash}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ type_trash: type_trash })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let item = document.querySelector(`.tr__trash[id_trash="${id_trash}"][type_trash="${type_trash}"]`);
+                if (item) item.remove();
+                document.querySelector('#loader').style.display = 'none';
+            } else {
+                console.log("Phục hồi không thành công");
+            }
+            id_trash = null;
+            type_trash = null;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    document.querySelector('#modal__restore__btn').addEventListener('click', trashRestore);
+}
+
+
+if(document.querySelector('.trash__remove__btn') != null){
+	let id_trash = null
+	let type_trash = null
+	document.querySelectorAll('.trash__remove__btn').forEach((button)=>{
 		button.addEventListener('click',()=>{
-			id_remove = button.getAttribute('id_remove');
-			type_remove = button.getAttribute('type_remove');
-			document.querySelector('#modal__remove__btn').addEventListener('click',()=>{
-
-				document.querySelector('#loader').style.display = 'flex';
-
-				fetch(`/admin/${type_remove}/delete/${id_remove}`,{
-					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-						'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-					},
-				})
-				.then(response => response.json())
-				.then(data =>{
-					if(data.success){
-						let item = document.querySelector(`.tr__remove[id_remove="${id_remove}"]`);
-						if (item) item.remove(); document.querySelector('#loader').style.display = 'none';
-					}else{
-						console.log("Xóa không thành công");
-					}
-				})
-				.catch(error => {
-					console.error(error);
-				});
-			})
+			id_trash = button.getAttribute('id_trash');
+			type_trash = button.getAttribute('type_trash');
 		})
 	})
+	function trashRemove() {
+		if (!id_trash || !type_trash) return;
+
+		document.querySelector('#loader').style.display = 'flex';
+			fetch(`/admin/trash/${type_trash}/remove/${id_trash}`,{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+				}
+			})
+			.then(response => response.json())
+			.then(data =>{
+				if(data.success){
+					let item = document.querySelector(`.tr__trash[id_trash="${id_trash}"][type_trash="${type_trash}"]`);
+					if (item) item.remove(); document.querySelector('#loader').style.display = 'none';
+				}else{
+					console.log("Xóa không thành công");
+				}
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	}
+    document.querySelector('#modal__remove__btn').addEventListener('click', trashRemove);
 }
+
 

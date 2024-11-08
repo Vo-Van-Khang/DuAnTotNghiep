@@ -20,4 +20,16 @@ class Reply_comments extends Model
       'content',
       'created_at'
     ];
+    
+    public function user(){
+      return $this->belongsTo(User::class, 'id_user'); 
+    }
+    
+    public function user_reply(){
+      return $this->belongsTo(User::class, 'id_user_reply'); 
+    }
+
+    public function comment(){
+        return $this->belongsTo(Comments::class, 'id_comment');
+    }
 }

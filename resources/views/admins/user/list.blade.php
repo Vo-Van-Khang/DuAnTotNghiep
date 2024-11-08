@@ -95,7 +95,7 @@
                     </div>
      <!-- end modal delete -->
 
-	</div>
+				</div>
 				<!-- end users -->
 
 				<!-- paginator -->

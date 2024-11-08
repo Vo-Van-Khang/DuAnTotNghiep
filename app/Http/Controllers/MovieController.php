@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use stdClass;
 use App\Models\Movies;
 use App\Models\Slides;
+use App\Models\Comments;
 use Illuminate\Http\Request;
 use App\Http\Requests\Validate;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,24 @@ use Illuminate\Support\Facades\Storage;
 class MovieController extends Controller
 {
     public function get_id($id){
-        $movie = Movies::with('get_categories')->find($id);
+        if(true){
+            $check_watch_later = DB::table("watch_laters")->where("id_movie",$id)->where("id_user",1)->count();
+            $check_like = DB::table("likes")->where("id_movie",$id)->where("id_user",1)->count();
+            $check_history = DB::table("histories")->where("id_movie",$id)->where("id_user",1)->count();
+            DB::table("movies")->where("id", $id)->increment("views", 1);
+            if($check_history > 0){
+                DB::table("histories")->where("id_movie",$id)->where("id_user",1)->delete();
+            }
+            DB::table("histories")->insert([
+                "id_movie" => $id,
+                "id_user" => 1
+            ]);
+        }else{
+            $check_watch_later = 0;
+            $check_like = 0;
+        }
+
+        $movie = Movies::with('category')->find($id);
 
         $urls = DB::table("urls")
         ->select("*")
@@ -48,20 +66,10 @@ class MovieController extends Controller
         ->select("*")
         ->get();
 
+        $comments = Comments::with("user")->with("reply_comments")->where("id_movie",$id)->orderBy("created_at","desc")->get();;
+
         $episode_focus = new stdClass();
         $episode_focus->episode = 1;
-
-        if(true){
-            $check_watch_later = DB::table("watch_laters")->where("id_movie",$movie->id)->where("id_user",1)->count();
-        }else{
-            $check_watch_later = 0;
-        }
-
-        if(true){
-            $check_like = DB::table("likes")->where("id_movie",$movie->id)->where("id_user",1)->count();
-        }else{
-            $check_like = 0;
-        }
 
         return view("clients.movie",[
             "movie"=>$movie,
@@ -70,33 +78,47 @@ class MovieController extends Controller
             "episodes"=>$episodes,
             "similars" => $similars,
             "categories" => $categories,
+            "comments" => $comments,
             "episode_focus" => $episode_focus,
             "check_like" => $check_like,
             "check_watch_later" => $check_watch_later
         ]);
     }
     public function index(){
-        $movies = Movies::with('get_categories')->where("status", 1)->where("isDeleted", 0)->get();
-        $slides = Slides::with('get_movies')->where('status', 'show')->get();
+        $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->get();
+        $slides = Slides::with('movie')->where('status', 1)->where('isDeleted', 0)->get();
         $categories = DB::table("categories")->get();
-        return view('/clients/HomePage', ['movies' => $movies, 'slides' => $slides, 'categories' => $categories]);
+
+        $watch_later_movies = [];
+        if (true) {
+            $watch_later_movies = DB::table("watch_laters")
+                ->where("id_user", 1)
+                ->pluck("id_movie")
+                ->toArray();
+        }
+        return view('/clients/HomePage', [
+            'movies' => $movies, 
+            'slides' => $slides, 
+            'categories' => $categories,
+            "watch_later_movies" => $watch_later_movies
+        ]);
     }
 
     public function admin__view(){
-        $movies = Movies::with('get_episodes')->where("isDeleted",0)->get();
+        $movies = Movies::with('category')->where("isDeleted",0)->get();
         return view('admins.movie.list', [
             "movies" => $movies,
             "selected" => "movie"
         ]);
     }
     Public function allMovie(){
-        $movies = Movies::with('get_categories')->get();
+        $movies = Movies::with('category')->get();
         return view('/clients/all', ['movies' => $movies]);
     }
     Public function search(Request $request){
         {
             $search = $request->input('search');
-            $movies = Movies::with('get_categories')
+            $movies = Movies::with('category')
                 ->where('title', 'LIKE', "%{$search}%")
                 ->get();
             return view('/clients/search', ['movies'=> $movies]);
@@ -125,27 +147,50 @@ class MovieController extends Controller
 
   
 
-    public function admin__create(Validate $request){
-    $request->validated();
+    public function admin__create(Request $request){
+
+    $validated = $request->validate([
+        'thumbnail_add' => 'required|file|mimes:jpeg,jpg,svg,webp,png',
+        'title' => 'required|string|max:255',
+        'cast' => 'required|string|max:255',
+        'director' => 'required|string|max:255',
+        'release_year' => 'required|integer|min:1900|max:' . date('Y'),
+        'country' => 'required|string|max:255',
+        'description' => 'required|string',
+        'duration' => 'required|integer|min:1',
+        'episode' => 'sometimes|required|min:1',
+    ], [
+        'thumbnail_add.required' => 'Hình ảnh là bắt buộc.',
+        'thumbnail_add.mimes' => 'Hình ảnh phải thuộc loại: jpeg, png, jpg, svg, webp.',
+        'title.required' => 'Tiêu đề là bắt buộc.',
+        'cast.required' => 'Diễn viên là bắt buộc.',
+        'director.required' => 'Đạo diễn là bắt buộc.',
+        'release_year.required' => 'Năm phát hành là bắt buộc.',
+        'country.required' => 'Quốc gia là bắt buộc.',
+        'description.required' => 'Mô tả là bắt buộc.',
+        'duration.required' => 'Thời lượng là bắt buộc.',
+        'episode.required' => 'Tập phim là bắt buộc.',
+    ]);
 
     $imagePath = "";
     if ($request->hasFile('thumbnail_add')) {
         $image = $request->file('thumbnail_add');
-        $imagePath = 'images/thumbnails/' . $image->getClientOriginalName();
-        $image->move(public_path('images/thumbnails'), $image->getClientOriginalName());
+        $uniqueName = time() . '_' . $image->getClientOriginalName();
+        $imagePath = 'images/thumbnails/' . $uniqueName;
+        $image->move(public_path('images/thumbnails'), $uniqueName);
     }
-    // Insert movie details into the database
+
     $movieId = DB::table('movies')->insertGetId([
-        'title' => $request->input('title'),
-        'thumbnail' => $imagePath, // Store the image URL in the database
-        'cast' => $request->input('cast'),
-        'director' => $request->input('director'),
-        'release_year' => $request->input('release_year'),
-        'country' => $request->input('country'),
-        'description' => $request->input('description'),
-        'status' => $request->input('status'),
-        'id_category' => $request->input('id_category'),
-        'duration' => $request->input('duration')// Duration can be adjusted based on actual video length
+        'title' => $validated['title'],
+        'thumbnail' => $imagePath,
+        'cast' => $validated['cast'],
+        'director' => $validated['director'],
+        'release_year' => $validated['release_year'],
+        'country' => $validated['country'],
+        'description' => $validated['description'],
+        'status' => $validated['status'],
+        'id_category' => $validated['id_category'],
+        'duration' => $validated['duration'],
     ]);
 
     if ($request->hasFile('url')) {
@@ -168,6 +213,7 @@ class MovieController extends Controller
 
     return redirect()->route("admin.movie.list")->with('success', 'Phim đã được thêm thành công!');
 }
+
     public function admin__update(Validate $request, $id) {
         $request->validated();
 
@@ -180,8 +226,9 @@ class MovieController extends Controller
                 unlink(public_path($movieData->thumbnail));
             }
             $image = $request->file('thumbnail');
-            $imagePath = 'images/thumbnails/' . $image->getClientOriginalName();
-            $image->move(public_path('images/thumbnails'), $image->getClientOriginalName());
+            $uniqueName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = 'images/thumbnails/' . $uniqueName;
+            $image->move(public_path('images/thumbnails'), $uniqueName);
         } else {
             $imagePath = $movieData->thumbnail;
         }

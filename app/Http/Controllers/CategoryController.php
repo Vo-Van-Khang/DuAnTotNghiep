@@ -9,21 +9,7 @@ use App\Models\Categories;
 use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
-    public function admin__view(){
-        $categories = DB::table("categories")->get();
-        return view("admins.category.list",[
-            "categories" => $categories,
-            "selected" => "category"
-        ]);
-    }
-    public function admin__add(){
-        return view("admins.category.add",[
-            "selected" => "category"
-        ]);
-    }
-
-
-    public function get(){
+  public function get(){
         $data = db::table('categories')->select('*')->get();
         return view('admins/category/list', ['categories' =>$data, "selected" => "category"]);
     }

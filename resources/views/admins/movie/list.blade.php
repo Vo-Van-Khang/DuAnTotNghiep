@@ -17,13 +17,13 @@
         <table class="main__table">
           <thead>
             <tr>
-              <th title="Tiêu đề"> Tiêu đề </th>
-              <th title="Hình ảnh"> Hình ảnh </th>
-              <th title="Lượt xem"> Lượt xem </th>
-              <th title="Tình trạng"> Tình trạng </th>
-              <th title="ID danh mục"> ID danh mục </th>
-              <th title="Ngày tạo"> Ngày tạo </th>
-              <th > Hành động </th>
+              <th> Tiêu đề </th>
+              <th> Hình ảnh </th>
+              <th> Lượt xem </th>
+              <th> Tình trạng </th>
+              <th> Danh mục </th>
+              <th> Ngày tạo </th>
+              <th> Hành động </th>
             </tr>
           </thead>
 
@@ -32,33 +32,33 @@
               @foreach ($movies as $movie)
               <tr class="tr__remove" id_remove="{{$movie->id}}">
                 <td>
-                  <div title="{{$movie->title}}" class="main__table-text"><a class="limit__text" href="{{route('movie',$movie->id)}}">{{$movie->title}}</a></div>
+                  <div class="main__table-text"><a target="_blank" class="limit__text" href="{{route('movie',$movie->id)}}">{{$movie->title}}</a></div>
                 </td>
                 <td>
                   <div class="main__table-text"><img src="{{asset($movie->thumbnail)}}" alt=""></div>
                 </td>
                 <td>
-                  <div title="{{$movie->views}}" class="main__table-text">{{$movie->views}}</div>
+                  <div class="main__table-text">{{$movie->views}}</div>
                 </td>
                 <td>
                   @if ($movie->status == 1)
-                    <div title="Hiển thị" class="movie__status main__table-text main__table-text--green">Hiển thị</div>
+                    <div title="Hiển thị" class="status__item__update main__table-text main__table-text--green">Hiển thị</div>
                   @else
-                    <div title="Ẩn" class="movie__status main__table-text main__table-text--red">Ẩn</div>    
+                    <div title="Ẩn" class="status__item__update main__table-text main__table-text--red">Ẩn</div>    
                   @endif
                 </td>
                 <td>
-                  <div title="{{$movie->id_category}}" class="main__table-text">{{$movie->id_category}}</div>
+                  <div class="main__table-text">{{$movie->category->name}}</div>
                 </td>
                 <td>
-                  <div title="{{$movie->created_at}}" class="main__table-text limit__text">{{$movie->created_at}}</div>
+                  <div class="main__table-text limit__text">{{$movie->created_at}}</div>
                 </td>
                 <td>
                   <div class="main__table-btns">
                     <a class="main__table-btn main__table-btn--view" href="{{route("admin.episode.add",$movie->id)}}">
                       <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M160-120v-720h80v80h80v-80h320v80h80v-80h80v720h-80v-80h-80v80H320v-80h-80v80h-80Zm80-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm400 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80ZM400-200h160v-560H400v560Zm0-560h160-160Z"/></svg>                  
                     </a>
-                    <button class="main__table-btn main__table-btn--banned movie__status__update__btn" id_movie="{{$movie->id}}">
+                    <button class="main__table-btn main__table-btn--banned status__update__btn" id_status="{{$movie->id}}" type_status="movie">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.92,11.6C19.9,6.91,16.1,4,12,4S4.1,6.91,2.08,11.6a1,1,0,0,0,0,.8C4.1,17.09,7.9,20,12,20s7.9-2.91,9.92-7.6A1,1,0,0,0,21.92,11.6ZM12,18c-3.17,0-6.17-2.29-7.9-6C5.83,8.29,8.83,6,12,6s6.17,2.29,7.9,6C18.17,15.71,15.17,18,12,18ZM12,8a4,4,0,1,0,4,4A4,4,0,0,0,12,8Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,14Z"/></svg>
                     </button>
                     <a href="{{route("admin.movie.update",$movie->id)}}" class="main__table-btn main__table-btn--edit">
@@ -71,46 +71,46 @@
                 </td>
               </tr>
               @endforeach
-            @else
+              @else
               <tr>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td class="main__table-text">Không có dữ liệu</td>
               </tr>
-            @endif
-          </tbody>
-        </table>
+              @endif
+            </tbody>
+          </table>
+          @if ($movies->count() > 0)
+          <!-- paginator -->
+          <div class="col-12">
+            <div class="paginator">
+              <span class="paginator__pages">10 từ 14 452</span>
+
+              <ul class="paginator__paginator">
+                <li>
+                  <a href="#">
+                    <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.75 5.36475L13.1992 5.36475" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.771 10.1271L0.749878 5.36496L5.771 0.602051" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  </a>
+                </li>
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li>
+                  <a href="#">
+                    <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.1992 5.3645L0.75 5.3645" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.17822 0.602051L13.1993 5.36417L8.17822 10.1271" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- end paginator -->
+          @endif
       </div>
-
+    </div>
+	</div>
 </div>
-
-				<!-- paginator -->
-				<div class="col-12">
-          <div class="paginator">
-            <span class="paginator__pages">10 từ 14 452</span>
-
-						<ul class="paginator__paginator">
-							<li>
-								<a href="#">
-									<svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.75 5.36475L13.1992 5.36475" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.771 10.1271L0.749878 5.36496L5.771 0.602051" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-								</a>
-							</li>
-							<li class="active"><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li>
-                <a href="#">
-									<svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.1992 5.3645L0.75 5.3645" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.17822 0.602051L13.1993 5.36417L8.17822 10.1271" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<!-- end paginator -->
-			</div>
-		</div>
 	
     <!-- end main content -->
     
@@ -121,7 +121,7 @@
        <p class="modal__text">Bạn có chắc chắn muốn xóa mục này không?</p>
 
        <div class="modal__btns">
-          <button class="modal__btn modal__btn--dismiss" id="modal__remove__btn" type="button">Xóa</button>
+          <button class="modal__btn modal__btn--apply" id="modal__remove__btn" type="button">Xóa</button>
           <button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
        </div>
      </div>

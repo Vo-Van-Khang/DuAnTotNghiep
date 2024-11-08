@@ -140,7 +140,7 @@
                                         <a href="/detail" >{{$movie->title}}</a>
                                     </h3>
                                     <ul class="card__list">
-                                    <li>{{$movie->get_categories ? $movie->get_categories->name : 'Không có danh mục'}}</li>
+                                    <li>{{$movie->category ? $movie->category->name : 'Không có danh mục'}}</li>
                                         <li>{{$movie->release_year}}</li>
                                     </ul>
 

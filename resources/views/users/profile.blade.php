@@ -241,115 +241,85 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    <a href="#"
-                                                        >Up</a
-                                                    >
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    11/10/2024
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text main__table-text--rate"
-                                                >
-                                                    <a href="" class="main__table-action">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    <a href="#"
-                                                        >Up</a
-                                                    >
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    11/10/2024
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text main__table-text--rate"
-                                                >
-                                                    <a href="" class="main__table-action">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    <a href="#"
-                                                        >Up</a
-                                                    >
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    11/10/2024
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text main__table-text--rate"
-                                                >
-                                                    <a href="" class="main__table-action">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    <a href="#"
-                                                        >Up</a
-                                                    >
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    11/10/2024
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text main__table-text--rate"
-                                                >
-                                                    <a href="" class="main__table-action">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        @if ($histories->count() > 0)
+                                            @foreach ($histories as $history)
+                                                <tr class="item__remove" id_remove="{{$history->id}}" type_remove="history">
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text"
+                                                        >
+                                                            <a href="{{route("movie", $history->id_movie)}}"
+                                                                >{{$history->movie->title}}</a
+                                                            >
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text"
+                                                        >
+                                                            {{$history->created_at}}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text main__table-btns"
+                                                        >
+                                                            <a href="{{route("movie",$history->id_movie)}}" class="main__table-btn main__table-btn--view">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M838-65 720-183v89h-80v-226h226v80h-90l118 118-56 57ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 20-2 40t-6 40h-82q5-20 7.5-40t2.5-40q0-20-2.5-40t-7.5-40H654q3 20 4.5 40t1.5 40q0 20-1.5 40t-4.5 40h-80q3-20 4.5-40t1.5-40q0-20-1.5-40t-4.5-40H386q-3 20-4.5 40t-1.5 40q0 20 1.5 40t4.5 40h134v80H404q12 43 31 82.5t45 75.5q20 0 40-2.5t40-4.5v82q-20 2-40 4.5T480-80ZM170-400h136q-3-20-4.5-40t-1.5-40q0-20 1.5-40t4.5-40H170q-5 20-7.5 40t-2.5 40q0 20 2.5 40t7.5 40Zm34-240h118q9-37 22.5-72.5T376-782q-55 18-99 54.5T204-640Zm172 462q-18-34-31.5-69.5T322-320H204q29 51 73 87.5t99 54.5Zm28-462h152q-12-43-31-82.5T480-798q-26 36-45 75.5T404-640Zm234 0h118q-29-51-73-87.5T584-782q18 34 31.5 69.5T638-640Z"/></svg>
+                                                            </a>
+                                                            <a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal remove__btn" id_remove="{{$history->id}}" type_remove="history">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td></td>
+                                                <td class="main__table-text">Không có dữ liệu</td>
+                                            </tr>
+                                        @endif
 
+                                        @if ($histories->count() > 0)
+                                            @foreach ($histories as $history)
+                                                <tr class="item__remove" id_remove="{{$history->id}}" type_remove="history">
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text"
+                                                        >
+                                                            <a href="{{route("movie", $history->id_movie)}}"
+                                                                >{{$history->movie->title}}</a
+                                                            >
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text"
+                                                        >
+                                                            {{$history->created_at}}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text main__table-btns"
+                                                        >
+                                                            <a href="{{route("movie",$history->id_movie)}}" class="main__table-btn main__table-btn--view">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M838-65 720-183v89h-80v-226h226v80h-90l118 118-56 57ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 20-2 40t-6 40h-82q5-20 7.5-40t2.5-40q0-20-2.5-40t-7.5-40H654q3 20 4.5 40t1.5 40q0 20-1.5 40t-4.5 40h-80q3-20 4.5-40t1.5-40q0-20-1.5-40t-4.5-40H386q-3 20-4.5 40t-1.5 40q0 20 1.5 40t4.5 40h134v80H404q12 43 31 82.5t45 75.5q20 0 40-2.5t40-4.5v82q-20 2-40 4.5T480-80ZM170-400h136q-3-20-4.5-40t-1.5-40q0-20 1.5-40t4.5-40H170q-5 20-7.5 40t-2.5 40q0 20 2.5 40t7.5 40Zm34-240h118q9-37 22.5-72.5T376-782q-55 18-99 54.5T204-640Zm172 462q-18-34-31.5-69.5T322-320H204q29 51 73 87.5t99 54.5Zm28-462h152q-12-43-31-82.5T480-798q-26 36-45 75.5T404-640Zm234 0h118q-29-51-73-87.5T584-782q18 34 31.5 69.5T638-640Z"/></svg>
+                                                            </a>
+                                                            <a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal remove__btn" id_remove="{{$history->id}}" type_remove="history">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td></td>
+                                                <td class="main__table-text">Không có dữ liệu</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -361,125 +331,130 @@
             <div class="tab-pane fade" id="tab-2" role="tabpanel">
                 <!-- favorites -->
                 <div class="row row--grid watch__later__container">
-                    @foreach ($watch_laters as $watch_later)
-                        <div class="col-6 col-sm-4 col-lg-3 col-xl-3 item__remove" id_watch_later="{{$watch_later->id}}">
-                            <div class="card card--favorites">
-                                <a href="{{route('movie',$watch_later->get_movies->id)}}" class="card__cover">
-                                    <img src="{{asset($watch_later->get_movies->thumbnail)}}" alt="" />
-                                    <svg
-                                        width="22"
-                                        height="22"
-                                        viewBox="0 0 22 22"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
+                    @if ($watch_laters->count() > 0)
+                        @foreach ($watch_laters as $watch_later)
+                            <div class="col-6 col-sm-4 col-lg-3 col-xl-3 item__remove" id_remove="{{$watch_later->id}}" type_remove="watch_later">
+                                <div class="card card--favorites">
+                                    <a href="{{route('movie',$watch_later->movie->id)}}" class="card__cover">
+                                        <img src="{{asset($watch_later->movie->thumbnail)}}" alt="" />
+                                        <svg
+                                            width="22"
+                                            height="22"
+                                            viewBox="0 0 22 22"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                fill-rule="evenodd"
+                                                clip-rule="evenodd"
+                                                d="M11 1C16.5228 1 21 5.47716 21 11C21 16.5228 16.5228 21 11 21C5.47716 21 1 16.5228 1 11C1 5.47716 5.47716 1 11 1Z"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                            <path
+                                                fill-rule="evenodd"
+                                                clip-rule="evenodd"
+                                                d="M14.0501 11.4669C13.3211 12.2529 11.3371 13.5829 10.3221 14.0099C10.1601 14.0779 9.74711 14.2219 9.65811 14.2239C9.46911 14.2299 9.28711 14.1239 9.19911 13.9539C9.16511 13.8879 9.06511 13.4569 9.03311 13.2649C8.93811 12.6809 8.88911 11.7739 8.89011 10.8619C8.88911 9.90489 8.94211 8.95489 9.04811 8.37689C9.07611 8.22089 9.15811 7.86189 9.18211 7.80389C9.22711 7.69589 9.30911 7.61089 9.40811 7.55789C9.48411 7.51689 9.57111 7.49489 9.65811 7.49789C9.74711 7.49989 10.1091 7.62689 10.2331 7.67589C11.2111 8.05589 13.2801 9.43389 14.0401 10.2439C14.1081 10.3169 14.2951 10.5129 14.3261 10.5529C14.3971 10.6429 14.4321 10.7519 14.4321 10.8619C14.4321 10.9639 14.4011 11.0679 14.3371 11.1549C14.3041 11.1999 14.1131 11.3999 14.0501 11.4669Z"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                    </a>
+                                    <a href="#modal-delete" class="card__add open-modal remove__btn" type="button" id_remove="{{$watch_later->id}}" type_remove="watch_later">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+                                    </a>
+                                    <span class="card__rating"
+                                        ><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
+                                        {{$watch_later->movie->views}}</span
                                     >
-                                        <path
-                                            fill-rule="evenodd"
-                                            clip-rule="evenodd"
-                                            d="M11 1C16.5228 1 21 5.47716 21 11C21 16.5228 16.5228 21 11 21C5.47716 21 1 16.5228 1 11C1 5.47716 5.47716 1 11 1Z"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                        <path
-                                            fill-rule="evenodd"
-                                            clip-rule="evenodd"
-                                            d="M14.0501 11.4669C13.3211 12.2529 11.3371 13.5829 10.3221 14.0099C10.1601 14.0779 9.74711 14.2219 9.65811 14.2239C9.46911 14.2299 9.28711 14.1239 9.19911 13.9539C9.16511 13.8879 9.06511 13.4569 9.03311 13.2649C8.93811 12.6809 8.88911 11.7739 8.89011 10.8619C8.88911 9.90489 8.94211 8.95489 9.04811 8.37689C9.07611 8.22089 9.15811 7.86189 9.18211 7.80389C9.22711 7.69589 9.30911 7.61089 9.40811 7.55789C9.48411 7.51689 9.57111 7.49489 9.65811 7.49789C9.74711 7.49989 10.1091 7.62689 10.2331 7.67589C11.2111 8.05589 13.2801 9.43389 14.0401 10.2439C14.1081 10.3169 14.2951 10.5129 14.3261 10.5529C14.3971 10.6429 14.4321 10.7519 14.4321 10.8619C14.4321 10.9639 14.4011 11.0679 14.3371 11.1549C14.3041 11.1999 14.1131 11.3999 14.0501 11.4669Z"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-                                </a>
-                                <button class="card__add remove__watch__later__id" type="button" id_watch_later="{{$watch_later->id}}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
-                                </button>
-                                <span class="card__rating"
-                                    ><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
-                                    {{$watch_later->get_movies->views}}</span
-                                >
-                                <h3 class="card__title">
-                                    <a href="{{route('movie',$watch_later->get_movies->id)}}"
-                                        >{{$watch_later->get_movies->title}}</a
-                                    >
-                                </h3>
-                                <ul class="card__list">
-                                    <li>{{$watch_later->get_movies->get_categories->name}}</li>
-                                    <li>{{$watch_later->get_movies->release_year}}</li>
-                                </ul>
+                                    <h3 class="card__title">
+                                        <a href="{{route('movie',$watch_later->movie->id)}}"
+                                            >{{$watch_later->movie->title}}</a
+                                        >
+                                    </h3>
+                                    <ul class="card__list">
+                                        <li>{{$watch_later->movie->category->name}}</li>
+                                        <li>{{$watch_later->movie->release_year}}</li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
 
+                            @endforeach
+                            <!-- paginator -->
+                             <div class="row">
+                                 <div class="col-12">
+                                     <div class="catalog__paginator-wrap">
+                                         <span class="catalog__pages"
+                                             >12 from 144</span
+                                         >
+
+                                         <ul class="catalog__paginator">
+                                             <li>
+                                                 <a href="#">
+                                                     <svg
+                                                         width="14"
+                                                         height="11"
+                                                         viewBox="0 0 14 11"
+                                                         fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg"
+                                                     >
+                                                         <path
+                                                             d="M0.75 5.36475L13.1992 5.36475"
+                                                             stroke-width="1.2"
+                                                             stroke-linecap="round"
+                                                             stroke-linejoin="round"
+                                                         />
+                                                         <path
+                                                             d="M5.771 10.1271L0.749878 5.36496L5.771 0.602051"
+                                                             stroke-width="1.2"
+                                                             stroke-linecap="round"
+                                                             stroke-linejoin="round"
+                                                         />
+                                                     </svg>
+                                                 </a>
+                                             </li>
+                                             <li class="active">
+                                                 <a href="#">1</a>
+                                             </li>
+                                             <li><a href="#">2</a></li>
+                                             <li><a href="#">3</a></li>
+                                             <li><a href="#">4</a></li>
+                                             <li>
+                                                 <a href="#">
+                                                     <svg
+                                                         width="14"
+                                                         height="11"
+                                                         viewBox="0 0 14 11"
+                                                         fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg"
+                                                     >
+                                                         <path
+                                                             d="M13.1992 5.3645L0.75 5.3645"
+                                                             stroke-width="1.2"
+                                                             stroke-linecap="round"
+                                                             stroke-linejoin="round"
+                                                         />
+                                                         <path
+                                                             d="M8.17822 0.602051L13.1993 5.36417L8.17822 10.1271"
+                                                             stroke-width="1.2"
+                                                             stroke-linecap="round"
+                                                             stroke-linejoin="round"
+                                                         />
+                                                     </svg>
+                                                 </a>
+                                             </li>
+                                         </ul>
+                                     </div>
+                                 </div>
+                             </div>
+                             <!-- end paginator -->
+                    @else
+                        <p style="width:100%;margin:20px 0 0;color:#fff;text-align:center">Không có dữ liệu</p>
+                    @endif
                 </div>
                 <!-- end favorites -->
 
-                <!-- paginator -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="catalog__paginator-wrap">
-                            <span class="catalog__pages"
-                                >12 from 144</span
-                            >
 
-                            <ul class="catalog__paginator">
-                                <li>
-                                    <a href="#">
-                                        <svg
-                                            width="14"
-                                            height="11"
-                                            viewBox="0 0 14 11"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M0.75 5.36475L13.1992 5.36475"
-                                                stroke-width="1.2"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            />
-                                            <path
-                                                d="M5.771 10.1271L0.749878 5.36496L5.771 0.602051"
-                                                stroke-width="1.2"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            />
-                                        </svg>
-                                    </a>
-                                </li>
-                                <li class="active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li>
-                                    <a href="#">
-                                        <svg
-                                            width="14"
-                                            height="11"
-                                            viewBox="0 0 14 11"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M13.1992 5.3645L0.75 5.3645"
-                                                stroke-width="1.2"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            />
-                                            <path
-                                                d="M8.17822 0.602051L13.1993 5.36417L8.17822 10.1271"
-                                                stroke-width="1.2"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                            />
-                                        </svg>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- end paginator -->
             </div>
 
             <div class="tab-pane fade" id="tab-3" role="tabpanel">
@@ -673,57 +648,17 @@
 </div>
 <!-- end profile -->
 
-<!-- partners -->
-<div class="section">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="partners owl-carousel">
-                    <a href="#" class="partners__img">
-                        <img
-                            src="img/partners/3docean-light-background.png"
-                            alt=""
-                        />
-                    </a>
+<!-- modal delete -->
+<div id="modal-delete" class="zoom-anim-dialog mfp-hide modal">
+    <h6 class="modal__title">Xóa mục</h6>
 
-                    <a href="#" class="partners__img">
-                        <img
-                            src="img/partners/activeden-light-background.png"
-                            alt=""
-                        />
-                    </a>
+    <p class="modal__text">Bạn có chắc chắn muốn xóa mục này không?</p>
 
-                    <a href="#" class="partners__img">
-                        <img
-                            src="img/partners/audiojungle-light-background.png"
-                            alt=""
-                        />
-                    </a>
-
-                    <a href="#" class="partners__img">
-                        <img
-                            src="img/partners/codecanyon-light-background.png"
-                            alt=""
-                        />
-                    </a>
-
-                    <a href="#" class="partners__img">
-                        <img
-                            src="img/partners/photodune-light-background.png"
-                            alt=""
-                        />
-                    </a>
-
-                    <a href="#" class="partners__img">
-                        <img
-                            src="img/partners/themeforest-light-background.png"
-                            alt=""
-                        />
-                    </a>
-                </div>
-            </div>
-        </div>
+    <div class="modal__btns">
+       <button class="modal__btn modal__btn--apply" id="modal__remove__btn" type="button">Xóa</button>
+       <button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
     </div>
-</div>
+  </div>
+  <!-- end modal delete -->
  @endsection
  <!-- end partners -->

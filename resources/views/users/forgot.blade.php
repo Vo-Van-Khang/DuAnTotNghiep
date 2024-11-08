@@ -40,42 +40,39 @@
                     <div class="col-12">
                         <div class="sign__content">
                             <!-- authorization form -->
-                            <form action="#" class="sign__form">
-                                <a href="index.html" class="sign__logo">
-                                    <img src="{{asset("images/logo.png")}}" alt="" />
+                            <form action="{{ route('forgot-password.send') }}" class="sign__form" method="post">
+                                <a href="{{ route('index') }}" class="sign__logo">
+                                    <img src="{{asset("images/storage/logo.png")}}" alt="" />
                                 </a>
-
+                                @csrf
+    
                                 <div class="sign__group">
                                     <input
-                                        type="text"
+                                        type="email"
+                                        name="email"
                                         class="sign__input"
-                                        placeholder="Email"
-                                    />
+                                        placeholder="Email" />
                                 </div>
-
+    
                                 <div class="sign__group sign__group--checkbox">
                                     <input
                                         id="remember"
                                         name="remember"
                                         type="checkbox"
-                                        checked="checked"
-                                    />
-                                    <label for="remember"
-                                        >Tôi đồng ý với
-                                        <a href="privacy.html"
-                                            >Chính sách bảo mật</a
-                                        ></label
-                                    >
+                                        checked="checked" />
+                                    <label for="remember">Tôi đồng ý với
+                                        <a href="privacy.html">Chính sách bảo mật</a></label>
                                 </div>
-
-                                <button class="sign__btn" type="button">
+    
+                                <button class="sign__btn" type="submit">
                                     Gửi
                                 </button>
-
-                                <span class="sign__text"
-                                    >Chúng tôi sẽ gửi mật khẩu vào Email của
-                                    bạn</span
-                                >
+                                <span class="sign__text">Bạn không muốn đổi mật khẩu
+                                <a href="{{ route('signin') }}">Đăng nhập!</a></span>
+                                @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror <span class="sign__text">Chúng tôi sẽ gửi xác nhận vào Email của
+                                    bạn</span>
                             </form>
                             <!-- end authorization form -->
                         </div>

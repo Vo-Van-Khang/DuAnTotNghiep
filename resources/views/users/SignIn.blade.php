@@ -21,10 +21,10 @@
         <link
             rel="icon"
             type="image/png"
-            href="{{asset("images/logo.png")}}"
+            href="{{asset("images/storage/logo.png")}}"
             sizes="32x32"
         />
-        <link rel="apple-touch-icon" href="{{asset("images/logo.png")}}" />
+        <link rel="apple-touch-icon" href="{{asset("images/storage/logo.png")}}" />
 
         <meta name="description" content="" />
         <meta name="keywords" content="" />
@@ -35,15 +35,15 @@
     </head>
     <body>
         <!-- sign in -->
-        <div class="sign section--full-bg" data-bg="{{asset('images/background.jpg')}}">
+        <div class="sign section--full-bg">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <div class="sign__content">
                             <!-- authorization form -->
                             <form action="#" class="sign__form">
-                                <a href="index.html" class="sign__logo">
-                                    <img src="{{asset("images/logo.png")}}" alt="" />
+                                <a href="{{route("index")}}" class="sign__logo">
+                                    <img src="{{asset("images/storage/logo.png")}}" alt="" />
                                 </a>
 
                                 <div class="sign__group">
@@ -94,7 +94,17 @@
             </div>
         </div>
         <!-- end sign in -->
-
+        @include('layouts.shared.loader')
+        @include('layouts.shared.message')
         <!-- JS -->
+        <script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
+        <script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>
+        <script src="{{asset("js/owl.carousel.min.js")}}"></script>
+        <script src="{{asset("js/slider-radio.js")}}"></script>
+        <script src="{{asset("js/select2.min.js")}}"></script>
+        <script src="{{asset("js/smooth-scrollbar.js")}}"></script>
+        <script src="{{asset("js/jquery.magnific-popup.min.js")}}"></script>
+        <script src="{{asset("js/plyr.min.js")}}"></script>
+        <script src="{{asset("js/main.js")}}"></script>
     </body>
 </html>
