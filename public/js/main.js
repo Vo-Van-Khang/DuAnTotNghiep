@@ -937,3 +937,86 @@ function comment__count() {
     let comment__count = document.querySelector(".comment__count");
     if(comment__count) comment__count.innerText = document.querySelectorAll(".remove__btn").length
 }
+
+function movie__ajax(id) {
+    const comments__list = document.querySelector(".comments__list");
+    fetch(`/movie/ajax/${id}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.querySelector('#likes').innerText = data.likes;
+            comments__list.innerHTML = "";
+
+            data.comments.forEach(comment => {
+                const commentItem = `
+                    <li class="comments__item item__remove" id_remove="${comment.id}" type_remove="comment">
+                        <div class="comments__autor">
+                            <div>
+                                <img class="comments__avatar" src="${comment.user.image}" alt="" />
+                                <span class="comments__name">${comment.user.name}</span>
+                                <span class="comments__time">${comment.created_at}</span>
+                            </div>
+                            <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="${comment.id}" type_remove="comment">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <p class="comments__text">${comment.content}</p>
+                        <div class="comments__actions">
+                            <button type="button" class="reply__comment__btn" name_user="${comment.user.name}" id_user="${comment.user.id}" id_comment="${comment.id}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+                                    <polyline points="400 160 464 224 400 288" style="fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 32px;" />
+                                    <path d="M448,224H154C95.24,224,48,273.33,48,332v20" style="fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 32px;" />
+                                </svg>
+                                <span>Trả Lời</span>
+                            </button>
+                        </div>
+                    </li>
+                    <div class="reply__comments__container">
+                        ${comment.reply_comments
+                            .map(
+                                reply => `
+                                    <li class="comments__item comments__item--answer item__remove" id_remove="${reply.id}" type_remove="reply_comment">
+                                        <div class="comments__autor">
+                                            <div>
+                                            <span class="comments__name">${reply.content}</span>
+                                                <img class="comments__avatar" src="${reply.user.image}" alt="" />
+                                                <span class="comments__time">${reply.created_at}</span>
+                                            </div>
+                                            <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="${reply.id}" type_remove="reply_comment">
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                        <p class="comments__text">
+                                            <span>@${reply.user_reply.name}</span> ${reply.content}
+                                        </p>
+                                    </li>
+                                `
+                            )
+                            .join("")}
+                    </div>
+                `;
+                comments__list.innerHTML += commentItem;
+            });
+        }
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
+if(document.querySelector(".comments__list")){
+    setInterval(()=>{
+        let id = document.querySelector(".comments__list").getAttribute('id_movie')
+        movie__ajax(id);
+    },2000)
+}

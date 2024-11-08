@@ -2078,6 +2078,9 @@ body::-webkit-scrollbar-thumb {
   width: 100%;
   padding: 10px 20px;
 }
+.sign__input::placeholder {
+ color: #b4b4b4;
+}
 .sign__input:focus {
   background-color: #151f30;
   border-color: #2f80ed;
@@ -2102,6 +2105,9 @@ body::-webkit-scrollbar-thumb {
   resize: none;
   overflow-x: hidden;
 }
+.sign__textarea::placeholder {
+  color: #b4b4b4;
+ }
 .sign__textarea::-webkit-scrollbar {
   width: 5px;
 }

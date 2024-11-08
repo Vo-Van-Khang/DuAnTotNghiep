@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Comment_Filters extends Model
 {
     use HasFactory;
+
     protected $table = 'comment_filters';
-    public $primaryKey = 'id';
-    public $timestamps = false;
+
+      
     protected $fillable = [
-      'id',
-      'content',
-      'created_at'
+        'content',
     ];
+
+    public $timestamps = true; // Enable timestamps for created_at and updated_at columns
 }
+

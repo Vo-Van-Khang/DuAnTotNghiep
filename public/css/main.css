@@ -500,7 +500,7 @@ body::-webkit-scrollbar-thumb {
 .header__form-input {
     width: calc(100% - 40px);
     height: 40px;
-    border-radius: 16px;
+    border-radius: 5px;
     background-color: #151f30;
     border: none;
     padding: 0 60px 0 20px;
@@ -827,7 +827,7 @@ body::-webkit-scrollbar-thumb {
     transition: 0.5s;
     overflow: hidden;
     position: relative;
-    border-radius: 16px;
+    border-radius: 5px;
 }
 
 .home__card img {
@@ -1561,7 +1561,7 @@ body::-webkit-scrollbar-thumb {
     align-items: flex-start;
     background-color: #151f30;
     padding: 10px 20px 20px;
-    border-radius: 16px;
+    border-radius: 5px;
     width: 100%;
 }
 
@@ -1583,7 +1583,7 @@ body::-webkit-scrollbar-thumb {
     margin: 40px auto 0;
     width: 160px;
     height: 50px;
-    border-radius: 16px;
+    border-radius: 8px;
     background-color: #151f30;
     font-size: 14px;
     color: #e0e0e0;
@@ -1715,7 +1715,7 @@ body::-webkit-scrollbar-thumb {
         top: -1px;
         z-index: 99;
         background-color: #131720;
-        border-radius: 0 0 16px 16px;
+        border-radius: 0 0 5px 5px;
     }
     .catalog__nav:before {
         content: '';
@@ -1725,7 +1725,7 @@ body::-webkit-scrollbar-thumb {
         left: 0;
         right: 0;
         bottom: 0;
-        border-radius: 16px;
+        border-radius: 5px;
         background-color: #151f30;
         z-index: 1;
         pointer-events: none;
@@ -2029,12 +2029,12 @@ body::-webkit-scrollbar-thumb {
     flex-direction: row;
     align-items: stretch;
     background-color: #151f30;
-    border-radius: 16px;
+    border-radius: 5px;
 }
 
 .card--big .card__cover {
     width: 140px;
-    border-radius: 16px 0 0 16px;
+    border-radius: 5px 0 0 5px;
 }
 
 .card--big .card__rating {
@@ -2061,7 +2061,7 @@ body::-webkit-scrollbar-thumb {
     justify-content: center;
     align-items: center;
     width: 100%;
-    border-radius: 16px;
+    border-radius: 5px;
     overflow: hidden;
     position: relative;
     z-index: 1;
@@ -3146,7 +3146,7 @@ body::-webkit-scrollbar-thumb {
     display: block;
     margin-top: 20px;
     padding: 20px;
-    border-radius: 16px;
+    border-radius: 5px;
     background-color: #151f30;
     position: relative;
     overflow: hidden;
@@ -3281,7 +3281,7 @@ body::-webkit-scrollbar-thumb {
     width: 100%;
     min-width: 160px;
     height: 50px;
-    border-radius: 16px;
+    border-radius: 8px;
     background-color: #131720;
     font-size: 14px;
     color: #e0e0e0;
@@ -4359,7 +4359,7 @@ body::-webkit-scrollbar-thumb {
     color: #e0e0e0;
     font-size: 14px;
     background-color: #151f30;
-    border-radius: 12px;
+    border-radius: 5px;
     padding: 0 12px;
     margin-top: 20px;
     margin-right: 20px;
@@ -4406,7 +4406,7 @@ body::-webkit-scrollbar-thumb {
     align-items: center;
     padding: 0 15px;
     height: 30px;
-    border-radius: 12px;
+    border-radius: 5px;
     color: #fff;
     font-size: 14px;
     background-color: #2f80ed;
@@ -5408,7 +5408,7 @@ body::-webkit-scrollbar-thumb {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 16px;
+    border-radius: 5px;
     padding: 30px 20px;
     position: relative;
     width: 100%;
@@ -6355,7 +6355,7 @@ body::-webkit-scrollbar-thumb {
 .plyr {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
-    border-radius: 16px;
+    border-radius: 5px;
     margin-top: 30px;
 }
 

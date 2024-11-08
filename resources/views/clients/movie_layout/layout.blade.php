@@ -185,7 +185,7 @@
                                         id="tab-1"
                                         role="tabpanel"
                                         >
-                                        <ul class="comments__list">
+                                        <ul class="comments__list" id_movie="{{$movie->id}}">
                                             @foreach ($comments as $comment)
                                                 <li class="comments__item item__remove" id_remove="{{$comment->id}}" type_remove="comment">
                                                     <div class="comments__autor">

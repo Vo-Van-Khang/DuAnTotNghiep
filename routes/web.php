@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\LikeController;
@@ -14,7 +15,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\WatchLaterController;
 use App\Http\Controllers\ReplyCommentController;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\CommentFilterController;
 
 //ADMIN
 Route::get('/admin/category/list', [CategoryController::class,'admin__view'])->name("admin.category.list");
@@ -42,6 +43,16 @@ Route::get('/admin/user/update/{id}', [UserController::class, 'edit'])->name('ad
 Route::post('/admin/user/update',[UserController::class , 'update'])->name('admin.user.update');
 Route::get('/admin/user/delete/{id}', [UserController::class, 'delete'])->name('admin.user.delete');
 
+Route::get('/admin/comment_filter/list', [CommentFilterController::class,'listAdmin'])->name("admins.comment_filter.list");
+Route::get('/admin/comment_filter/add', function () {
+    return view('admins.comment_filter.add',["selected" => "comment_filter"]);
+})->name("admins.comment_filter.add");
+Route::get('/admin/comment_filters', [CommentFilterController::class, 'listAdmin'])->name('comment_filter.listAdmin');
+Route::post('/admin/comment_filter/add', [CommentFilterController::class,'create'])->name("admin.comment_filter.add");
+Route::post('/admin/comment_filters/store', [CommentFilterController::class, 'store'])->name('comment_filter.store');
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::delete('/admin/comment_filter/delete/{id}', [CommentFilterController::class,'destroy']);
+
 Route::get('/admin/slide/list', [SlideController::class,'admin__view'])->name("admin.slide.list");
 Route::get('/admin/slide/add', [SlideController::class,'admin__add'])->name("admin.slide.add");
 Route::post('/admin/slide/add', [SlideController::class,'admin__create'])->name("admin.slide.add");
@@ -57,6 +68,21 @@ Route::post('/admin/trash/user/remove/{id}', [TrashController::class,'admin__use
 Route::post('/admin/trash/comment/remove/{id}', [TrashController::class,'admin__comment__remove']);
 Route::post('/admin/trash/notification/remove/{id}', [TrashController::class,'admin__notification__remove']);
 Route::post('/admin/trash/slide/remove/{id}', [TrashController::class,'admin__slide__remove']);
+
+
+Route::get('/admin/payment/list', function () {
+    return view('admins.payment.list');
+});
+Route::get('/admin/payment/list', [PaymentController::class, 'listpayment']);
+Route::get('/admin/payment/add', function () {
+    return view('admins.payment.add');
+});
+Route::post('/admin/payment/add', [PaymentController::class, 'addpayment']);
+Route::get('/admin/payment/update', function () {
+    return view('admins.payment.update');
+});
+Route::get('/admin/payment/delete/{maxoa}', [PaymentController::class, 'deletepayment']);
+
 
 //CLIENT
 Route::get("/", [MovieController::class, 'index'])->name('index');
@@ -81,25 +107,12 @@ Route::post('/movie/watch_later/{id}', [WatchLaterController::class,'watch_later
 Route::delete('/watch_later/remove/{id}', [WatchLaterController::class,'remove_by_id']);
 Route::delete('/history/remove/{id}', [HistoryController::class,'remove_by_id']);
 
+Route::get('/movie/ajax/{id}', [AjaxController::class,'movie']);
 Route::post('/movie/{id}/comment/add', [CommentController::class,'comment__add']);
 Route::post('/movie/{id}/reply_comment/add', [ReplyCommentController::class,'reply__comment__add']);
 
 Route::delete('/comment/remove/{id}', [CommentController::class,'remove_by_id']);
 Route::delete('/reply_comment/remove/{id}', [ReplyCommentController::class,'remove_by_id']);
-
-Route::get('/admin/payment/list', function () {
-    return view('admins.payment.list');
-});
-Route::get('/admin/payment/list', [PaymentController::class, 'listpayment']);
-Route::get('/admin/payment/add', function () {
-    return view('admins.payment.add');
-});
-Route::post('/admin/payment/add', [PaymentController::class, 'addpayment']);
-Route::get('/admin/payment/update', function () {
-    return view('admins.payment.update');
-});
-Route::get('/admin/payment/delete/{maxoa}', [PaymentController::class, 'deletepayment']);
-
 
 Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [UserController::class, 'register']);
