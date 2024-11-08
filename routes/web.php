@@ -18,9 +18,6 @@ use App\Http\Controllers\ReplyCommentController;
 use App\Http\Controllers\CommentFilterController;
 
 //ADMIN
-Route::get('/admin/category/list', [CategoryController::class,'admin__view'])->name("admin.category.list");
-Route::get('/admin/category/add', [CategoryController::class,'admin__add'])->name("admin.category.add");
-Route::get('/admin/category/update/{id}', [CategoryController::class,'admin__update'])->name("admin.category.update");
 
 Route::get('/admin/movie/list', [MovieController::class,'admin__view'])->name("admin.movie.list");
 Route::get('/admin/movie/add', [MovieController::class,'admin__add'])->name("admin.movie.add");
@@ -41,6 +38,7 @@ Route::delete('/admin/episode/url/remove/{id}',[EpisodeController::class,'admin_
 Route::get('/admin/user/list',[UserController::class , 'show'])->name('admin.user.list');
 Route::get('/admin/user/update/{id}', [UserController::class, 'edit'])->name('admin.user.update');
 Route::post('/admin/user/update',[UserController::class , 'update'])->name('admin.user.update');
+Route::delete('/admin/user/delete/{id}', [UserController::class, 'delete'])->name('admin.user.delete');
 Route::get('/admin/user/delete/{id}', [UserController::class, 'delete'])->name('admin.user.delete');
 
 Route::get('/admin/comment_filter/list', [CommentFilterController::class,'listAdmin'])->name("admins.comment_filter.list");
@@ -84,6 +82,28 @@ Route::get('/admin/payment/update', function () {
 Route::get('/admin/payment/delete/{maxoa}', [PaymentController::class, 'deletepayment']);
 
 
+
+Route::get('/admin/payment/list', function () {
+    return view('admins.payment.list');
+});
+Route::get('/admin/payment/list', [PaymentController::class, 'listpayment']);
+Route::get('/admin/payment/add', function () {
+    return view('admins.payment.add');
+});
+Route::post('/admin/payment/add', [PaymentController::class, 'addpayment']);
+Route::get('/admin/payment/update', function () {
+    return view('admins.payment.update');
+});
+Route::get('/admin/payment/delete/{maxoa}', [PaymentController::class, 'deletepayment']);
+
+
+Route::get('/admin/category/list', [CategoryController::class , 'get'])->name('admin.category.list');
+Route::get('/admin/category/add', [CategoryController::class , 'add'])->name('admin.category.add');
+Route::post('/admin/category/create', [CategoryController::class , 'create'])->name('admin.category.create');
+Route::get('/admin/category/update/{id}', [CategoryController::class, 'edit'])->name('admin.category.update');
+Route::post('/admin/category/update/{id}',[CategoryController::class , 'update'])->name('admin.category.update');
+Route::delete('/admin/category/delete/{id}',[CategoryController::class , 'delete'])->name('admin.category.delete');
+
 //CLIENT
 Route::get("/", [MovieController::class, 'index'])->name('index');
 Route::view('/about', 'clients.about')->name("about");
@@ -95,7 +115,9 @@ Route::view('/privacy', 'clients.privacy')->name("privacy");
 Route::view('/signin', 'users.SignIn')->name("signin");
 Route::view('/signup', 'users.SignUp')->name("signup");
 Route::view('/forgot', 'users.forgot')->name("forgot");
-Route::get('/profile', [UserController::class,'get'])->name("profile");
+Route::get( '/profile', [UserController::class, 'get'])->name('profile');
+Route::post( '/profile/update', [UserController::class, 'update'])->name('profile');
+Route::get("/all", [MovieController::class, 'allMovie'])->name('allMovie');
 Route::get('/search', [MovieController::class,'search'])->name("search");
 
 Route::get('/movie/{id}', [MovieController::class,'get_id'])->name("movie");

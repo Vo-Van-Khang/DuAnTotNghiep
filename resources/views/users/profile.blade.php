@@ -211,7 +211,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                       
+
                                     </tbody>
                                 </table>
                             </div>
@@ -265,14 +265,14 @@
                                                             class="main__table-text main__table-btns"
                                                         >
                                                             <a href="{{route("movie",$history->id_movie)}}" class="main__table-btn main__table-btn--view">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M838-65 720-183v89h-80v-226h226v80h-90l118 118-56 57ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 20-2 40t-6 40h-82q5-20 7.5-40t2.5-40q0-20-2.5-40t-7.5-40H654q3 20 4.5 40t1.5 40q0 20-1.5 40t-4.5 40h-80q3-20 4.5-40t1.5-40q0-20-1.5-40t-4.5-40H386q-3 20-4.5 40t-1.5 40q0 20 1.5 40t4.5 40h134v80H404q12 43 31 82.5t45 75.5q20 0 40-2.5t40-4.5v82q-20 2-40 4.5T480-80ZM170-400h136q-3-20-4.5-40t-1.5-40q0-20 1.5-40t4.5-40H170q-5 20-7.5 40t-2.5 40q0 20 2.5 40t7.5 40Zm34-240h118q9-37 22.5-72.5T376-782q-55 18-99 54.5T204-640Zm172 462q-18-34-31.5-69.5T322-320H204q29 51 73 87.5t99 54.5Zm28-462h152q-12-43-31-82.5T480-798q-26 36-45 75.5T404-640Zm234 0h118q-29-51-73-87.5T584-782q18 34 31.5 69.5T638-640Z"/></svg>                                                        
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M838-65 720-183v89h-80v-226h226v80h-90l118 118-56 57ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 20-2 40t-6 40h-82q5-20 7.5-40t2.5-40q0-20-2.5-40t-7.5-40H654q3 20 4.5 40t1.5 40q0 20-1.5 40t-4.5 40h-80q3-20 4.5-40t1.5-40q0-20-1.5-40t-4.5-40H386q-3 20-4.5 40t-1.5 40q0 20 1.5 40t4.5 40h134v80H404q12 43 31 82.5t45 75.5q20 0 40-2.5t40-4.5v82q-20 2-40 4.5T480-80ZM170-400h136q-3-20-4.5-40t-1.5-40q0-20 1.5-40t4.5-40H170q-5 20-7.5 40t-2.5 40q0 20 2.5 40t7.5 40Zm34-240h118q9-37 22.5-72.5T376-782q-55 18-99 54.5T204-640Zm172 462q-18-34-31.5-69.5T322-320H204q29 51 73 87.5t99 54.5Zm28-462h152q-12-43-31-82.5T480-798q-26 36-45 75.5T404-640Zm234 0h118q-29-51-73-87.5T584-782q18 34 31.5 69.5T638-640Z"/></svg>
                                                             </a>
                                                             <a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal remove__btn" id_remove="{{$history->id}}" type_remove="history">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg> 
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
                                                             </a>
                                                         </div>
                                                     </td>
-                                                </tr>   
+                                                </tr>
                                             @endforeach
                                         @else
                                             <tr>
@@ -347,7 +347,7 @@
                                          <span class="catalog__pages"
                                              >12 from 144</span
                                          >
- 
+
                                          <ul class="catalog__paginator">
                                              <li>
                                                  <a href="#">
@@ -414,7 +414,7 @@
                 </div>
                 <!-- end favorites -->
 
-               
+
             </div>
 
             <div class="tab-pane fade" id="tab-3" role="tabpanel">
@@ -425,9 +425,11 @@
                                 <!-- details form -->
                                 <div class="col-12 col-lg-6">
                                     <form
-                                        action="#"
+                                        action="{{ route('profile') }}"
+                                         method="POST" enctype="multipart/form-data"
                                         class="sign__form sign__form--profile sign__form--first"
                                     >
+                                    @csrf
                                         <div class="row">
                                             <div class="col-12">
                                                 <h4 class="sign__title">
@@ -444,15 +446,14 @@
                                                     <label
                                                         class="sign__label"
                                                         for="username"
-                                                        >Đăng
-                                                        nhập</label
+                                                        >Tên</label
                                                     >
                                                     <input
                                                         id="username"
                                                         type="text"
-                                                        name="username"
+                                                        name="name"
                                                         class="sign__input"
-                                                        placeholder="User123"
+                                                        value="{{$user->name}}"
                                                     />
                                                 </div>
                                             </div>
@@ -473,7 +474,7 @@
                                                         type="text"
                                                         name="email"
                                                         class="sign__input"
-                                                        placeholder="abc@gmail.com"
+                                                        value="{{$user->email}}"
                                                     />
                                                 </div>
                                             </div>
@@ -487,15 +488,11 @@
                                                     <label
                                                         class="sign__label"
                                                         for="firstname"
-                                                        >Họ</label
+                                                        >Ảnh hiện tại : </label
                                                     >
-                                                    <input
-                                                        id="firstname"
-                                                        type="text"
-                                                        name="firstname"
-                                                        class="sign__input"
-                                                        placeholder="Phương"
-                                                    />
+                                                    <img id="current_image"
+                                                    src=" {{ $user->image }}"
+                                                    alt="Ảnh hiện tại của người dùng" width="60">
                                                 </div>
                                             </div>
 
@@ -508,14 +505,14 @@
                                                     <label
                                                         class="sign__label"
                                                         for="lastname"
-                                                        >Tên</label
+                                                        >Chọn ảnh mới</label
                                                     >
                                                     <input
                                                         id="lastname"
-                                                        type="text"
-                                                        name="lastname"
+                                                        type="file"
+                                                        name="image"
                                                         class="sign__input"
-                                                        placeholder="Thảo"
+
                                                     />
                                                 </div>
                                             </div>
@@ -523,7 +520,7 @@
                                             <div class="col-12">
                                                 <button
                                                     class="sign__btn"
-                                                    type="button"
+                                                    type="submit"
                                                 >
                                                     Lưu
                                                 </button>
@@ -536,129 +533,68 @@
                                 <!-- password form -->
                                 <div class="col-12 col-lg-6">
                                     <form
-                                        action="#"
-                                        class="sign__form sign__form--profile"
-                                    >
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <h4 class="sign__title">
-                                                    Thay đổi mật khẩu
-                                                </h4>
-                                            </div>
+    action="{{ route('profile') }}"
+    method="POST"
+    class="sign__form sign__form--profile"
+>
+    @csrf
+    <div class="row">
+        <div class="col-12">
+            <h4 class="sign__title">Thay đổi mật khẩu</h4>
+        </div>
 
-                                            <div
-                                                class="col-12 col-md-6 col-lg-12 col-xl-6"
-                                            >
-                                                <div
-                                                    class="sign__group"
-                                                >
-                                                    <label
-                                                        class="sign__label"
-                                                        for="oldpass"
-                                                        >Mật khẩu
-                                                        cũ</label
-                                                    >
-                                                    <input
-                                                        id="oldpass"
-                                                        type="password"
-                                                        name="oldpass"
-                                                        class="sign__input"
-                                                    />
-                                                </div>
-                                            </div>
+        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+            <div class="sign__group">
+                <label class="sign__label" for="current_password">Mật khẩu cũ</label>
+                <input
+                    id="current_password"
+                    type="password"
+                    name="current_password"
+                    class="sign__input"
+                    required
+                />
+            </div>
+        </div>
 
-                                            <div
-                                                class="col-12 col-md-6 col-lg-12 col-xl-6"
-                                            >
-                                                <div
-                                                    class="sign__group"
-                                                >
-                                                    <label
-                                                        class="sign__label"
-                                                        for="newpass"
-                                                        >Mật khẩu
-                                                        mới</label
-                                                    >
-                                                    <input
-                                                        id="newpass"
-                                                        type="password"
-                                                        name="newpass"
-                                                        class="sign__input"
-                                                    />
-                                                </div>
-                                            </div>
+        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+            <div class="sign__group">
+                <label class="sign__label" for="new_password">Mật khẩu mới</label>
+                <input
+                    id="new_password"
+                    type="password"
+                    name="new_password"
+                    class="sign__input"
+                    required
+                />
+            </div>
+        </div>
 
-                                            <div
-                                                class="col-12 col-md-6 col-lg-12 col-xl-6"
-                                            >
-                                                <div
-                                                    class="sign__group"
-                                                >
-                                                    <label
-                                                        class="sign__label"
-                                                        for="confirmpass"
-                                                        >Cập nhật mật
-                                                        khẩu mới</label
-                                                    >
-                                                    <input
-                                                        id="confirmpass"
-                                                        type="password"
-                                                        name="confirmpass"
-                                                        class="sign__input"
-                                                    />
-                                                </div>
-                                            </div>
+        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+            <div class="sign__group">
+                <label class="sign__label" for="new_password_confirmation">Nhập lại mật khẩu mới</label>
+                <input
+                    id="new_password_confirmation"
+                    type="password"
+                    name="new_password_confirmation"
+                    class="sign__input"
+                    required
+                />
+            </div>
+        </div>
 
-                                            <div
-                                                class="col-12 col-md-6 col-lg-12 col-xl-6"
-                                            >
-                                                <div
-                                                    class="sign__group"
-                                                >
-                                                    <label
-                                                        class="sign__label"
-                                                        for="select"
-                                                        >Select</label
-                                                    >
-                                                    <select
-                                                        name="select"
-                                                        id="select"
-                                                        class="sign__select"
-                                                    >
-                                                        <option
-                                                            value="0"
-                                                        >
-                                                            Option
-                                                        </option>
-                                                        <option
-                                                            value="1"
-                                                        >
-                                                            Option 2
-                                                        </option>
-                                                        <option
-                                                            value="2"
-                                                        >
-                                                            Option 3
-                                                        </option>
-                                                        <option
-                                                            value="3"
-                                                        >
-                                                            Option 4
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </div>
+        <div class="col-12">
+            <button
+                class="sign__btn"
+                type="submit"
+                name="action"
+                value="change_password"
+            >
+                Đổi mật khẩu
+            </button>
+        </div>
+    </div>
+</form>
 
-                                            <div class="col-12">
-                                                <button
-                                                    class="sign__btn"
-                                                    type="button"
-                                                >
-                                                    Change
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
                                 <!-- end password form -->
                             </div>

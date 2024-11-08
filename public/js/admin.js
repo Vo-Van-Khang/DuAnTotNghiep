@@ -200,7 +200,6 @@ $(document).ready(function () {
 	});
 
 });
-
 window.addEventListener('load',()=>{
     document.querySelector('#loader').style.display = "none";
 })
@@ -313,7 +312,7 @@ if(document.getElementById('add__url') != null){
 							});
 						}
 					}else{
-						
+
 						itemUrlRemove.remove();
 					}
 				}
@@ -327,7 +326,7 @@ if(document.querySelector('.status__update__btn') != null){
 		let status__item__update = document.querySelectorAll(`.status__item__update`);
 		let id = button.getAttribute('id_status');
 		let type_status = button.getAttribute('type_status');
-		
+
 		button.addEventListener('click',()=>{
 			document.querySelector('#loader').style.display = 'flex';
 
@@ -345,24 +344,24 @@ if(document.querySelector('.status__update__btn') != null){
 						if(data.show){
 							status__item__update[index].innerText = "Hiển thị";
 							status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
-							
+
 							document.querySelector('#loader').style.display = 'none';
 						}else{
 							status__item__update[index].innerText = "Ẩn";
 							status__item__update[index].classList = "status__item__update main__table-text main__table-text--red";
-							
+
 							document.querySelector('#loader').style.display = 'none';
 						}
 					}else{
 						if(!data.ban){
 							status__item__update[index].innerText = "Hoạt động";
 							status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
-							
+
 							document.querySelector('#loader').style.display = 'none';
 						}else{
 							status__item__update[index].innerText = "Bị cấm";
 							status__item__update[index].classList = "status__item__update main__table-text main__table-text--red";
-							
+
 							document.querySelector('#loader').style.display = 'none';
 						}
 					}
@@ -424,7 +423,7 @@ if (document.querySelector('.remove__btn__ajax') != null) {
 if (document.querySelector('.trash__restore__btn') != null) {
     let id_trash = null;
     let type_trash = null;
-    
+
     document.querySelectorAll('.trash__restore__btn').forEach((button) => {
         button.addEventListener('click', () => {
             id_trash = button.getAttribute('id_trash');
@@ -436,7 +435,7 @@ if (document.querySelector('.trash__restore__btn') != null) {
         if (!id_trash || !type_trash) return;
 
         document.querySelector('#loader').style.display = 'flex';
-        
+
         fetch(`/admin/trash/restore/${id_trash}`, {
             method: 'POST',
             headers: {
@@ -501,4 +500,5 @@ if(document.querySelector('.trash__remove__btn') != null){
 	}
     document.querySelector('#modal__remove__btn').addEventListener('click', trashRemove);
 }
+
 
