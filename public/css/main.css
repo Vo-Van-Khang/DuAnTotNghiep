@@ -6620,3 +6620,22 @@ body::-webkit-scrollbar-thumb {
         width: 0;
     }
 }
+
+/* Style cho các trường nhập liệu có lỗi */
+input.is-invalid {
+    border-color: #dc3545; /* Viền màu đỏ */
+    background-color: #f8d7da; /* Nền màu đỏ nhạt */
+}
+
+input.is-invalid:focus {
+    border-color: #dc3545; /* Viền đỏ khi focus vào trường */
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5); /* Ánh sáng đỏ quanh trường */
+}
+
+/* Style cho thông báo lỗi dưới từng trường nhập liệu */
+.invalid-feedback {
+    display: block;
+    color: #dc3545; /* Màu chữ đỏ */
+    font-size: 12px; /* Kích thước chữ nhỏ */
+    margin-top: 0px; /* Khoảng cách trên */
+}

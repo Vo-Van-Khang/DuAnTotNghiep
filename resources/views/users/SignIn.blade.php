@@ -94,7 +94,17 @@
             </div>
         </div>
         <!-- end sign in -->
-
+        @include('layouts.shared.loader')
+        @include('layouts.shared.message')
         <!-- JS -->
+        <script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
+        <script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>
+        <script src="{{asset("js/owl.carousel.min.js")}}"></script>
+        <script src="{{asset("js/slider-radio.js")}}"></script>
+        <script src="{{asset("js/select2.min.js")}}"></script>
+        <script src="{{asset("js/smooth-scrollbar.js")}}"></script>
+        <script src="{{asset("js/jquery.magnific-popup.min.js")}}"></script>
+        <script src="{{asset("js/plyr.min.js")}}"></script>
+        <script src="{{asset("js/main.js")}}"></script>
     </body>
 </html>

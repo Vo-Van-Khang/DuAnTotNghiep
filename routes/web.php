@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ReplyCommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\LikeController;
@@ -11,8 +10,11 @@ use App\Http\Controllers\TrashController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\EpisodeController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\WatchLaterController;
+use App\Http\Controllers\ReplyCommentController;
+use Illuminate\Support\Facades\DB;
 
 //ADMIN
 Route::get('/admin/category/list', [CategoryController::class,'admin__view'])->name("admin.category.list");
@@ -84,3 +86,39 @@ Route::post('/movie/{id}/reply_comment/add', [ReplyCommentController::class,'rep
 
 Route::delete('/comment/remove/{id}', [CommentController::class,'remove_by_id']);
 Route::delete('/reply_comment/remove/{id}', [ReplyCommentController::class,'remove_by_id']);
+
+Route::get('/admin/payment/list', function () {
+    return view('admins.payment.list');
+});
+Route::get('/admin/payment/list', [PaymentController::class, 'listpayment']);
+Route::get('/admin/payment/add', function () {
+    return view('admins.payment.add');
+});
+Route::post('/admin/payment/add', [PaymentController::class, 'addpayment']);
+Route::get('/admin/payment/update', function () {
+    return view('admins.payment.update');
+});
+Route::get('/admin/payment/delete/{maxoa}', [PaymentController::class, 'deletepayment']);
+
+
+Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [UserController::class, 'register']);
+Route::get('/verify/{token}', function ($token) {
+    $user = DB::table('users')->where('remember_token', $token)->first();
+
+    if (!$user) {
+        return redirect()->route('signin')->with('error', 'Token không hợp lệ.');
+    }
+
+    DB::table('users')->where('id', $user->id)->update([
+        'email_verified_at' => now(),
+        'status' => '0',
+        'remember_token' => null,
+    ]);
+
+    return redirect()->route('signin')->with('success', 'Email của bạn đã được xác nhận. Vui lòng đăng nhập.');
+})->name('verify');
+Route::get('/forgot-password', [UserController::class, 'forgotPassword'])->name('forgot-password.form');
+Route::post('/forgot-password', [UserController::class, 'sendReset'])->name('forgot-password.send');
+Route::get('/reset-password/{token}', [UserController::class, 'resetPasswordForm'])->name('reset-password.form');
+Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('reset-password.update');
