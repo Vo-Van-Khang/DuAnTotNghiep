@@ -379,7 +379,6 @@ $(document).ready(function() {
         return false;
     }
     $(window).on('load', initializePlayer());
-
     /*==============================
     Modal
     ==============================*/
@@ -468,7 +467,6 @@ $(document).ready(function() {
     }
 
 
-});
 
 window.addEventListener('load',()=>{
     document.querySelector('#loader').style.display = "none";
@@ -495,7 +493,17 @@ if(document.querySelector('.message_box') !== null){
         message_box.style.display = "none";
     })
 }
-
+if(document.querySelector('.change__server__btn')){
+    let change__server__btn = document.querySelectorAll('.change__server__btn');
+    change__server__btn.forEach((e)=>{
+        e.addEventListener('click',()=>{
+            let server = e.getAttribute("server");
+            let currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('server', server);
+            window.location.href = currentUrl.toString();
+        })
+    })
+}
 if(document.querySelector('.watch__later__button') != null){
     const watch__later__button = document.querySelectorAll('.watch__later__button');
     watch__later__button.forEach((button) => {
@@ -1020,3 +1028,4 @@ if(document.querySelector(".comments__list")){
         movie__ajax(id);
     },2000)
 }
+});

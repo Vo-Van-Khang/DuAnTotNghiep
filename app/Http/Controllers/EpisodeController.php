@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movies;
+use App\Models\Comments;
 use Illuminate\Http\Request;
 use App\Http\Requests\Validate;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,18 @@ class EpisodeController extends Controller
 {
     public function get_by_movie($id_movie,$id_episode){
         // $movie = DB::table("movies")->select("*")->where("id", $id_movie)->first();
-        
+        $servers = DB::table('urls')
+        ->select('source')
+        ->where("type", 'episode')
+        ->where('media_id', $id_episode)
+        ->distinct()
+        ->get();
+
+        $server_selected = "server 1";
+        if(request("server")){
+            $server_selected = request("server");
+        }
+
         $urls = DB::table("urls")
         ->select("*")
         ->where("media_id", $id_episode)
@@ -58,14 +70,19 @@ class EpisodeController extends Controller
         $categories = DB::table("categories")
         ->get();
 
+        $comments = Comments::with("user")->with("reply_comments")->where("id_movie",$id_movie)->orderBy("created_at","desc")->get();
+        
         return view("clients.movie",[
             "movie"=>$movie,
+            "servers"=>$servers,
+            "server_selected"=>$server_selected,
             "urls"=>$urls,
             "likes"=>$likes,
             "episodes"=>$episodes,
             "similars" => $similars,
             "categories" => $categories,
             "episode_focus" => $episode_focus,
+            "comments" => $comments,
             "check_like" => $check_like,
             "check_watch_later" => $check_watch_later
         ]);
@@ -89,31 +106,45 @@ class EpisodeController extends Controller
         ]);
     }
     public function admin__create(Validate $request , $movie){
-        $request -> validated();
         $episodeId = DB::table('episodes')->insertGetId([
             'episode' => $request->input('episode'),
             'id_movie' => $movie
         ]);
 
-        if ($request->hasFile('url')) {
-            foreach ($request->file('url') as $index => $file) {
-                if ($file) {
-                    $videoPath = $file->store('videos', 's3');
-                    Storage::disk('s3')->setVisibility($videoPath, 'public');
-                    $videoUrl = Storage::disk('s3')->url($videoPath);
-                    
-                    DB::table('urls')->insert([
-                        'url' => $videoUrl,
-                        'resolution' => $request->input("resolution.$index"), 
-                        'type' => 'episode', 
-                        'premium' => $request->input("premium.$index"), 
-                        'media_id' => $episodeId  
-                    ]);
-                }
+        $urls = request()->input('urls'); 
+        $resolutions = request()->input('resolutions'); 
+        $premiums = request()->input('premiums');
+       
+        foreach ($urls as $index => $url) {
+            if ($url) {
+                $resolution = $resolutions[$index] ?? null;
+
+                // Kiểm tra các URL đã tồn tại với resolution và media_id tương ứng
+                $existingUrls = DB::table('urls')
+                    ->where('url', $url)
+                    ->where('resolution', $resolution)
+                    ->where("type", "episode")
+                    ->where("media_id", $episodeId)
+                    ->get();
+        
+                // Tính toán số lượng các bản ghi trùng, để gán source cho bản ghi mới
+                $newSource = $existingUrls->count() + 1; // Tăng số lượng server tương ứng
+        
+                // Thêm URL mới vào cơ sở dữ liệu
+                DB::table('urls')->insert([
+                    'url' => $url,
+                    'resolution' => $resolution,
+                    'type' => 'episode',
+                    'premium' => $premiums[$index] ?? null,
+                    'media_id' => $episodeId,
+                    'source' => "server " . $newSource // Gán source với số lượng server
+                ]);
             }
         }
     
-        return redirect()->back()->with('success', 'Tập phim đã được thêm thành công!');
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     public function admin__delete($id){

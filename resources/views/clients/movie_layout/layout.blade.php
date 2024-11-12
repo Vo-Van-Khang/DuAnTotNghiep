@@ -30,6 +30,9 @@
                         <!-- video player -->
                         <div class="col-12 col-xl-12">
                             @yield('type')
+                            <div class="col-12 article__servers">
+                                @yield('servers')
+                            </div>
                             <div class="article__actions article__actions--details">
                                 @yield('download')
                                 <div class="article__additional">

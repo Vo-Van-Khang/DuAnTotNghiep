@@ -4085,7 +4085,29 @@ body::-webkit-scrollbar-thumb {
     background-color: #151f30;
     color: #fff;
 }
-
+.article__servers{
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+}
+.article__servers button{
+    padding: 5px 10px;
+    border: 1px solid #668cb7;
+    background-color: transparent;
+    border-radius: 5px;
+    color: #f2f2f2;
+    text-transform: capitalize;
+    cursor: pointer;
+    font-size: 13px;
+}
+.article__servers button:hover{
+    color: #2f80ed;
+}
+.article__servers .active{
+    border: 1px solid #1da1f2;
+    color: #2f80ed;
+}
 .article__actions {
     display: flex;
     flex-direction: row;

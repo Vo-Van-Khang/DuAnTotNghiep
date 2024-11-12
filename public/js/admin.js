@@ -78,7 +78,7 @@ $(document).ready(function () {
 		placeholder: "Choose genre / genres"
 	});
 
-	$('#subscription, #rights,#status,#id_category,#payment').select2();
+	$('#subscription, #rights,#status,#id_category,#payment,#isSeries').select2();
 
 	/*==============================
 	Upload cover
@@ -228,55 +228,225 @@ limitText.forEach((i)=>{
 	}
 })
 
-if(document.getElementById('add__url') != null){
-	document.getElementById('add__url').addEventListener('click', function() {
-		const container = document.getElementById('url__items');
+if(document.querySelector('#add__url') != null){
+	const submit__btn = document.querySelector('.submit__btn');
+	let data_saved = false;
+	document.querySelector('#add__url').addEventListener('click', function() {
+		const container = document.querySelector('#url__items');
+		const resolution__select = document.querySelectorAll('.resolution__select');
 
-		// Create a new item__url div
+		let selectedResolutions = [];
+		resolution__select.forEach(select => {
+			selectedResolutions.push(select.value)
+		});
+
 		const newItem = document.createElement('div');
 		newItem.className = 'row item__url';
 		newItem.innerHTML = `
 			<div class="col-12 d-flex">
 				<h4 class="sign__title-small">Đường dẫn ${container.children.length + 1}</h4>
 				<button class="btn remove__url__item" type="button">
-					<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-						<path d="M200-440v-80h560v80H200Z"/>
-					</svg>
-				</button>
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+					<path d="M200-440v-80h560v80H200Z"/>
+				</svg>
+			</button>
 			</div>
 			<div class="col-12 col-md-6 col-lg-12 col-xl-12">
 				<div class="sign__group">
-					<label class="sign__label">Video</label>
-					<input type="file" name="url[]" class="sign__input">
+					<div class="d-flex justify-content-between">
+						<label class="sign__label label__video__input">Video</label>
+						<div class="d-flex">
+							<div class="d-flex mr-2">
+								<label class="sign__text" style="margin: 0 10px 0 0">Tải lên file</label>
+								<input type="radio" class="sign__input--radio change__video__input" checked name="change__video__input" value="file">
+							</div>
+							<div class="d-flex">
+								<label class="sign__text" style="margin: 0 10px 0 0">Tự điền</label>
+								<input type="radio" class="sign__input--radio change__video__input" name="change__video__input" value="url">
+							</div>
+						</div>
+					</div>
+					<input type="file" name="url[]" class="sign__input video__input">
+					<span style="color: #df4a32" class="video__input__error"></span>
 				</div>
 			</div>
+			<input type="hidden" class="video__uploaded">
 			<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 				<div class="sign__group">
 					<label class="sign__label">Độ phân giải</label>
-					<select class="sign__select" name="resolution[]">
-						<option value="360">360p</option>
-						<option value="480">480p</option>
-						<option value="720">720p</option>
-						<option value="1080">1080p</option>
-						<option value="2160">2160p</option>
+					<select class="sign__select resolution__select" name="resolution[]">
+					${['360', '480', '720', '1080', '2160'].map(resolution => {
+						const resolutionCount = selectedResolutions.filter(r => r === resolution).length;
+						if (resolutionCount < 3) {
+							return `<option value="${resolution}">${resolution}p</option>`;
+						}
+					}).filter(option => option !== undefined).join('')}
 					</select>
 				</div>
 			</div>
 			<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 				<div class="sign__group">
 					<label class="sign__label">Premium</label>
-					<select class="sign__select" name="premium[]">
+					<select class="sign__select premium__select" name="premium[]">
 						<option value="1">Có</option>
 						<option value="0" selected>Không</option>
 					</select>
 				</div>
 			</div>
+			<div class="col-12">
+				<div class="upload__progress__container">
+					<div class="upload__progress__bar">0%</div>
+				</div>
+				<button class="sign__btn sign__btn--upload" type="button">Tải lên</button>
+			</div>
 		`;
 
-		// Append the new item to the container
 		container.appendChild(newItem);
+		document.getElementById('add__url').disabled = true;
+		checkSubmitButton();
 	});
 
+	document.addEventListener('click', (event) => {
+		
+
+		if(event.target && event.target.closest('.change__video__input')){
+			let item__url = event.target.closest('.change__video__input').closest('.item__url');
+			let button =  item__url.querySelector('.sign__btn--upload');
+			let label__video__input = item__url.querySelector('.label__video__input');
+			let change__video__input = item__url.querySelectorAll('.change__video__input');
+			let video__input = item__url.querySelector('.video__input');
+			let video__input__error = item__url.querySelector('.video__input__error');
+
+			video__input__error.innerText = "";
+
+			let selectedType = item__url.querySelector('.change__video__input:checked').value;
+
+			if (selectedType === "url") {
+				video__input.type = "url";
+				video__input.placeholder = "Nhập Url";
+				button.innerText = "Kiểm tra";
+				label__video__input.innerText = "Đường dẫn";
+			} else {
+				video__input.type = "file";
+				button.innerText = "Tải lên";
+				label__video__input.innerText = "Video";
+			}
+		}
+
+		if (event.target && event.target.closest('.sign__btn--upload')) {
+			let button = event.target.closest('.sign__btn--upload');
+			let item__url = button.closest('.item__url');
+			let video__input = item__url.querySelector('.video__input');
+			let change__video__input = item__url.querySelectorAll('.change__video__input');
+			let video__uploaded = item__url.querySelector('.video__uploaded');
+			let resolution__select = item__url.querySelector('.resolution__select');
+			let premium__select = item__url.querySelector('.premium__select');
+			let video__input__error = item__url.querySelector('.video__input__error');
+			let upload__progress__container = item__url.querySelector('.upload__progress__container');
+			let upload__progress__bar = item__url.querySelector('.upload__progress__bar');
+			let remove__url__item = item__url.querySelector('.remove__url__item');
+
+			if(video__input.type == "file"){
+				if (video__input.files && video__input.files.length > 0) {
+					uploadVideoUrl()
+				} else {
+					video__input__error.innerHTML = "Video là bắt buộc!";
+				}
+			}else{
+				const urlValue = video__input.value;
+				if (urlValue) {
+					if (urlValue.startsWith("http://") || urlValue.startsWith("https://")) {
+						video__input.classList.add("sign__input--validated");
+						uploadVideoUrl();
+					} else {
+						video__input__error.innerHTML = "Url của bạn nhập không đúng định dạng!";
+					}
+				} else {
+					video__input__error.innerHTML = "Url là bắt buộc!";
+				}
+			}
+			
+
+			function uploadVideoUrl() {
+				video__input__error.innerHTML = "";
+				if (video__input.type == "file" && !isVideoFile(video__input.files[0])) {
+					video__input__error.innerHTML = "Video không hợp lệ!";
+					return;
+				}
+				
+				let formData = new FormData();
+				if(video__input.type == "file"){
+					formData.append('video', video__input.files[0]);
+				}else{
+					formData.append('video', video__input.value);
+				}
+
+				upload__progress__container.style.display = "block";
+				let percent = 0;
+				let progress = setInterval(() => {
+					if (percent < 99) {
+						percent++;
+						upload__progress__bar.style.width = percent + '%';
+						upload__progress__bar.innerText = percent + '%';
+					} else {
+						clearInterval(progress);
+					}
+				}, 200); 
+				
+				change__video__input.forEach((e)=>{
+					if(e.checked){
+						e.classList.add("sign__input--radio-checked");
+					}
+					e.removeAttribute("name");
+					e.disabled = true;
+				})
+				video__input.disabled = true;
+				resolution__select.disabled = true;
+				premium__select.disabled = true;
+				button.disabled = true;
+				if(video__input.type == "file"){
+					button.innerText = "Đang tải lên...";
+				}
+
+				checkSubmitButton();
+
+				if(remove__url__item) remove__url__item.remove();
+
+				let resolution__selects = document.querySelectorAll('.resolution__select');
+				if (resolution__selects.length == 5) {
+					document.querySelector('#add__url').disabled = true;
+				} else {
+					document.querySelector('#add__url').disabled = false;
+				}
+
+				fetch('/admin/movie/url/add', {
+					method: 'POST',
+					headers: {
+						'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+					},
+					body: formData
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						clearInterval(progress);
+						upload__progress__bar.style.width = '100%';
+						upload__progress__bar.innerText = '100%';
+						button.setAttribute("uploaded",true)
+						if(video__input.type == "file"){
+							button.innerText = "Đã tải lên";
+						}
+						video__uploaded.value = data.url;
+						checkSubmitButton();
+					}
+				})
+				.catch(error => {
+					console.error("Upload failed:", error);
+				});
+			}
+		}
+	});
+	
 	document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById('url__items').addEventListener('click', function(event) {
 			if (event.target.closest('.remove__url__item')) {
@@ -312,13 +482,196 @@ if(document.getElementById('add__url') != null){
 							});
 						}
 					}else{
-
 						itemUrlRemove.remove();
+						document.querySelector('#add__url').disabled = false;
+						checkSubmitButton();
 					}
 				}
 			}
 		});
 	});
+
+	const input__data = document.querySelectorAll(".input__data");
+	const input__error = document.querySelectorAll(".input__error");
+	let oldMsg = [];
+
+	input__data.forEach((item, index)=>{
+		oldMsg.push(input__error[index].textContent);
+		item.addEventListener('input',()=>{
+			if(validateForm(item, index)){
+				item.classList = "sign__input sign__input--validated input__data";
+			}else{
+				item.classList = "sign__input input__data";
+			}
+		})
+	})
+
+	function validateForm(item, index) {
+		let isValid = true;
+		let message = ""; 
+	
+		input__error[index].innerText = "";
+
+		if (item.type === "file" && item.files.length > 0 && !isImageFile(item.files[0])) {
+			message = "Tệp phải là hình ảnh và thuộc kiểu png, webp, jpg, svg, hoặc jpeg.";
+		} 
+		else if (item.value.trim() === "") {
+			message = oldMsg[index]; // Thông báo mặc định nếu trống.
+		} 
+		else if (item.name === "title") {
+			if (item.value.length < 8 || item.value.length > 255) {
+				message = "Tiêu đề phải từ 8 đến 255 ký tự.";
+			}
+		} 
+		else if (item.name === "cast") {
+			if (item.value.length < 8 || item.value.length > 255) {
+				message = "Diễn viên phải từ 8 đến 255 ký tự.";
+			}
+		} 
+		else if (item.name === "director") {
+			if (item.value.length < 2 || item.value.length > 50) {
+				message = "Đạo diễn phải từ 2 đến 50 ký tự.";
+			}
+		} 
+		else if (item.name === "country") {
+			if (item.value.length < 2 || item.value.length > 50) {
+				message = "Quốc gia phải từ 2 đến 50 ký tự.";
+			}
+		} 
+		else if (item.name === "description") {
+			if (item.value.length < 20) {
+				message = "Mô tả phải từ 20 ký tự trở lên.";
+			}
+		} 
+		else if (item.name === "release_year") {
+			if (isNaN(item.value) || item.value < 1900 || item.value > new Date().getFullYear()) {
+				message = "Năm phát hành phải từ 1900 đến năm hiện tại.";
+			}
+		} 
+		else if (item.name === "duration") {
+			if (isNaN(item.value) || item.value < 1) {
+				message = "Thời lượng phải là số và lớn hơn 0.";
+			}
+		}
+		else if (item.name === "episode") {
+			if (isNaN(item.value) || item.value < 2) {
+				message = "Tập phim phải là số và từ 2 trở lên.";
+			}
+		}
+
+		if (message) {
+			input__error[index].innerText = message;
+			item.focus();
+			isValid = false;
+		}
+
+		return isValid;
+	}
+	submit__btn.addEventListener('click',()=>{
+		const video__uploaded = document.querySelectorAll(".video__uploaded");
+		const resolution__select = document.querySelectorAll(".resolution__select");
+		const premium__select = document.querySelectorAll(".premium__select");
+
+		let isFormValid = true;
+
+		for (let i = input__data.length - 1; i >= 0; i--) {
+			if (!validateForm(input__data[i], i)) {
+				isFormValid = false;
+			}
+		}		
+
+		if(isFormValid){
+			let formData = new FormData();
+
+			input__data.forEach((item)=>{
+				if(item.type == "file"){
+					formData.append(item.getAttribute('name'), item.files[0]);
+				}else{
+					formData.append(item.getAttribute('name'), item.value);
+				}
+			})
+
+			video__uploaded.forEach((item)=>{
+				formData.append("urls[]", item.value);
+			})
+			resolution__select.forEach((item)=>{
+				formData.append("resolutions[]", item.value);
+			})
+			premium__select.forEach((item)=>{
+				formData.append("premiums[]", item.value);
+			})
+
+			document.querySelector('#loader').style.display = 'flex';
+			let type = submit__btn.getAttribute("type__add");
+			let id_movie = "";
+			if(type == "episode"){
+				id_movie = submit__btn.getAttribute("id_movie")
+			}
+
+			fetch(`/admin/${type}/add/${id_movie}`, {
+				method: 'POST',
+				headers: {
+					'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+				},
+					body: formData
+				})
+			.then(response =>  response.json())
+			.then(data => {
+				if(data.success){
+					data_saved = true;
+					if(type == "episode"){
+						window.location = `/admin/episode/add/${id_movie}`
+					}else{
+						window.location = "/admin/movie/list"
+					}
+				}
+			})
+			.catch(error => {
+				console.error("Có lỗi xảy ra:", error);
+			});
+		}
+	})
+
+	window.addEventListener('beforeunload', function(event) {
+		if(!data_saved){
+			const video__uploaded = document.querySelectorAll(".video__uploaded");
+			let formData = new FormData();
+			
+			// Thêm các URLs vào formData
+			video__uploaded.forEach((item) => {
+				formData.append("urls[]", item.value);
+			});
+		
+			// Lấy CSRF token
+			const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+			formData.append('_token', token);
+		
+			// Gửi dữ liệu với sendBeacon
+			navigator.sendBeacon('/video/remove', formData);
+		}
+	});
+	
+}
+function checkSubmitButton(){
+	const submit__btn = document.querySelector('.submit__btn');
+	let sign__btn__upload = document.querySelectorAll('.sign__btn--upload');
+	if(Array.from(sign__btn__upload).every(item => item.getAttribute("uploaded") === "true")){
+		submit__btn.disabled = false;
+	}else{
+		submit__btn.disabled = true;
+	}
+}
+
+function isVideoFile(file) {
+    const videoTypes = ['mp4', 'avi', 'mov', 'mkv', 'webm'];
+    const fileType = file.name.split('.').pop().toLowerCase();
+    return videoTypes.includes(fileType);
+}
+
+function isImageFile(file) {
+    const ImageTypes = ['png', 'webp', 'jpg', 'svg', 'jpeg'];
+    const fileType = file.name.split('.').pop().toLowerCase();
+    return ImageTypes.includes(fileType);
 }
 
 if(document.querySelector('.status__update__btn') != null){

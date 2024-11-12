@@ -34,10 +34,8 @@
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Tập</label>
-                                        <input type="number" name="episode" class="sign__input" placeholder="Tập" min="2" value="{{old('episode')}}">
-                                        @error('episode')
-                                            <span style="color: #df4a32">{{$message}}</span>
-                                        @enderror
+                                        <input type="text" name="episode" class="sign__input input__data" placeholder="Tập" min="2" value="{{old('episode')}}">
+                                        <span class="input__error" style="color: #df4a32">Tập phim là bắt buộc!</span>
                                     </div>
                                 </div>
 
@@ -52,25 +50,39 @@
                             <div class="row">
                                 <div class="col-12 d-flex" style="padding-right: 0">
                                     <h2 class="sign__title" style="width: fit-content;margin-right:auto">Đường dẫn</h2>
-                                    <button class="btn" style="height: fit-content" id="add__url" type="button">
+                                    <button class="btn add__button" style="height: fit-content" id="add__url" type="button" disabled>
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
                                     </button>
                                 </div>
-                                <div id="url__items" style="width:100%">
+                                <div id="url__items" style="width:100%" >
                                     <div class="row item__url">
                                         <div class="col-12 d-flex">
                                             <h4 class="sign__title-small">Đường dẫn 1</h4>
                                         </div>
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-12">
                                             <div class="sign__group">
-                                                <label class="sign__label">Video</label>
-                                                <input type="file" name="url[]" class="sign__input" value="{{old('url[]')}}">
+                                                <div class="d-flex justify-content-between">
+                                                    <label class="sign__label label__video__input">Video</label>
+                                                    <div class="d-flex">
+                                                        <div class="d-flex mr-2">
+                                                            <label class="sign__text" style="margin: 0 10px 0 0">Tải lên file</label>
+                                                            <input type="radio" class="sign__input--radio change__video__input" checked name="change__video__input" value="file">
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <label class="sign__text" style="margin: 0 10px 0 0">Tự điền</label>
+                                                            <input type="radio" class="sign__input--radio change__video__input" name="change__video__input" value="url">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="file" name="url[]" class="sign__input video__input">
+                                                <span style="color: #df4a32" class="video__input__error"></span>
                                             </div>
                                         </div>
+                                        <input type="hidden" class="video__uploaded">
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                             <div class="sign__group">
                                                 <label class="sign__label">Độ phân giải</label>
-                                                <select class="sign__select" name="resolution[]">
+                                                <select class="sign__select resolution__select" name="resolution[]">
                                                     <option value="360">360p</option>
                                                     <option value="480">480p</option>
                                                     <option value="720">720p</option>
@@ -82,17 +94,23 @@
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                             <div class="sign__group">
                                                 <label class="sign__label">Premium</label>
-                                                <select class="sign__select" name="premium[]">
+                                                <select class="sign__select premium__select" name="premium[]">
                                                     <option value="1">Có</option>
                                                     <option value="0" selected>Không</option>
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-12">
+                                            <div class="upload__progress__container">
+                                                <div class="upload__progress__bar">0%</div>
+                                            </div>
+                                            <button class="sign__btn sign__btn--upload" type="button">Tải lên</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button class="sign__btn" type="submit">Lưu</button>
+                                <button class="sign__btn submit__btn" type="button" type__add="episode" id_movie="{{$movie}}" disabled>Lưu</button>
                             </div>
                         </form>
                     </div>

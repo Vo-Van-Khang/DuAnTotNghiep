@@ -2085,6 +2085,33 @@ body::-webkit-scrollbar-thumb {
   background-color: #151f30;
   border-color: #2f80ed;
 }
+.sign__input--validated {
+  background-color: #151f30;
+  border: 1px solid #00c400;
+}
+.sign__input--validated:focus {
+  border: 1px solid #00c400;
+}
+.sign__input--radio{
+  width: 20px;
+  height: 20px;
+  background-color: #202f48;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.5s ease;
+}
+.sign__input--radio:checked{
+  background-image: url("../images/storage/checkmark.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.sign__input--radio-checked{
+  background-image: url("../images/storage/checkmark.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
 .sign__image{
   width: 100px;
   height: 100px;
@@ -2188,7 +2215,7 @@ body::-webkit-scrollbar-thumb {
   height: 22px;
   text-align: center;
   transition: 0.5s;
-  background: url("../img/checkmark.svg") no-repeat center/12px auto;
+  background: url("../images/storage/checkmark.svg") no-repeat center/12px auto;
   border-radius: 8px;
 }
 .sign__group--checkbox input:not(:checked) + label:after {
@@ -2225,6 +2252,13 @@ body::-webkit-scrollbar-thumb {
 .sign__btn:hover {
   color: #151f30;
   background-color: #fff;
+}
+.sign__btn--upload{
+  font-size: 10px;
+  width:100px;
+  height:40px;
+  background-color: #3b5999;
+  border-radius: 5px;
 }
 .sign__text {
   margin-top: 15px;
@@ -2335,6 +2369,9 @@ body::-webkit-scrollbar-thumb {
   }
   .sign__form--profile .sign__btn {
     width: 180px;
+  }
+  .sign__form--profile .sign__btn--upload{
+    width: 100px;
   }
 }
 /*==============================
@@ -2835,4 +2872,44 @@ body::-webkit-scrollbar-thumb {
   to{
       width: 0;
   }
+}
+
+.upload__progress__container{
+  display: none;
+  margin-bottom: 10px;
+  width: 80%;
+  border-radius: 5px;
+  background-color: #202f48;
+}
+.upload__progress__container .upload__progress__bar{
+  width: 0%;
+  border-radius: 5px;
+  font-size: 7px;
+  font-weight: 600;
+  color: #f2f2f2;
+  background-color: #29b474;
+  text-align: center;
+  height: 10px;
+}
+.submit__btn:disabled{
+  background-color: #b4b4b4;
+  cursor:not-allowed;
+}
+.submit__btn:disabled:hover{
+  background-color: #b4b4b4;
+  color: #fff;
+}
+.add__button svg{
+  fill: #fff;
+  background-color: #3b5999;
+  padding: 5px;
+  border-radius: 50%;
+  transition: 0.5s;
+}
+.add__button:disabled svg{
+  fill: #fff;
+  background-color: #b4b4b4;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: not-allowed;
 }

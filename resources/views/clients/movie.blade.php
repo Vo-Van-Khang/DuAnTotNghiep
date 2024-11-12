@@ -7,12 +7,18 @@
         id="player"
         >
         @foreach ($urls as $url)
-        <source
+        <source class="video__source"
             src="{{$url->url}}" 
             size="{{$url->resolution}}"
+            data-server="{{ $url->source }}"
         />
         @endforeach
     </video>
+@endsection
+@section('servers')
+    @foreach($servers as $server)
+        <button @disabled($server_selected == $server->source) server="{{$server->source}}" @class(['change__server__btn item', "active" => $server_selected == $server->source])>{{$server->source}}</button>
+    @endforeach
 @endsection
 @section('download')
     <div class="article__download">

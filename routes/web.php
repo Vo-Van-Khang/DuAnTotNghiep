@@ -27,6 +27,9 @@ Route::post('/admin/movie/update/{id}', [MovieController::class,'admin__update']
 Route::delete('/admin/movie/delete/{id}', [MovieController::class,'admin__delete']);
 Route::post('/admin/movie/status/update/{id}',[MovieController::class,'admin__status__update']);
 Route::delete('/admin/movie/url/remove/{id}',[MovieController::class,'admin__remove__url']);
+Route::post('/admin/movie/url/add',[MovieController::class,'admin__url__add']);
+
+Route::post('/video/remove',[MovieController::class,'admin__remove__all__url']);
 
 Route::get('/admin/episode/add/{id}', [EpisodeController::class,'admin__add'])->name("admin.episode.add");
 Route::post('/admin/episode/add/{id}', [EpisodeController::class,'admin__create'])->name("admin.episode.add");
@@ -116,7 +119,7 @@ Route::view('/signin', 'users.SignIn')->name("signin");
 Route::view('/signup', 'users.SignUp')->name("signup");
 Route::view('/forgot', 'users.forgot')->name("forgot");
 Route::get( '/profile', [UserController::class, 'get'])->name('profile');
-Route::post( '/profile/update', [UserController::class, 'update'])->name('profile');
+Route::post( '/profile/update', [UserController::class, 'update']);
 Route::get("/all", [MovieController::class, 'allMovie'])->name('allMovie');
 Route::get('/search', [MovieController::class,'search'])->name("search");
 
