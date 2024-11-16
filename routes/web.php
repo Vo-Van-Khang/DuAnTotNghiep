@@ -28,13 +28,14 @@ Route::delete('/admin/movie/delete/{id}', [MovieController::class,'admin__delete
 Route::post('/admin/movie/status/update/{id}',[MovieController::class,'admin__status__update']);
 Route::delete('/admin/movie/url/remove/{id}',[MovieController::class,'admin__remove__url']);
 Route::post('/admin/movie/url/add',[MovieController::class,'admin__url__add']);
+Route::post('/admin/movie/url/update',[MovieController::class,'admin__url__update']);
 
 Route::post('/video/remove',[MovieController::class,'admin__remove__all__url']);
 
 Route::get('/admin/episode/add/{id}', [EpisodeController::class,'admin__add'])->name("admin.episode.add");
 Route::post('/admin/episode/add/{id}', [EpisodeController::class,'admin__create'])->name("admin.episode.add");
-Route::get('/admin/episode/update/{movie}/{id}', [EpisodeController::class,'admin__update__form'])->name("admin.episode.update");
-Route::post('/admin/episode/update/{movie}/{id}', [EpisodeController::class,'admin__update'])->name("admin.episode.update");
+Route::get('/admin/episode/update/{id}', [EpisodeController::class,'admin__update__form'])->name("admin.episode.update");
+Route::post('/admin/episode/update/{id}', [EpisodeController::class,'admin__update']);
 Route::delete('/admin/episode/delete/{id}', [EpisodeController::class,'admin__delete']);
 Route::delete('/admin/episode/url/remove/{id}',[EpisodeController::class,'admin__remove__url']);
 
@@ -135,6 +136,7 @@ Route::delete('/history/remove/{id}', [HistoryController::class,'remove_by_id'])
 Route::get('/movie/ajax/{id}', [AjaxController::class,'movie']);
 Route::post('/movie/{id}/comment/add', [CommentController::class,'comment__add']);
 Route::post('/movie/{id}/reply_comment/add', [ReplyCommentController::class,'reply__comment__add']);
+Route::post('/movie/update-view/{id}', [MovieController::class,'movie__update__view']);
 
 Route::delete('/comment/remove/{id}', [CommentController::class,'remove_by_id']);
 Route::delete('/reply_comment/remove/{id}', [ReplyCommentController::class,'remove_by_id']);

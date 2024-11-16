@@ -50,14 +50,19 @@
                             <div class="row">
                                 <div class="col-12 d-flex" style="padding-right: 0">
                                     <h2 class="sign__title" style="width: fit-content;margin-right:auto">Đường dẫn</h2>
-                                    <button class="btn add__button" style="height: fit-content" id="add__url" type="button" disabled>
+                                    <button class="btn add__button" style="height: fit-content" id="add__url" type="button">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
                                     </button>
                                 </div>
                                 <div id="url__items" style="width:100%" >
-                                    <div class="row item__url">
+                                    <div class="row item__url" type__url="episode">
                                         <div class="col-12 d-flex">
                                             <h4 class="sign__title-small">Đường dẫn 1</h4>
+                                            <button class="btn remove__url__item" type="button" disabled>
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                                    <path d="M200-440v-80h560v80H200Z"/>
+                                                </svg>
+                                            </button>
                                         </div>
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-12">
                                             <div class="sign__group">
@@ -66,11 +71,11 @@
                                                     <div class="d-flex">
                                                         <div class="d-flex mr-2">
                                                             <label class="sign__text" style="margin: 0 10px 0 0">Tải lên file</label>
-                                                            <input type="radio" class="sign__input--radio change__video__input" checked name="change__video__input" value="file">
+                                                            <input type="radio" class="sign__input--radio change__video__input sign__input--radio-checked" value="file">
                                                         </div>
                                                         <div class="d-flex">
                                                             <label class="sign__text" style="margin: 0 10px 0 0">Tự điền</label>
-                                                            <input type="radio" class="sign__input--radio change__video__input" name="change__video__input" value="url">
+                                                            <input type="radio" class="sign__input--radio change__video__input" value="url">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -79,24 +84,32 @@
                                             </div>
                                         </div>
                                         <input type="hidden" class="video__uploaded">
-                                        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                        <div class="col-12 col-md-4 col-lg-12 col-xl-4">
+                                            <div class="sign__group">
+                                                <label class="sign__label">Server</label>
+                                                <select class="sign__select server__select" name="server[]" isUpdate="true">
+                                                    <option value="">Chưa chọn</option>
+                                                    <option value="server 1">Server 1</option>
+                                                    <option value="server 2">Server 2</option>
+                                                    <option value="server 3">Server 3</option>
+                                                </select>
+                                                <span style="color: #df4a32;text-transform: capitalize" class="server__select__error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4 col-lg-12 col-xl-4">
                                             <div class="sign__group">
                                                 <label class="sign__label">Độ phân giải</label>
-                                                <select class="sign__select resolution__select" name="resolution[]">
-                                                    <option value="360">360p</option>
-                                                    <option value="480">480p</option>
-                                                    <option value="720">720p</option>
-                                                    <option value="1080">1080p</option>
-                                                    <option value="2160">2160p</option>
+                                                <select class="sign__select resolution__select" name="resolution[]" disabled>
+                                                    <option value="">Chọn server trước</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                        <div class="col-12 col-md-4 col-lg-12 col-xl-4">
                                             <div class="sign__group">
                                                 <label class="sign__label">Premium</label>
                                                 <select class="sign__select premium__select" name="premium[]">
+                                                    <option value="0">Không</option>
                                                     <option value="1">Có</option>
-                                                    <option value="0" selected>Không</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -104,13 +117,13 @@
                                             <div class="upload__progress__container">
                                                 <div class="upload__progress__bar">0%</div>
                                             </div>
-                                            <button class="sign__btn sign__btn--upload" type="button">Tải lên</button>
+                                            <button class="sign__btn sign__btn--upload" uploaded="true" type="button">Tải lên</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <button class="sign__btn submit__btn" type="button" type__add="episode" id_movie="{{$movie}}" disabled>Lưu</button>
+                                <button class="sign__btn submit__btn" id_movie="{{$movie}}" type="button" type__add="episode" is__add="true" disabled>Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -139,14 +152,14 @@
                                 <div class="main__table-text">{{$episode->id}}</div>
                             </td>
                             <td>
-                                <div class="main__table-text">{{$episode->episode}}</div>
+                                <div class="main__table-text episode__td">{{$episode->episode}}</div>
                             </td>
                             <td>
                                 <div class="main__table-text">{{$episode->created_at}}</div>
                             </td>
                             <td>
                                 <div class="main__table-btns">
-                                <a href="{{route('admin.episode.update',[$movie,$episode->id])}}" class="main__table-btn main__table-btn--edit">
+                                <a href="{{route('admin.episode.update',$episode->id)}}" class="main__table-btn main__table-btn--edit">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22,7.24a1,1,0,0,0-.29-.71L17.47,2.29A1,1,0,0,0,16.76,2a1,1,0,0,0-.71.29L13.22,5.12h0L2.29,16.05a1,1,0,0,0-.29.71V21a1,1,0,0,0,1,1H7.24A1,1,0,0,0,8,21.71L18.87,10.78h0L21.71,8a1.19,1.19,0,0,0,.22-.33,1,1,0,0,0,0-.24.7.7,0,0,0,0-.14ZM6.83,20H4V17.17l9.93-9.93,2.83,2.83ZM18.17,8.66,15.34,5.83l1.42-1.41,2.82,2.82Z"/></svg>
                                 </a>
                                 <a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal remove__btn__ajax" id_remove="{{$episode->id}}" type_remove="episode">
@@ -175,7 +188,7 @@
         <p class="modal__text">Bạn có chắc chắn muốn xóa mục này vĩnh viễn không?</p>
 
         <div class="modal__btns">
-        <button class="modal__btn modal__btn--dismiss" id="modal__remove__btn" type="button">Xóa</button>
+        <button class="modal__btn modal__btn--apply" id="modal__remove__btn" type="button">Xóa</button>
         <button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
         </div>
     </div>

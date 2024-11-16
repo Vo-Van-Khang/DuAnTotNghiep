@@ -221,9 +221,9 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <button class="catalog__more" type="button">
+                        <a href="{{route('allMovie')}}" class="catalog__more" type="button">
                             Xem thêm
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

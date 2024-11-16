@@ -477,33 +477,65 @@ if(document.querySelector(".page-404__btn")){
         window.history.back();
     })
 }
+
 if(document.querySelector('form') != null){
 	document.querySelector('form').addEventListener('submit', function(event) {
         document.querySelector('#loader').style.display = 'flex';
 	});
 }
 
-if(document.querySelector('.message_box') !== null){
-    const hide_message = document.querySelector('.hide_message');
-    const message_box = document.querySelector('.message_box');
-    hide_message.addEventListener('click',() => {
-        message_box.style.display = "none";
-    })
-    message_box.addEventListener("animationend",()=>{
-        message_box.style.display = "none";
-    })
+function messageBySession() {
+	if(sessionStorage.getItem("message")){
+		let storedMessage = JSON.parse(sessionStorage.getItem("message"));
+		let msg = storedMessage[0];
+		let status = storedMessage[1];
+		
+		let template = `
+			<div class="message_box ${status}">
+			${msg}
+			<svg class="hide_message" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+			</div>
+		`
+		document.querySelector('.message__container').insertAdjacentHTML('beforeend', template)
+	}
+	
+	if(document.querySelector('.message_box')){
+		const hide_message = document.querySelectorAll('.hide_message');
+		const message_box = document.querySelectorAll('.message_box');
+		hide_message.forEach((e,index)=>{
+			e.addEventListener("click",()=>{
+				message_box[index].remove();
+				if(sessionStorage.getItem("message")) sessionStorage.removeItem("message")
+			})
+		})
+		message_box.forEach((e)=>{
+			e.addEventListener("animationend",()=>{
+				e.remove();
+				if(sessionStorage.getItem("message")) sessionStorage.removeItem("message")
+			})
+		})
+	}
 }
+messageBySession();
+
 if(document.querySelector('.change__server__btn')){
     let change__server__btn = document.querySelectorAll('.change__server__btn');
     change__server__btn.forEach((e)=>{
         e.addEventListener('click',()=>{
             let server = e.getAttribute("server");
             let currentUrl = new URL(window.location.href);
-            currentUrl.searchParams.set('server', server);
-            window.location.href = currentUrl.toString();
+
+            if (server !== 'server 1') {
+                currentUrl.searchParams.set('server', server);
+                window.location.href = currentUrl.toString();
+            } else {
+                currentUrl.searchParams.delete('server');
+                window.location.href = currentUrl.toString();
+            }
         })
     })
 }
+
 if(document.querySelector('.watch__later__button') != null){
     const watch__later__button = document.querySelectorAll('.watch__later__button');
     watch__later__button.forEach((button) => {
@@ -594,6 +626,7 @@ if(document.querySelector('#like__button') != null){
         });
     });
 }
+});
 
 if(document.querySelector('#watch__later__button') != null){
     const watch__later__button = document.querySelector('#watch__later__button');
@@ -632,7 +665,6 @@ if(document.querySelector('#watch__later__button') != null){
         });
     });
 }
-
 
 if (document.querySelector('.remove__btn')) {
     let id_remove = null;
@@ -688,6 +720,28 @@ if (document.querySelector('.remove__btn')) {
     document.querySelector('#modal__remove__btn').addEventListener('click', remove);
 }
 
+if(document.querySelector('.views__movie')){
+    let count = document.querySelector('.views__movie');
+    let id_movie = document.querySelector('#information__movie').getAttribute("id_movie");
+    setTimeout(()=>{
+        fetch(`/movie/update-view/${id_movie}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                count.innerText = Number(count.textContent) + 1;
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }, 10000)
+}
 
 if (document.querySelector(".comment__submit__btn")) {
     let comment__submit__btn = document.querySelector(".comment__submit__btn");
@@ -948,6 +1002,7 @@ function comment__count() {
 
 function movie__ajax(id) {
     const comments__list = document.querySelector(".comments__list");
+    const views = document.querySelector('.views__movie');
     fetch(`/movie/ajax/${id}`,{
         method: 'GET',
         headers: {
@@ -959,6 +1014,7 @@ function movie__ajax(id) {
     .then(data => {
         if (data.success) {
             document.querySelector('#likes').innerText = data.likes;
+            views.innerText = data.views;
             comments__list.innerHTML = "";
 
             data.comments.forEach(comment => {
@@ -1028,4 +1084,3 @@ if(document.querySelector(".comments__list")){
         movie__ajax(id);
     },2000)
 }
-});

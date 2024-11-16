@@ -19,7 +19,6 @@ class MovieController extends Controller
             $check_watch_later = DB::table("watch_laters")->where("id_movie",$id)->where("id_user",1)->count();
             $check_like = DB::table("likes")->where("id_movie",$id)->where("id_user",1)->count();
             $check_history = DB::table("histories")->where("id_movie",$id)->where("id_user",1)->count();
-            DB::table("movies")->where("id", $id)->increment("views", 1);
             if($check_history > 0){
                 DB::table("histories")->where("id_movie",$id)->where("id_user",1)->delete();
             }
@@ -100,7 +99,7 @@ class MovieController extends Controller
         ]);
     }
     public function index(){
-        $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->get();
+        $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->limit(8)->get();
         $slides = Slides::with('movie')->where('status', 1)->where('isDeleted', 0)->get();
         $categories = DB::table("categories")->get();
 
@@ -127,7 +126,7 @@ class MovieController extends Controller
         ]);
     }
     Public function allMovie(){
-        $movies = Movies::with('category')->get();
+        $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->get();
         return view('/clients/all', ['movies' => $movies]);
     }
     Public function search(Request $request){
@@ -159,171 +158,6 @@ class MovieController extends Controller
             "selected" => "movie"
         ]);
     }
-
-  
-
-    // public function admin__create(Request $request){
-
-    // $validated = $request->validate([
-    //     'thumbnail_add' => 'required|file|mimes:jpeg,jpg,svg,webp,png',
-    //     'title' => 'required|string|max:255',
-    //     'cast' => 'required|string|max:255',
-    //     'director' => 'required|string|max:255',
-    //     'release_year' => 'required|integer|min:1900|max:' . date('Y'),
-    //     'country' => 'required|string|max:255',
-    //     'description' => 'required|string',
-    //     'duration' => 'required|integer|min:1',
-    //     'episode' => 'sometimes|required|min:1',
-    // ], [
-    //     'thumbnail_add.required' => 'Hình ảnh là bắt buộc.',
-    //     'thumbnail_add.mimes' => 'Hình ảnh phải thuộc loại: jpeg, png, jpg, svg, webp.',
-    //     'title.required' => 'Tiêu đề là bắt buộc.',
-    //     'cast.required' => 'Diễn viên là bắt buộc.',
-    //     'director.required' => 'Đạo diễn là bắt buộc.',
-    //     'release_year.required' => 'Năm phát hành là bắt buộc.',
-    //     'country.required' => 'Quốc gia là bắt buộc.',
-    //     'description.required' => 'Mô tả là bắt buộc.',
-    //     'duration.required' => 'Thời lượng là bắt buộc.',
-    //     'episode.required' => 'Tập phim là bắt buộc.',
-    // ]);
-
-    // $imagePath = "";
-    // if ($request->hasFile('thumbnail_add')) {
-    //     $image = $request->file('thumbnail_add');
-    //     $uniqueName = time() . '_' . $image->getClientOriginalName();
-    //     $imagePath = 'images/thumbnails/' . $uniqueName;
-    //     $image->move(public_path('images/thumbnails'), $uniqueName);
-    // }
-
-    // $movieId = DB::table('movies')->insertGetId([
-    //     'title' => $validated['title'],
-    //     'thumbnail' => $imagePath,
-    //     'cast' => $validated['cast'],
-    //     'director' => $validated['director'],
-    //     'release_year' => $validated['release_year'],
-    //     'country' => $validated['country'],
-    //     'description' => $validated['description'],
-    //     'status' => $validated['status'],
-    //     'id_category' => $validated['id_category'],
-    //     'duration' => $validated['duration'],
-    // ]);
-
-    // if ($request->hasFile('url')) {
-    //     foreach ($request->file('url') as $index => $file) {
-    //         if ($file) {
-    //             $videoPath = $file->store('videos', 's3');
-    //             Storage::disk('s3')->setVisibility($videoPath, 'public');
-    //             $videoUrl = Storage::disk('s3')->url($videoPath);
-
-    //             DB::table('urls')->insert([
-    //                 'url' => $videoUrl,
-    //                 'resolution' => $request->input("resolution.$index"), 
-    //                 'type' => 'movie', 
-    //                 'premium' => $request->input("premium.$index"), 
-    //                 'media_id' => $movieId 
-    //             ]);
-    //         }
-    //     }
-    // }
-
-    // return redirect()->route("admin.movie.list")->with('success', 'Phim đã được thêm thành công!');
-    // }
-
-    public function admin__update(Validate $request, $id) {
-        $request->validated();
-
-        // Lấy thông tin bộ phim hiện tại
-        $movieData = DB::table("movies")->where('id', $id)->first();
-        
-        // Xử lý thumbnail
-        if ($request->hasFile('thumbnail')) {
-            if ($movieData && file_exists(public_path($movieData->thumbnail))) {
-                unlink(public_path($movieData->thumbnail));
-            }
-            $image = $request->file('thumbnail');
-            $uniqueName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = 'images/thumbnails/' . $uniqueName;
-            $image->move(public_path('images/thumbnails'), $uniqueName);
-        } else {
-            $imagePath = $movieData->thumbnail;
-        }
-
-        // Cập nhật thông tin phim
-        DB::table("movies")->where('id', $id)->update([
-            "title" => $request->input('title'),
-            "description" => $request->input('description'),
-            "thumbnail" => $imagePath,
-            "cast" => $request->input('cast'),
-            "director" => $request->input('director'),
-            "release_year" => $request->input('release_year'),
-            "id_category" => $request->input('id_category'),
-            "country" => $request->input('country'),
-            "status" => $request->input('status'),
-            "duration" => $request->input('duration'),
-        ]);
-
-        $currentUrls = DB::table('urls')->where("type", "movie")->where('media_id', $id)->get();
-        $totalUrls = $request->file('url') ? count($request->file('url')) + $currentUrls->count() : 0;
-
-        // Cập nhật hoặc xóa URL hiện tại
-        foreach ($currentUrls as $index => $url) {
-            if (isset($request->url[$index])) {
-                $resolution = $request->resolution[$index];
-                $premium = $request->premium[$index];
-                $newUrl = $request->url[$index];
-
-                if ($request->hasFile("url.$index")) {
-                    $videoPath = $request->file("url.$index")->store('videos', 's3');
-                    Storage::disk('s3')->setVisibility($videoPath, 'public');
-                    $videoUrl = Storage::disk('s3')->url($videoPath);
-
-                    if ($url->url !== $videoUrl) {
-                        $oldVideoPath = parse_url($url->url, PHP_URL_PATH);
-                        if (Storage::disk('s3')->exists($oldVideoPath)) {
-                            Storage::disk('s3')->delete($oldVideoPath);
-                        }
-                    }
-
-                    $newUrl = $videoUrl;
-                }
-
-                DB::table('urls')->where('id', $url->id)->update([
-                    'url' => $newUrl,
-                    'resolution' => $resolution,
-                    'premium' => $premium,
-                ]);
-            } else {
-                $resolution = $request->resolution[$index];
-                $premium = $request->premium[$index];
-                DB::table('urls')->where('id', $url->id)->update([
-                    'resolution' => $resolution,
-                    'premium' => $premium,
-                ]);
-            }
-        }
-
-        // Thêm URL mới nếu có thêm file
-        if ($totalUrls > $currentUrls->count()) {
-            for ($index = $currentUrls->count(); $index < $totalUrls; $index++) {
-                if ($request->hasFile("url.$index")) {
-                    $videoPath = $request->file("url.$index")->store('videos', 's3');
-                    Storage::disk('s3')->setVisibility($videoPath, 'public');
-                    $videoUrl = Storage::disk('s3')->url($videoPath);
-
-                    DB::table('urls')->insert([
-                        'url' => $videoUrl,
-                        'resolution' => $request->input("resolution.$index"),
-                        'premium' => $request->input("premium.$index"),
-                        'type' => 'movie',
-                        'media_id' => $id,
-                    ]);
-                }
-            }
-        }
-
-        return redirect()->back()->with('success', 'Phim đã được cập nhật thành công!');
-    }
-
 
     public function admin__remove__url($id){
         $url = DB::table("urls")->where("id",$id);
@@ -366,7 +200,42 @@ class MovieController extends Controller
         ]);
     }
 
-    public function admin__create(){
+    public function admin__create(){        
+        $urls = request()->input('urls',[]); 
+        $resolutions = request()->input('resolutions',[]); 
+        $premiums = request()->input('premiums',[]);
+        $servers = request()->input('servers',[]);
+       
+        $check = false;
+        $serverResolutionMap = []; // Mảng để lưu các resolution đã gặp cho mỗi server
+        
+        foreach ($servers as $index => $server) {
+            $resolution = $resolutions[$index] ?? null;
+            
+            if ($resolution) {
+                // Nếu server này chưa có trong mảng, khởi tạo mảng cho server
+                if (!isset($serverResolutionMap[$server])) {
+                    $serverResolutionMap[$server] = [];
+                }
+        
+                // Kiểm tra nếu resolution đã tồn tại trong server này
+                if (in_array($resolution, $serverResolutionMap[$server])) {
+                    $check = true;
+                    break; // Dừng lặp nếu tìm thấy trùng
+                }
+        
+                // Thêm resolution vào mảng của server này
+                $serverResolutionMap[$server][] = $resolution;
+            }
+        }
+        if($check){
+            return response()->json([
+                'success' => false,
+                'status' => 'error',
+                'message' => 'Đã có lỗi trùng độ phân giải trong cùng một server!'
+            ]);
+        }
+
         $imagePath = "";
         if (request()->hasFile('thumbnail_add')) {
             $image = request()->file('thumbnail_add');
@@ -388,42 +257,131 @@ class MovieController extends Controller
             'duration' => request('duration'),
             'isSeries' => request('isSeries')
         ]);
-        
-        $urls = request()->input('urls'); 
-        $resolutions = request()->input('resolutions'); 
-        $premiums = request()->input('premiums');
-       
+
         foreach ($urls as $index => $url) {
             if ($url) {
-                $resolution = $resolutions[$index] ?? null;
-
-                // Kiểm tra các URL đã tồn tại với resolution và media_id tương ứng
-                $existingUrls = DB::table('urls')
-                    ->where('url', $url)
-                    ->where('resolution', $resolution)
-                    ->where("type", "movie")
-                    ->where("media_id", $movieId)
-                    ->get();
-        
-                // Tính toán số lượng các bản ghi trùng, để gán source cho bản ghi mới
-                $newSource = $existingUrls->count() + 1; // Tăng số lượng server tương ứng
-        
-                // Thêm URL mới vào cơ sở dữ liệu
                 DB::table('urls')->insert([
                     'url' => $url,
-                    'resolution' => $resolution,
+                    'resolution' => $resolutions[$index],
                     'type' => 'movie',
                     'premium' => $premiums[$index] ?? null,
                     'media_id' => $movieId,
-                    'source' => "server " . $newSource // Gán source với số lượng server
+                    'source' => $servers[$index] 
                 ]);
             }
         }
     
         return response()->json([
-            'success' => true
+            'success' => true,
+            'status' => 'success',
+            'message' => 'Thêm phim thành công!'
         ]);
     }
+
+    public function admin__update(Request $request, $id) {
+        $urls = $request->input('urls', []);
+        $url_ids = $request->input('url_ids', []);  
+        $premiums = $request->input('premiums', []);
+        $resolutions = $request->input('resolutions', []);
+        $servers = $request->input('servers', []);
+        
+        $check = false;
+        $serverResolutionMap = []; // Mảng để lưu các resolution đã gặp cho mỗi server
+    
+        foreach ($servers as $index => $server) {
+            $resolution = $resolutions[$index] ?? null;
+        
+            if ($resolution) {
+                // Nếu server này chưa có trong mảng, khởi tạo mảng cho server
+                if (!isset($serverResolutionMap[$server])) {
+                    $serverResolutionMap[$server] = [];
+                }
+        
+                // Kiểm tra nếu resolution đã tồn tại trong server này
+                if (in_array($resolution, $serverResolutionMap[$server])) {
+                    $check = true;
+                    break; // Dừng lặp nếu tìm thấy trùng
+                }
+        
+                // Thêm resolution vào mảng của server này
+                $serverResolutionMap[$server][] = $resolution;
+            }
+        }
+        if($check){
+            return response()->json([
+                'success' => false,
+                'status' => 'error',
+                'message' => 'Đã có lỗi trùng độ phân giải trong cùng một server!'
+            ]);
+        }
+        
+        $movie = DB::table('movies')->where('id', $id)->first();
+    
+        if (!$movie) {
+            return response()->json(['success' => false, 'message' => 'Phim không tồn tại!'], 404);
+        }
+
+        if ($request->hasFile('thumbnail')) {
+            if ($movie->thumbnail && file_exists(public_path($movie->thumbnail))) {
+                unlink(public_path($movie->thumbnail)); 
+            }
+            $image = $request->file('thumbnail');
+            $uniqueName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = 'images/thumbnails/' . $uniqueName;
+            $image->move(public_path('images/thumbnails'), $uniqueName);
+        } else {
+            $imagePath = $movie->thumbnail;
+        }
+    
+        DB::table('movies')->where('id', $id)->update([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'thumbnail' => $imagePath,
+            'cast' => $request->input('cast'),
+            'director' => $request->input('director'),
+            'release_year' => $request->input('release_year'),
+            'id_category' => $request->input('id_category'),
+            'country' => $request->input('country'),
+            'status' => $request->input('status'),
+            'duration' => $request->input('duration'),
+        ]);
+    
+        
+        // Duyệt qua từng url
+        foreach ($urls as $index => $url) {
+            // Nếu có id của url, thực hiện update, nếu không thì chèn mới
+            $upsertData = [
+                'url' => $url,
+                'resolution' => $resolutions[$index] ?? null,
+                'premium' => $premiums[$index] ?? 0,
+                'source' => $servers[$index] ?? 'server 1',
+                'type' => 'movie',
+                'media_id' => $id,
+            ];
+
+            if (isset($url_ids[$index]) && $url_ids[$index]) {
+                // Nếu có `url_id`, cập nhật bản ghi
+                $oldVideo = DB::table('urls')->where('id', $url_ids[$index]);
+                if($oldVideo->value("url") !== $url){
+                    $oldVideoPath = parse_url($oldVideo->value("url"), PHP_URL_PATH);
+                    if (Storage::disk('s3')->exists($oldVideoPath)) {
+                        Storage::disk('s3')->delete($oldVideoPath);
+                    }
+                }
+                $oldVideo->update($upsertData);
+            } else {
+                // Nếu không có `url_id`, chèn mới
+                DB::table('urls')->insert($upsertData);
+            }
+        }
+    
+        return response()->json([
+            'success' => true,
+            'status' => 'success',
+            'message' => 'Cập nhật phim thành công!'
+        ]);
+    }
+    
 
     public function admin__url__add(){
         $url = request('video');
@@ -449,5 +407,17 @@ class MovieController extends Controller
                 }
             }
         }
+    }
+
+    public function movie__update__view($id){
+        if(!auth()->check()){
+            return response()->json([
+                "success" => false
+            ]);
+        }
+        DB::table("movies")->where("id", $id)->increment('views',1);
+        return response()->json([
+            "success" => true
+        ]);
     }
 }

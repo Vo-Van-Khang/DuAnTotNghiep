@@ -46,8 +46,10 @@
         @yield('content')
         @include('layouts.shared.footer')
         <!-- end footer -->
+        <div class="message__container">
+            @include('layouts.shared.message')
+        </div>
         @include('layouts.shared.loader')
-        @include('layouts.shared.message')
         <!-- JS -->
         <script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
         <script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>

@@ -6598,23 +6598,30 @@ body::-webkit-scrollbar-thumb {
     }
 }
 /* MESSAGE */
+.message__container{
+  position: fixed;
+  right: 20px;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: fit-content;
+}
 .message_box{
-    position: fixed;
-    right: 20px;
-    bottom: 30px;
-    background-color: #151f30;
-    padding: 20px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    font-size: 17px;
-    text-transform: capitalize;
-    font-family: "Poppins", sans-serif;
-    overflow: hidden;
-    z-index: 100;
-    color: #fff;
-    border: 1px solid #202f48;
+  background-color: #151f30;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  font-size: 17px;
+  text-transform: capitalize;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+  z-index: 100;
+  color: #fff;
+  border: 1px solid #202f48;
+  position: relative;
 }
 .message_box::after{
     content: "";
