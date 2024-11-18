@@ -466,6 +466,7 @@ $(document).ready(function() {
         });
     }
 
+});
 
 
 window.addEventListener('load',()=>{
@@ -518,6 +519,17 @@ function messageBySession() {
 }
 messageBySession();
 
+function add__notification(message, status) {
+    sessionStorage.setItem('message', JSON.stringify([message, status]));
+    messageBySession();
+}
+if(document.querySelector('.isLogin__false')){
+    document.querySelectorAll('.isLogin__false').forEach((e)=>{
+        e.addEventListener('click',()=>{
+            add__notification("Vui lòng đăng nhập để sử dụng tính năng này!", "error")
+        })
+    })
+}
 if(document.querySelector('.change__server__btn')){
     let change__server__btn = document.querySelectorAll('.change__server__btn');
     change__server__btn.forEach((e)=>{
@@ -573,7 +585,6 @@ if(document.querySelector('.watch__later__button') != null){
     })
 }
 
-
 if (document.querySelector('#copy__url')) {
     const copy__url__button = document.querySelector('#copy__url');
     copy__url__button.addEventListener('click',(e)=>{
@@ -626,7 +637,6 @@ if(document.querySelector('#like__button') != null){
         });
     });
 }
-});
 
 if(document.querySelector('#watch__later__button') != null){
     const watch__later__button = document.querySelector('#watch__later__button');

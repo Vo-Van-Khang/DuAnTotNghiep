@@ -557,6 +557,7 @@ body::-webkit-scrollbar-thumb {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    gap: 20px;
 }
 
 .header__search {
@@ -592,7 +593,20 @@ body::-webkit-scrollbar-thumb {
 .header__user:hover span {
     color: #2f80ed;
 }
-
+.manage__website{
+   padding: 7px 10px;
+   border-radius: 5px;
+   background-color: #2f80ed;
+   margin-right: 20px;
+   white-space: nowrap;
+   font-size: 14px;
+   color: #f2f2f2;
+   transition: 0.5s ease-in-out;
+}
+.manage__website:hover{
+    background-color: #e0e0e0;
+    color: #131720;
+}
 @media (min-width: 576px) {
     .header__nav {
         padding-left: calc((100% - 510px) / 2);
@@ -5644,7 +5658,7 @@ body::-webkit-scrollbar-thumb {
     color: #e0e0e0;
 }
 
-.sign__btn {
+.sign__btn{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -5684,11 +5698,13 @@ body::-webkit-scrollbar-thumb {
     display: none;
 }
 
-.sign__btn:hover {
-    color: #151f30;
-    background-color: #fff;
+.sign__btn--error{
+    background-color: #ba0000;
+    padding: 5px 10px;
 }
-
+.sign__btn--error:hover{
+    background-color: #f2f2f2;
+}
 .sign__text {
     margin-top: 15px;
     font-size: 14px;
@@ -6056,7 +6072,7 @@ body::-webkit-scrollbar-thumb {
     width: 100%;
     max-width: 420px;
     padding: 20px;
-    border-radius: 16px;
+    border-radius: 5px;
     overflow: hidden;
   }
   .modal .mfp-close {
@@ -6094,7 +6110,7 @@ body::-webkit-scrollbar-thumb {
     align-items: center;
     height: 40px;
     width: calc(50% - 10px);
-    border-radius: 16px;
+    border-radius: 8px;
     font-size: 14px;
     color: #e0e0e0;
     text-transform: uppercase;
@@ -6605,6 +6621,7 @@ body::-webkit-scrollbar-thumb {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  z-index: 100;
   width: fit-content;
 }
 .message_box{
@@ -6618,7 +6635,6 @@ body::-webkit-scrollbar-thumb {
   text-transform: capitalize;
   font-family: "Poppins", sans-serif;
   overflow: hidden;
-  z-index: 100;
   color: #fff;
   border: 1px solid #202f48;
   position: relative;

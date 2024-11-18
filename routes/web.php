@@ -117,7 +117,9 @@ Route::view('/category', 'clients.category')->name("category");
 Route::view('/privacy', 'clients.privacy')->name("privacy");
 
 Route::view('/signin', 'users.SignIn')->name("signin");
+Route::post('/signin',[UserController::class , 'sign__in'])->name("signin");
 Route::view('/signup', 'users.SignUp')->name("signup");
+Route::get('/logout',[UserController::class , 'logout'])->name("logout");
 Route::view('/forgot', 'users.forgot')->name("forgot");
 Route::get( '/profile', [UserController::class, 'get'])->name('profile');
 Route::post( '/profile/update', [UserController::class, 'update']);
@@ -162,3 +164,5 @@ Route::get('/forgot-password', [UserController::class, 'forgotPassword'])->name(
 Route::post('/forgot-password', [UserController::class, 'sendReset'])->name('forgot-password.send');
 Route::get('/reset-password/{token}', [UserController::class, 'resetPasswordForm'])->name('reset-password.form');
 Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('reset-password.update');
+
+Route::get('/check-login',[UserController::class, 'check__login']);

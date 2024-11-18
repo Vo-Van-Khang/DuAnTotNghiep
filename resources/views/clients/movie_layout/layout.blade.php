@@ -37,34 +37,55 @@
                                 @yield('download')
                                 <div class="article__additional">
                                     <!-- add .active class -->
-                                    @if ($check_like > 0)
-                                        <button id="like__button" class="active"
-                                            title="Bỏ thích video này"
-                                            type="button"
-                                        >
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
-                                            <span id="likes">{{$likes}}</span>
-                                        </button>
+                                    @if (auth()->check())
+                                        @if ($check_like > 0)
+                                                <button id="like__button" class="active"
+                                                    title="Bỏ thích video này"
+                                                    type="button"
+                                                >
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
+                                                    <span id="likes">{{$likes}}</span>
+                                                </button>
+                                        
+                                        @else
+                                            <button id="like__button"
+                                                title="Thích video này"
+                                                type="button"
+                                            >
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
+                                                <span id="likes">{{$likes}}</span>
+                                            </button>
+                                        @endif
                                     @else
-                                        <button id="like__button"
-                                            title="Thích video này"
+                                        <button class="isLogin__false"
+                                            title="Vui lòng đăng nhập để sử dụng"
                                             type="button"
                                         >
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
                                             <span id="likes">{{$likes}}</span>
                                         </button>
                                     @endif
-                                    @if ($check_watch_later > 0)
-                                        <button id="watch__later__button" class="active"
-                                            title="Xóa khỏi danh sách xem sau"
-                                            type="button"
-                                        >
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
-                                            <span id="watch__later__text"> Đã thêm xem sau</span>
-                                        </button>
+                                    @if (auth()->check())
+                                        @if ($check_watch_later > 0)
+                                            <button id="watch__later__button" class="active"
+                                                title="Xóa khỏi danh sách xem sau"
+                                                type="button"
+                                            >
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
+                                                <span id="watch__later__text"> Đã thêm xem sau</span>
+                                            </button>
+                                        @else
+                                            <button id="watch__later__button"
+                                                title="Thêm vào danh sách xem sau"
+                                                type="button"
+                                            >
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
+                                                <span id="watch__later__text"> Xem sau</span>
+                                            </button>
+                                        @endif
                                     @else
-                                        <button id="watch__later__button"
-                                            title="Thêm vào danh sách xem sau"
+                                        <button class="isLogin__false"
+                                            title="Vui lòng đăng nhập để sử dụng"
                                             type="button"
                                         >
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
@@ -174,7 +195,7 @@
                                             aria-selected="true"
                                         >
                                             <h4>Bình luận</h4>
-                                            <span class="comment__count"></span>
+                                            <span class="comment__count">{{$comments->count()}}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -384,29 +405,35 @@
                                                 ></textarea>
                                                 <span style="color: #df4a32; display:none" id="comment__error"></span>
                                             </div>
-                                            <div class="sign__group" style="gap: 20px">
-                                                <button
-                                                    type="button"
-                                                    class="sign__btn comment__submit__btn"
-                                                    id_movie="{{$movie->id}}"
-                                                >
-                                                    Gửi
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    class="sign__btn reply__comment__submit__btn"
-                                                    id_movie="{{$movie->id}}"
-                                                    style="display:none"
-                                                >
-                                                    Trả lời
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    class="sign__reply__btn user__reply__btn">
-                                                    <span class="user__reply">User</span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>  
-                                                </button>
-                                            </div>
+                                            @if (auth()->check())
+                                                <div class="sign__group" style="gap: 20px">
+                                                    <button
+                                                        type="button"
+                                                        class="sign__btn comment__submit__btn"
+                                                        id_movie="{{$movie->id}}"
+                                                    >
+                                                        Gửi
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        class="sign__btn reply__comment__submit__btn"
+                                                        id_movie="{{$movie->id}}"
+                                                        style="display:none"
+                                                    >
+                                                        Trả lời
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        class="sign__reply__btn user__reply__btn">
+                                                        <span class="user__reply">User</span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>  
+                                                    </button>
+                                                </div>
+                                            @else
+                                                <div class="sign__group">
+                                                    <a class="sign__btn" href="{{route('signin')}}">Đăng nhập</a>
+                                                </div>
+                                            @endif
                                         </form>
                                     </div>
                                     <!-- end comments -->

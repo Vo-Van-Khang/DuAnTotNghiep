@@ -50,13 +50,13 @@ class EpisodeController extends Controller
         ->get();
 
         if(true){
-            $check_watch_later = DB::table("watch_laters")->where("id_movie",$movie->id)->where("id_user",1)->count();
+            $check_watch_later = DB::table("watch_laters")->where("id_movie",$movie->id)->where("id_user",auth()->user()->id)->count();
         }else{
             $check_watch_later = 0;
         } 
 
         if(true){
-            $check_like = DB::table("likes")->where("id_movie",$movie->id)->where("id_user",1)->count();
+            $check_like = DB::table("likes")->where("id_movie",$movie->id)->where("id_user",auth()->user()->id)->count();
         }else{
             $check_like = 0;
         } 

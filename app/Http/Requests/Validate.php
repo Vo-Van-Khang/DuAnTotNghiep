@@ -49,6 +49,11 @@ class Validate extends FormRequest
     public function messages(): array
     {
         return [
+            'email.required' => 'Email là bắt buộc.',
+            'email.email' => 'Email không hợp lệ.',
+            'password.required' => 'Mật khẩu là bắt buộc.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.confirm' => 'Mật khẩu không khớp.',
             'thumbnail.mimes' => 'Hình ảnh phải thuộc loại: jpeg, png, jpg, svg, webp.',
             'title.required' => 'Tiêu đề là bắt buộc.',
             'cast.required' => 'Diễn viên là bắt buộc.',

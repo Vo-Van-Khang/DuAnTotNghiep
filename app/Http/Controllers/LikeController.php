@@ -9,12 +9,12 @@ use App\Http\Controllers\Controller;
 class LikeController extends Controller
 {
     public function like($id){
-        $check = DB::table("likes")->where("id_movie", $id)->where("id_user",1)->count();
+        $check = DB::table("likes")->where("id_movie", $id)->where("id_user",auth()->user()->id)->count();
         if($check > 0){
-            DB::table("likes")->where("id_movie",$id)->where("id_user",1)->delete();
+            DB::table("likes")->where("id_movie",$id)->where("id_user",auth()->user()->id)->delete();
         }else{
             DB::table("likes")->where("id_movie",$id)->insert([
-                "id_user" => 1,
+                "id_user" => auth()->user()->id,
                 "id_movie" => $id
             ]);
         }

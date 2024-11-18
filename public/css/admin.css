@@ -2450,7 +2450,7 @@ body::-webkit-scrollbar-thumb {
   width: 100%;
   max-width: 420px;
   padding: 20px;
-  border-radius: 16px;
+  border-radius: 5px;
   overflow: hidden;
 }
 .modal .mfp-close {
@@ -2488,7 +2488,7 @@ body::-webkit-scrollbar-thumb {
   align-items: center;
   height: 40px;
   width: calc(50% - 10px);
-  border-radius: 16px;
+  border-radius: 8px;
   font-size: 14px;
   color: #e0e0e0;
   text-transform: uppercase;
@@ -2853,6 +2853,7 @@ body::-webkit-scrollbar-thumb {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  z-index: 100;
   width: fit-content;
 }
 .message_box{
@@ -2866,7 +2867,6 @@ body::-webkit-scrollbar-thumb {
   text-transform: capitalize;
   font-family: "Poppins", sans-serif;
   overflow: hidden;
-  z-index: 100;
   color: #fff;
   border: 1px solid #202f48;
   position: relative;

@@ -15,16 +15,16 @@ use Illuminate\Support\Facades\Storage;
 class MovieController extends Controller
 {
     public function get_id($id){
-        if(true){
-            $check_watch_later = DB::table("watch_laters")->where("id_movie",$id)->where("id_user",1)->count();
-            $check_like = DB::table("likes")->where("id_movie",$id)->where("id_user",1)->count();
-            $check_history = DB::table("histories")->where("id_movie",$id)->where("id_user",1)->count();
+        if(auth()->check()){
+            $check_watch_later = DB::table("watch_laters")->where("id_movie",$id)->where("id_user",auth()->user()->id)->count();
+            $check_like = DB::table("likes")->where("id_movie",$id)->where("id_user",auth()->user()->id)->count();
+            $check_history = DB::table("histories")->where("id_movie",$id)->where("id_user",auth()->user()->id)->count();
             if($check_history > 0){
-                DB::table("histories")->where("id_movie",$id)->where("id_user",1)->delete();
+                DB::table("histories")->where("id_movie",$id)->where("id_user",auth()->user()->id)->delete();
             }
             DB::table("histories")->insert([
                 "id_movie" => $id,
-                "id_user" => 1
+                "id_user" => auth()->user()->id
             ]);
         }else{
             $check_watch_later = 0;
@@ -104,9 +104,9 @@ class MovieController extends Controller
         $categories = DB::table("categories")->get();
 
         $watch_later_movies = [];
-        if (true) {
+        if (auth()->check()) {
             $watch_later_movies = DB::table("watch_laters")
-                ->where("id_user", 1)
+                ->where("id_user", auth()->user()->id)
                 ->pluck("id_movie")
                 ->toArray();
         }
