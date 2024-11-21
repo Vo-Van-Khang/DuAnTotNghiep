@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Likes;
 use App\Models\Movies;
+use App\Models\Payments;
 use App\Models\Histories;
 use Illuminate\Support\Str;
 use App\Mail\UserRegistered;
+use App\Models\Subscription;
 use App\Models\Watch_laters;
 use Illuminate\Http\Request;
 use App\Http\Requests\Validate;
@@ -26,39 +29,65 @@ class UserController extends Controller
         $watch_laters = Watch_laters::whereHas('movie', function($query) {
                 $query->where('isDeleted', 0)->where('status', 1);
             })->where("id_user", auth()->user()->id)->orderBy("id","desc")->get();
+        $likes = Likes::whereHas('movie', function($query) {
+                $query->where('isDeleted', 0)->where('status', 1);
+            })->where("id_user", auth()->user()->id)->orderBy("id","desc")->get();
         $histories = Histories::whereHas('movie', function($query) {
                 $query->where('isDeleted', 0)->where('status', 1);
             })->where("id_user", auth()->user()->id)->orderBy("created_at","desc")->get();
+        $payments = Payments::with("subscription")->where("id_user", auth()->user()->id)->get();
+        // dd($payments);
         $user = User::find(auth()->user()->id);
         return view('users.profile',[
+            'likes'=>$likes,
             'watch_laters'=>$watch_laters,
             'histories'=>$histories,
+            'payments'=>$payments,
             'user'=>$user
         ]);
     }
     public function sign__in(Validate $request){
         $validated = $request->validated();
 
-        if(auth()->attempt($validated)){
-            if(request("remember")){
-                auth()->login(auth()->user(), true); 
+        $email = $validated['email'];
+        $password = $validated['password'];
+
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            return redirect()->back()
+                ->with('error', 'Email không tồn tại!')
+                ->withInput();
+        }
+
+        if (!password_verify($password, $user->password)) {
+            return redirect()->back()
+                ->with('error', 'Mật khẩu không chính xác!')
+                ->withInput();
+        }
+
+        if (!$user->email_verified_at) {
+            return redirect()->back()
+                ->with('error', 'Vui lòng xác nhận email của bạn!')
+                ->withInput();
+        }
+
+        if (auth()->attempt($validated)) {
+            if (request('remember')) {
+                auth()->login(auth()->user(), true);
                 Cookie::queue(Cookie::make('remember_web', 'token_value', 7 * 24 * 60));
             }
+
             request()->session()->regenerate();
-            return redirect()->route('index')->with('success','Đăng nhập thành công!');
+
+            return redirect()->route('index')->with('success', 'Đăng nhập thành công!');
         }
-        $email = request()->input('email');
-        $password = request()->input('password');
-        
-        $user = DB::table('users')->where('email',$email)->first();
-        if($user != null){
-            if($password !== $user->password){
-                return redirect()->back()->with('error','Mật khẩu không chính xác!')->withInput();
-            }
-        }else{
-            return redirect()->back()->with('error','Email không tồn tại!')->withInput();
-        }
+
+        return redirect()->back()
+            ->with('error', 'Đăng nhập thất bại, vui lòng thử lại!')
+            ->withInput();
     }
+
 
     public function logout()
     {

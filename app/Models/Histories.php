@@ -20,6 +20,6 @@ class Histories extends Model
     
     public function movie() {
       return $this->belongsTo(Movies::class, 'id_movie');
-  }
+    }
   
 }

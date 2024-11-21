@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-12">
 			<div class="main__title">
-				<h2>Thêm Thanh Toán</h2>
+				<h2>Cập Nhật Thanh Toán</h2>
 			</div>
 		</div>
 
@@ -15,46 +15,35 @@
 						<div class="">
 							<!-- biểu mẫu chi tiết -->
 							<div class="">
-								<form action="/admin/payment/add" class="sign__form sign__form--profile sign__form--first" method="post">
+							<form action="{{ route('admin.payment.update', $subscription->id) }}" class="sign__form sign__form--profile sign__form--first" method="post">
 									@csrf
 									<div class="row">
 										<div class="col-12">
 											<h4 class="sign__title">Chi tiết</h4>
 										</div>
-
+											<div class="sign__group">
+												<input  type="hidden" value="{{ $subscription->id }}" class="sign__input" name="id">
+											</div>
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
-												<label class="sign__label" for="username">Tên</label>
-												<input id="username" type="text" class="sign__input" name="name">
+												<label class="sign__label" for="username">Tên gói</label>
+												<input id="username" type="text" value="{{ $subscription->name }}" class="sign__input" name="name">
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
-												<label class="sign__label">Gói</label>
-												<div>
-													<select name="duration" id="">
-														<option value="">Chọn gói</option>
-														<option value="1">1</option>
-														<option value="3">3</option>
-														<option value="6">6</option>
-													</select>
-												</div>
+												<label class="sign__label" for="price">Số ngày</label>
+												<input id="price" type="number" value="{{ $subscription->duration }}" class="sign__input" name="duration">
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
 												<label class="sign__label" for="price">Giá</label>
-												<input id="price" type="number" class="sign__input" name="price">
-											</div>
-										</div>
-										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
-											<div class="sign__group">
-												<label class="sign__label" for="username">Ngày tạo</label>
-												<input id="username" type="date" class="sign__input" name="created_at">
+												<input id="price" type="number" value="{{ $subscription->price }}" class="sign__input" name="price">
 											</div>
 										</div>
 										<div class="col-12">
-											<button class="sign__btn" type="submit">Thêm</button>
+											<button class="sign__btn" type="submit">Sửa</button>
 										</div>
 									</div>
 								</form>

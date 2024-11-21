@@ -743,7 +743,7 @@ body::-webkit-scrollbar-thumb {
         right: auto;
         bottom: auto;
         left: auto;
-        width: 250px;
+        width: auto;
     }
     .header__form-input {
         width: 100%;
@@ -761,7 +761,7 @@ body::-webkit-scrollbar-thumb {
 
 @media (min-width: 1440px) {
     .header__actions {
-        width: 383px;
+        width: auto;
     }
     .header__content {
         padding: 0 30px;
@@ -4689,6 +4689,9 @@ body::-webkit-scrollbar-thumb {
     background-color: #131720;
     width: fit-content;
 }
+.comments__text .comments__text--premium{
+    color: #ffe600;
+}
 
 .comments__item {
     margin-bottom: 20px;
@@ -5480,6 +5483,14 @@ body::-webkit-scrollbar-thumb {
     margin: 5px 0 15px;
 }
 
+.sign__form--subscription{
+    justify-content: flex-start;
+    align-items: flex-start;
+    display: flex;
+    color: #f2f2f2;
+    width: 100%;
+}
+
 .sign__form--first {
     margin-top: 0;
 }
@@ -5529,7 +5540,20 @@ body::-webkit-scrollbar-thumb {
     background-color: #151f30;
     border-color: #2f80ed;
 }
-
+.sign__input--radio{
+    width: 25px;
+    height: 25px;
+    background-color: #202f48;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.5s ease;
+}
+.sign__input--radio:checked{
+    background-image: url("../images/storage/checkmark.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
 .sign__select {
     background: url("../images/storage/arrow.svg") no-repeat center right 20px #151f30;
     background-size: 16px auto;
@@ -6113,8 +6137,13 @@ body::-webkit-scrollbar-thumb {
     border-radius: 8px;
     font-size: 14px;
     color: #e0e0e0;
+    background-color: #2f80ed;
     text-transform: uppercase;
     font-weight: 500;
+  }
+  .modal__btn:hover{
+    color: #29b474;
+    background-color: #fff;
   }
   .modal__btn--apply {
     background-color: #2f80ed;
@@ -6683,4 +6712,130 @@ input.is-invalid:focus {
     color: #dc3545; /* Màu chữ đỏ */
     font-size: 12px; /* Kích thước chữ nhỏ */
     margin-top: 0px; /* Khoảng cách trên */
+}
+
+.subscriptions__select{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #f2f2f2;
+    width: 100%;
+}
+.subscriptions__select .item{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #151f30;
+    cursor: pointer;
+}
+
+.subscriptions__select .item .information{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+.subscriptions__select .item .information p{
+    margin-bottom: 0;
+}
+.subscriptions__select .item .information .pack{
+    display: flex;
+    flex-direction: column;
+}
+.subscriptions__select .item .information .pack span{
+    font-size: 12px;
+}
+
+.payments__select{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #f2f2f2;
+}
+.payments__select .item{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #151f30;
+}
+.payments__select .item input{
+
+}
+.payments__select .item .information{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+.payments__select .item .information p{
+    margin-bottom: 0;
+}
+.payments__select .item .information img{
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.payment__information{
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #151f30;
+    color: #ffffff;
+}
+.payment__information p{
+    margin-bottom: 0;
+}
+.payment__information .item{
+    border-bottom: 1px solid #4c6c91;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.payment__information .item p{
+    display: flex;
+    justify-content: space-between;
+}
+.payment__information .item p span{
+    font-weight: 500;
+}
+.payment__information .pay__total{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.payment__information .pay__total .price{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.payment__information .pay__total .price span{
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #1da1f2;
+    font-size: 20px;
+}
+.payment__information .pay__total button{
+    padding: 10px 0;
+    width: 100%;
+    background-color: #1da1f2;
+    font-weight: 500;
+    border-radius: 5px;
+    color: #f2f2f2;
+    font-size: 18px;
+    text-transform: capitalize;
+}
+.payment__information .pay__total button:hover{
+    background-color: #f2f2f2;
+    color: #131720;
 }

@@ -11,8 +11,15 @@
                             <img src="img/avatar.svg" alt="" />
                         </div>
                         <div class="profile__meta">
-                            <h3>Phương Thảo</h3>
-                            <span>Gói: <span style="color: #ffc312">Premium</span></span>
+                            <h3>{{auth()->user()->name}}</h3>
+                            <span>
+                                Gói: 
+                                @if (auth()->user()->premium)
+                                    <span style="color: #ffc312">Premium</span>
+                                @else
+                                    <span style="color: #2f80ed">Thường</span>
+                                @endif
+                            </span>
                         </div>
                     </div>
 
@@ -90,12 +97,12 @@
 
 
                     <!-- dashbox -->
-                    <div class="col-12 col-xl-6">
+                    <div class="col-12 col-xl-12">
                         <div class="dashbox">
                             <div class="dashbox__title">
                                 <h3>
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/></svg>
-                                    Premium
+                                    Dịch vụ
                                 </h3>
                             </div>
 
@@ -110,116 +117,139 @@
                                             <th>TÊN GÓI</th>
                                             <th>NGÀY MUA</th>
                                             <th>NGÀY HẾT HẠN</th>
+                                            <th>GIÁ GÓI</th>
                                             <th>TÌNH TRẠNG</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    Premium cơ bản
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    11/10/2024
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text main__table-text--rate"
-                                                >
-                                                    11/12/2024
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text main__table-text--red"
-                                                >
-                                                    Đã hết hạn
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    Premium cơ bản
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    11/10/2024
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text main__table-text--rate"
-                                                >
-                                                    11/12/2024
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    Premium cơ bản
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    11/10/2024
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text main__table-text--rate"
-                                                >
-                                                    11/12/2024
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    Premium cơ bản
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text"
-                                                >
-                                                    11/10/2024
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div
-                                                    class="main__table-text main__table-text--rate"
-                                                >
-                                                    11/12/2024
-                                                </div>
-                                            </td>
-                                        </tr>
-
+                                        @if ($payments->count() > 0)
+                                            @foreach ($payments as $payment)
+                                                <tr>
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text"
+                                                        >
+                                                            {{$payment->subscription->subscription_plan->name}}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text"
+                                                        >
+                                                            {{$payment->subscription->start_date}}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text main__table-text--rate"
+                                                        >
+                                                            {{$payment->subscription->end_date}}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text"
+                                                        >
+                                                            {{$payment->subscription->subscription_plan->price ? number_format($payment->subscription->subscription_plan->price, 0, ',', '.') : '0'}} VND
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @if ($payment->subscription->end_date < time())
+                                                            <div
+                                                                class="main__table-text main__table-text--red"
+                                                            >
+                                                                Hết hạn
+                                                            </div>
+                                                        @else
+                                                            <div
+                                                                class="main__table-text main__table-text--green"
+                                                            >
+                                                                Đang sử dụng
+                                                            </div>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="main__table-text">Không có dữ liệu</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                     <!-- end dashbox -->
+                    <div class="col-12 col-xl-6">
+                        <div class="dashbox">
+                            <div class="dashbox__title">
+                                <h3>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/></svg>
+                                    Phim đã thích
+                                </h3>
+                            </div>
+
+                            <div
+                                class="dashbox__table-wrap dashbox__table-wrap--1"
+                            >
+                                <table
+                                    class="main__table main__table--dash"
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th>PHIM</th>
+                                            <th>LƯỢT XEM</th>
+                                            <th>HÀNH ĐỘNG</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if ($likes->count() > 0)
+                                            @foreach ($likes as $like)
+                                                <tr class="item__remove" id_remove="{{$like->id}}" type_remove="like">
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text"
+                                                        >
+                                                            <a href="{{route("movie", $like->id_movie)}}"
+                                                                >{{$like->movie->title}}</a
+                                                            >
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text"
+                                                        >
+                                                            {{$like->movie->views}}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div
+                                                            class="main__table-text main__table-btns"
+                                                        >
+                                                            <a href="{{route("movie",$like->id_movie)}}" class="main__table-btn main__table-btn--view">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M838-65 720-183v89h-80v-226h226v80h-90l118 118-56 57ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 20-2 40t-6 40h-82q5-20 7.5-40t2.5-40q0-20-2.5-40t-7.5-40H654q3 20 4.5 40t1.5 40q0 20-1.5 40t-4.5 40h-80q3-20 4.5-40t1.5-40q0-20-1.5-40t-4.5-40H386q-3 20-4.5 40t-1.5 40q0 20 1.5 40t4.5 40h134v80H404q12 43 31 82.5t45 75.5q20 0 40-2.5t40-4.5v82q-20 2-40 4.5T480-80ZM170-400h136q-3-20-4.5-40t-1.5-40q0-20 1.5-40t4.5-40H170q-5 20-7.5 40t-2.5 40q0 20 2.5 40t7.5 40Zm34-240h118q9-37 22.5-72.5T376-782q-55 18-99 54.5T204-640Zm172 462q-18-34-31.5-69.5T322-320H204q29 51 73 87.5t99 54.5Zm28-462h152q-12-43-31-82.5T480-798q-26 36-45 75.5T404-640Zm234 0h118q-29-51-73-87.5T584-782q18 34 31.5 69.5T638-640Z"/></svg>
+                                                            </a>
+                                                            <a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal remove__btn" id_remove="{{$like->id}}" type_remove="like">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td></td>
+                                                <td class="main__table-text">Không có dữ liệu</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12 col-xl-6">
                         <div class="dashbox">
                             <div class="dashbox__title">

@@ -219,16 +219,23 @@
                                                                 src="{{$comment->user->image}}"
                                                                 alt=""
                                                             />
-                                                            <span class="comments__name"
-                                                                >{{$comment->user->name}}</span
-                                                            >
+                                                            <span class="comments__name">
+                                                                {{$comment->user->name}}
+                                                                @if ($comment->user->premium)
+                                                                    <svg class="svg__premium" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffe600">
+                                                                        <path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
+                                                                    </svg>
+                                                                @endif
+                                                            </span>
                                                             <span class="comments__time"
                                                                 >{{$comment->created_at}}</span
                                                             >
                                                         </div>
-                                                        <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="{{$comment->id}}" type_remove="comment">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                                                        </a>
+                                                        @if (auth()->check() && auth()->id() == $comment->user->id)
+                                                            <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="{{$comment->id}}" type_remove="comment">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                                            </a>
+                                                        @endif
                                                     </div>
                                                     <p class="comments__text">
                                                         {{$comment->content}}
@@ -278,19 +285,26 @@
                                                                         src="{{asset($reply_comment->user->image)}}"
                                                                         alt=""
                                                                     />
-                                                                    <span class="comments__name"
-                                                                        >{{$reply_comment->user->name}}</span
-                                                                    >
+                                                                    <span class="comments__name">
+                                                                        {{$reply_comment->user->name}}
+                                                                        @if ($reply_comment->user->premium)
+                                                                            <svg class="svg__premium" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffe600">
+                                                                                <path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
+                                                                            </svg>
+                                                                        @endif
+                                                                    </span>
                                                                     <span class="comments__time"
                                                                         >{{$reply_comment->created_at}}</span
                                                                     >
                                                                 </div>
-                                                                <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn"  id_remove="{{$reply_comment->id}}" type_remove="reply_comment">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                                                                </a>
+                                                                @if (auth()->check() && auth()->id() == $reply_comment->user->id)
+                                                                    <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn"  id_remove="{{$reply_comment->id}}" type_remove="reply_comment">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                                                    </a>
+                                                                @endif
                                                             </div>
                                                             <p class="comments__text">
-                                                                <span>{{ "@" . $reply_comment->user_reply->name }}</span>
+                                                                <span @class(['comments__text--premium' => $reply_comment->user_reply->premium]) >{{ "@" . $reply_comment->user_reply->name }}</span>
                                                                 {{$reply_comment->content}}
                                                             </p>
                                                             <div class="comments__actions">

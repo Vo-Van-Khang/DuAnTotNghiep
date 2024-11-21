@@ -72,33 +72,14 @@ Route::post('/admin/trash/notification/remove/{id}', [TrashController::class,'ad
 Route::post('/admin/trash/slide/remove/{id}', [TrashController::class,'admin__slide__remove']);
 
 
-Route::get('/admin/payment/list', function () {
-    return view('admins.payment.list');
-});
-Route::get('/admin/payment/list', [PaymentController::class, 'listpayment']);
+Route::get('/admin/payment/list', [PaymentController::class, 'listpayment'])->name("admin.payment.list");
 Route::get('/admin/payment/add', function () {
-    return view('admins.payment.add');
-});
+    return view('admins.payment.add', ["selected" => "pay"]);
+})->name("admin.payment.add");
 Route::post('/admin/payment/add', [PaymentController::class, 'addpayment']);
-Route::get('/admin/payment/update', function () {
-    return view('admins.payment.update');
-});
-Route::get('/admin/payment/delete/{maxoa}', [PaymentController::class, 'deletepayment']);
-
-
-
-Route::get('/admin/payment/list', function () {
-    return view('admins.payment.list');
-});
-Route::get('/admin/payment/list', [PaymentController::class, 'listpayment']);
-Route::get('/admin/payment/add', function () {
-    return view('admins.payment.add');
-});
-Route::post('/admin/payment/add', [PaymentController::class, 'addpayment']);
-Route::get('/admin/payment/update', function () {
-    return view('admins.payment.update');
-});
-Route::get('/admin/payment/delete/{maxoa}', [PaymentController::class, 'deletepayment']);
+Route::get('/admin/payment/update/{id}', [PaymentController::class, 'edit'])->name('admin.payment.update');
+Route::post('/admin/payment/update/{id}', [PaymentController::class, 'update'])->name('admin.payment.update');
+Route::delete('/admin/payment/delete/{id}', [PaymentController::class, 'deletepayment']);
 
 
 Route::get('/admin/category/list', [CategoryController::class , 'get'])->name('admin.category.list');
@@ -112,7 +93,9 @@ Route::delete('/admin/category/delete/{id}',[CategoryController::class , 'delete
 Route::get("/", [MovieController::class, 'index'])->name('index');
 Route::view('/about', 'clients.about')->name("about");
 Route::view('/contact', 'clients.contact')->name("contact");
-Route::view('/subscription', 'clients.subscription')->name("subscription");
+Route::get('/subscription', [PaymentController::class , 'get'])->name("subscription");
+Route::post('/subscription/payment', [PaymentController::class , 'payment'])->name("subscription.payment");
+Route::get('/subscription/payment/return/{id_plan}', [PaymentController::class , 'payment__return'])->name("subscription.payment.return");
 Route::view('/category', 'clients.category')->name("category");
 Route::view('/privacy', 'clients.privacy')->name("privacy");
 
@@ -134,6 +117,7 @@ Route::post('/movie/watch_later/{id}', [WatchLaterController::class,'watch_later
 
 Route::delete('/watch_later/remove/{id}', [WatchLaterController::class,'remove_by_id']);
 Route::delete('/history/remove/{id}', [HistoryController::class,'remove_by_id']);
+Route::delete('/like/remove/{id}', [LikeController::class,'remove_by_id']);
 
 Route::get('/movie/ajax/{id}', [AjaxController::class,'movie']);
 Route::post('/movie/{id}/comment/add', [CommentController::class,'comment__add']);

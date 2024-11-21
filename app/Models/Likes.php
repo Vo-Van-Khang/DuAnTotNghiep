@@ -17,4 +17,8 @@ class Likes extends Model
       'id_user',
       'created_at'
     ];
+
+    public function movie() {
+      return $this->belongsTo(Movies::class, 'id_movie');
+    }
 }

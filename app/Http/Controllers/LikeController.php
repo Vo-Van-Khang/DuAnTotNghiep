@@ -25,5 +25,12 @@ class LikeController extends Controller
             "success" => true
         ]);
     }
+
+    public function remove_by_id($id){
+        DB::table("likes")->where("id",$id)->delete();
+        return response()->json([
+            "success" => true
+        ]);
+    }
     
 }

@@ -239,7 +239,7 @@
                     <div class="col-12">
                         <h2 class="section__title">Mua gói Premium ngay</h2>
                         <p class="section__text">
-                            Không có phí ẩn
+                            Không có phí phát sinh thêm
                         </p>
                     </div>
                 </div>

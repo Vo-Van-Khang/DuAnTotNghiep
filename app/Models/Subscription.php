@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Subscription extends Model
 {
     use HasFactory;
-    protected $table = 'subcriptions';
+    protected $table = 'subscriptions';
     public $primaryKey = 'id';
     public $timestamps = false;
     protected $fillable = [
@@ -18,4 +18,9 @@ class Subscription extends Model
       'end_date',
       'payment_status'
     ];
+
+    public function subscription_plan()
+    {
+        return $this->belongsTo(Subscription_plans::class, 'id_plan'); 
+    }
 }
