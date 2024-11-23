@@ -10,13 +10,19 @@ use App\Http\Controllers\Controller;
 class AjaxController extends Controller
 {
     public function movie($id){
+        $views = DB::table("movies")->where("id",$id)->value("views");
         $likes = DB::table("likes")->where("id_movie",$id)->count();
         $comments = Comments::with("user", 'reply_comments.user', 'reply_comments.user_reply')->with("reply_comments")->where("id_movie",$id)->orderBy("created_at", "desc")->get();
-        // dd($comments);
+        $user_id = auth()->check() ? auth()->id() : null;
+        $user_login = auth()->check();
+        
         return response()->json([
             "success" => true,
+            "views" => $views,
             "comments" => $comments,
-            "likes" => $likes
+            "likes" => $likes,
+            "user_login" => $user_login,
+            "user_id" => $user_id
         ]);
     }
 }

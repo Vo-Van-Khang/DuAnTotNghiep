@@ -10,12 +10,12 @@ use App\Http\Controllers\Controller;
 class WatchLaterController extends Controller
 {
     public function watch_later($id){
-        $check = DB::table("watch_laters")->where("id_movie", $id)->where("id_user",1)->count();
+        $check = DB::table("watch_laters")->where("id_movie", $id)->where("id_user",auth()->user()->id)->count();
         if($check > 0){
-            DB::table("watch_laters")->where("id_movie",$id)->where("id_user",1)->delete();
+            DB::table("watch_laters")->where("id_movie",$id)->where("id_user",auth()->user()->id)->delete();
         }else{
             DB::table("watch_laters")->where("id_movie",$id)->insert([
-                "id_user" => 1,
+                "id_user" => auth()->user()->id,
                 "id_movie" => $id
             ]);
         }

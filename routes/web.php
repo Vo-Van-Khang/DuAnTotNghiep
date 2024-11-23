@@ -19,21 +19,26 @@ use App\Http\Controllers\CommentFilterController;
 
 //ADMIN
 
-Route::get('/admin/movie/list', [MovieController::class, 'admin__view'])->name("admin.movie.list");
-Route::get('/admin/movie/add', [MovieController::class, 'admin__add'])->name("admin.movie.add");
-Route::post('/admin/movie/add', [MovieController::class, 'admin__create'])->name("admin.movie.add");
-Route::get('/admin/movie/update/{id}', [MovieController::class, 'admin__update__form'])->name("admin.movie.update");
-Route::post('/admin/movie/update/{id}', [MovieController::class, 'admin__update'])->name("admin.movie.update");
-Route::delete('/admin/movie/delete/{id}', [MovieController::class, 'admin__delete']);
-Route::post('/admin/movie/status/update/{id}', [MovieController::class, 'admin__status__update']);
-Route::delete('/admin/movie/url/remove/{id}', [MovieController::class, 'admin__remove__url']);
+Route::get('/admin/movie/list', [MovieController::class,'admin__view'])->name("admin.movie.list");
+Route::get('/admin/movie/add', [MovieController::class,'admin__add'])->name("admin.movie.add");
+Route::post('/admin/movie/add', [MovieController::class,'admin__create'])->name("admin.movie.add");
+Route::get('/admin/movie/update/{id}', [MovieController::class,'admin__update__form'])->name("admin.movie.update");
+Route::post('/admin/movie/update/{id}', [MovieController::class,'admin__update'])->name("admin.movie.update");
+Route::delete('/admin/movie/delete/{id}', [MovieController::class,'admin__delete']);
+Route::post('/admin/movie/status/update/{id}',[MovieController::class,'admin__status__update']);
+Route::delete('/admin/movie/url/remove/{id}',[MovieController::class,'admin__remove__url']);
+Route::post('/admin/movie/url/add',[MovieController::class,'admin__url__add']);
+Route::post('/admin/movie/url/update',[MovieController::class,'admin__url__update']);
 
-Route::get('/admin/episode/add/{id}', [EpisodeController::class, 'admin__add'])->name("admin.episode.add");
-Route::post('/admin/episode/add/{id}', [EpisodeController::class, 'admin__create'])->name("admin.episode.add");
-Route::get('/admin/episode/update/{movie}/{id}', [EpisodeController::class, 'admin__update__form'])->name("admin.episode.update");
-Route::post('/admin/episode/update/{movie}/{id}', [EpisodeController::class, 'admin__update'])->name("admin.episode.update");
-Route::delete('/admin/episode/delete/{id}', [EpisodeController::class, 'admin__delete']);
-Route::delete('/admin/episode/url/remove/{id}', [EpisodeController::class, 'admin__remove__url']);
+Route::post('/video/remove',[MovieController::class,'admin__remove__all__url']);
+
+
+Route::get('/admin/episode/add/{id}', [EpisodeController::class,'admin__add'])->name("admin.episode.add");
+Route::post('/admin/episode/add/{id}', [EpisodeController::class,'admin__create'])->name("admin.episode.add");
+Route::get('/admin/episode/update/{id}', [EpisodeController::class,'admin__update__form'])->name("admin.episode.update");
+Route::post('/admin/episode/update/{id}', [EpisodeController::class,'admin__update']);
+Route::delete('/admin/episode/delete/{id}', [EpisodeController::class,'admin__delete']);
+Route::delete('/admin/episode/url/remove/{id}',[EpisodeController::class,'admin__remove__url']);
 
 Route::get('/admin/user/list', [UserController::class, 'show'])->name('admin.user.list');
 Route::get('/admin/user/update/{id}', [UserController::class, 'edit'])->name('admin.user.update');
@@ -75,33 +80,14 @@ Route::post('/admin/comment/update/{id}', [CommentController::class, 'admin__upd
 Route::delete('/admin/comment/delete/{id}', [CommentController::class, 'admin__delete']);
 Route::post('/admin/comment/status/update/{id}', [CommentController::class, 'admin__status__update']);
 
-Route::get('/admin/payment/list', function () {
-    return view('admins.payment.list');
-});
-Route::get('/admin/payment/list', [PaymentController::class, 'listpayment']);
+Route::get('/admin/payment/list', [PaymentController::class, 'listpayment'])->name("admin.payment.list");
 Route::get('/admin/payment/add', function () {
-    return view('admins.payment.add');
-});
+    return view('admins.payment.add', ["selected" => "pay"]);
+})->name("admin.payment.add");
 Route::post('/admin/payment/add', [PaymentController::class, 'addpayment']);
-Route::get('/admin/payment/update', function () {
-    return view('admins.payment.update');
-});
-Route::get('/admin/payment/delete/{maxoa}', [PaymentController::class, 'deletepayment']);
-
-
-
-Route::get('/admin/payment/list', function () {
-    return view('admins.payment.list');
-});
-Route::get('/admin/payment/list', [PaymentController::class, 'listpayment']);
-Route::get('/admin/payment/add', function () {
-    return view('admins.payment.add');
-});
-Route::post('/admin/payment/add', [PaymentController::class, 'addpayment']);
-Route::get('/admin/payment/update', function () {
-    return view('admins.payment.update');
-});
-Route::get('/admin/payment/delete/{maxoa}', [PaymentController::class, 'deletepayment']);
+Route::get('/admin/payment/update/{id}', [PaymentController::class, 'edit'])->name('admin.payment.update');
+Route::post('/admin/payment/update/{id}', [PaymentController::class, 'update'])->name('admin.payment.update');
+Route::delete('/admin/payment/delete/{id}', [PaymentController::class, 'deletepayment']);
 
 
 Route::get('/admin/category/list', [CategoryController::class, 'get'])->name('admin.category.list');
@@ -115,15 +101,19 @@ Route::delete('/admin/category/delete/{id}', [CategoryController::class, 'delete
 Route::get("/", [MovieController::class, 'index'])->name('index');
 Route::view('/about', 'clients.about')->name("about");
 Route::view('/contact', 'clients.contact')->name("contact");
-Route::view('/subscription', 'clients.subscription')->name("subscription");
+Route::get('/subscription', [PaymentController::class , 'get'])->name("subscription");
+Route::post('/subscription/payment', [PaymentController::class , 'payment'])->name("subscription.payment");
+Route::get('/subscription/payment/return/{id_plan}', [PaymentController::class , 'payment__return'])->name("subscription.payment.return");
 Route::view('/category', 'clients.category')->name("category");
 Route::view('/privacy', 'clients.privacy')->name("privacy");
 
 Route::view('/signin', 'users.SignIn')->name("signin");
+Route::post('/signin',[UserController::class , 'sign__in'])->name("signin");
 Route::view('/signup', 'users.SignUp')->name("signup");
+Route::get('/logout',[UserController::class , 'logout'])->name("logout");
 Route::view('/forgot', 'users.forgot')->name("forgot");
-Route::get('/profile', [UserController::class, 'get'])->name('profile');
-Route::post('/profile/update', [UserController::class, 'update'])->name('profile');
+Route::get( '/profile', [UserController::class, 'get'])->name('profile');
+Route::post( '/profile/update', [UserController::class, 'update']);
 Route::get("/all", [MovieController::class, 'allMovie'])->name('allMovie');
 Route::get('/search', [MovieController::class, 'search'])->name("search");
 
@@ -133,12 +123,13 @@ Route::get('/movie/{movie}/episode/{episode}', [EpisodeController::class, 'get_b
 Route::post('/movie/like/{id}', [LikeController::class, 'like']);
 Route::post('/movie/watch_later/{id}', [WatchLaterController::class, 'watch_later']);
 
-Route::delete('/watch_later/remove/{id}', [WatchLaterController::class, 'remove_by_id']);
-Route::delete('/history/remove/{id}', [HistoryController::class, 'remove_by_id']);
+Route::delete('/watch_later/remove/{id}', [WatchLaterController::class,'remove_by_id']);
+Route::delete('/history/remove/{id}', [HistoryController::class,'remove_by_id']);
 
-Route::get('/movie/ajax/{id}', [AjaxController::class, 'movie']);
-Route::post('/movie/{id}/comment/add', [CommentController::class, 'comment__add']);
-Route::post('/movie/{id}/reply_comment/add', [ReplyCommentController::class, 'reply__comment__add']);
+Route::get('/movie/ajax/{id}', [AjaxController::class,'movie']);
+Route::post('/movie/{id}/comment/add', [CommentController::class,'comment__add']);
+Route::post('/movie/{id}/reply_comment/add', [ReplyCommentController::class,'reply__comment__add']);
+Route::post('/movie/update-view/{id}', [MovieController::class,'movie__update__view']);
 
 Route::delete('/comment/remove/{id}', [CommentController::class, 'remove_by_id']);
 Route::delete('/reply_comment/remove/{id}', [ReplyCommentController::class, 'remove_by_id']);
@@ -164,3 +155,5 @@ Route::get('/forgot-password', [UserController::class, 'forgotPassword'])->name(
 Route::post('/forgot-password', [UserController::class, 'sendReset'])->name('forgot-password.send');
 Route::get('/reset-password/{token}', [UserController::class, 'resetPasswordForm'])->name('reset-password.form');
 Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('reset-password.update');
+
+Route::get('/check-login',[UserController::class, 'check__login']);

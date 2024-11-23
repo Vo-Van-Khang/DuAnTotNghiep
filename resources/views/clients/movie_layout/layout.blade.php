@@ -17,7 +17,7 @@
                                 <ul class="list">
                                     <li>
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
-                                        {{$movie->views}}
+                                        <span class="views__movie">{{$movie->views}}</span>
                                     </li>
                                     <li>{{$movie->category->name}}</li>
                                     <li>{{$movie->release_year}}</li>
@@ -30,38 +30,62 @@
                         <!-- video player -->
                         <div class="col-12 col-xl-12">
                             @yield('type')
+                            <div class="col-12 article__servers">
+                                @yield('servers')
+                            </div>
                             <div class="article__actions article__actions--details">
                                 @yield('download')
                                 <div class="article__additional">
                                     <!-- add .active class -->
-                                    @if ($check_like > 0)
-                                        <button id="like__button" class="active"
-                                            title="Bỏ thích video này"
-                                            type="button"
-                                        >
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
-                                            <span id="likes">{{$likes}}</span>
-                                        </button>
+                                    @if (auth()->check())
+                                        @if ($check_like > 0)
+                                                <button id="like__button" class="active"
+                                                    title="Bỏ thích video này"
+                                                    type="button"
+                                                >
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
+                                                    <span id="likes">{{$likes}}</span>
+                                                </button>
+                                        
+                                        @else
+                                            <button id="like__button"
+                                                title="Thích video này"
+                                                type="button"
+                                            >
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
+                                                <span id="likes">{{$likes}}</span>
+                                            </button>
+                                        @endif
                                     @else
-                                        <button id="like__button"
-                                            title="Thích video này"
+                                        <button class="isLogin__false"
+                                            title="Vui lòng đăng nhập để sử dụng"
                                             type="button"
                                         >
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
                                             <span id="likes">{{$likes}}</span>
                                         </button>
                                     @endif
-                                    @if ($check_watch_later > 0)
-                                        <button id="watch__later__button" class="active"
-                                            title="Xóa khỏi danh sách xem sau"
-                                            type="button"
-                                        >
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
-                                            <span id="watch__later__text"> Đã thêm xem sau</span>
-                                        </button>
+                                    @if (auth()->check())
+                                        @if ($check_watch_later > 0)
+                                            <button id="watch__later__button" class="active"
+                                                title="Xóa khỏi danh sách xem sau"
+                                                type="button"
+                                            >
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
+                                                <span id="watch__later__text"> Đã thêm xem sau</span>
+                                            </button>
+                                        @else
+                                            <button id="watch__later__button"
+                                                title="Thêm vào danh sách xem sau"
+                                                type="button"
+                                            >
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
+                                                <span id="watch__later__text"> Xem sau</span>
+                                            </button>
+                                        @endif
                                     @else
-                                        <button id="watch__later__button"
-                                            title="Thêm vào danh sách xem sau"
+                                        <button class="isLogin__false"
+                                            title="Vui lòng đăng nhập để sử dụng"
                                             type="button"
                                         >
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
@@ -171,7 +195,7 @@
                                             aria-selected="true"
                                         >
                                             <h4>Bình luận</h4>
-                                            <span class="comment__count"></span>
+                                            <span class="comment__count">{{$comments->count()}}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -195,16 +219,23 @@
                                                                 src="{{$comment->user->image}}"
                                                                 alt=""
                                                             />
-                                                            <span class="comments__name"
-                                                                >{{$comment->user->name}}</span
-                                                            >
+                                                            <span class="comments__name">
+                                                                {{$comment->user->name}}
+                                                                @if ($comment->user->premium)
+                                                                    <svg class="svg__premium" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffe600">
+                                                                        <path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
+                                                                    </svg>
+                                                                @endif
+                                                            </span>
                                                             <span class="comments__time"
                                                                 >{{$comment->created_at}}</span
                                                             >
                                                         </div>
-                                                        <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="{{$comment->id}}" type_remove="comment">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                                                        </a>
+                                                        @if (auth()->check() && auth()->id() == $comment->user->id)
+                                                            <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="{{$comment->id}}" type_remove="comment">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                                            </a>
+                                                        @endif
                                                     </div>
                                                     <p class="comments__text">
                                                         {{$comment->content}}
@@ -254,19 +285,26 @@
                                                                         src="{{asset($reply_comment->user->image)}}"
                                                                         alt=""
                                                                     />
-                                                                    <span class="comments__name"
-                                                                        >{{$reply_comment->user->name}}</span
-                                                                    >
+                                                                    <span class="comments__name">
+                                                                        {{$reply_comment->user->name}}
+                                                                        @if ($reply_comment->user->premium)
+                                                                            <svg class="svg__premium" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffe600">
+                                                                                <path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
+                                                                            </svg>
+                                                                        @endif
+                                                                    </span>
                                                                     <span class="comments__time"
                                                                         >{{$reply_comment->created_at}}</span
                                                                     >
                                                                 </div>
-                                                                <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn"  id_remove="{{$reply_comment->id}}" type_remove="reply_comment">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                                                                </a>
+                                                                @if (auth()->check() && auth()->id() == $reply_comment->user->id)
+                                                                    <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn"  id_remove="{{$reply_comment->id}}" type_remove="reply_comment">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                                                    </a>
+                                                                @endif
                                                             </div>
                                                             <p class="comments__text">
-                                                                <span>{{ "@" . $reply_comment->user_reply->name }}</span>
+                                                                <span @class(['comments__text--premium' => $reply_comment->user_reply->premium]) >{{ "@" . $reply_comment->user_reply->name }}</span>
                                                                 {{$reply_comment->content}}
                                                             </p>
                                                             <div class="comments__actions">
@@ -381,29 +419,35 @@
                                                 ></textarea>
                                                 <span style="color: #df4a32; display:none" id="comment__error"></span>
                                             </div>
-                                            <div class="sign__group" style="gap: 20px">
-                                                <button
-                                                    type="button"
-                                                    class="sign__btn comment__submit__btn"
-                                                    id_movie="{{$movie->id}}"
-                                                >
-                                                    Gửi
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    class="sign__btn reply__comment__submit__btn"
-                                                    id_movie="{{$movie->id}}"
-                                                    style="display:none"
-                                                >
-                                                    Trả lời
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    class="sign__reply__btn user__reply__btn">
-                                                    <span class="user__reply">User</span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>  
-                                                </button>
-                                            </div>
+                                            @if (auth()->check())
+                                                <div class="sign__group" style="gap: 20px">
+                                                    <button
+                                                        type="button"
+                                                        class="sign__btn comment__submit__btn"
+                                                        id_movie="{{$movie->id}}"
+                                                    >
+                                                        Gửi
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        class="sign__btn reply__comment__submit__btn"
+                                                        id_movie="{{$movie->id}}"
+                                                        style="display:none"
+                                                    >
+                                                        Trả lời
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        class="sign__reply__btn user__reply__btn">
+                                                        <span class="user__reply">User</span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>  
+                                                    </button>
+                                                </div>
+                                            @else
+                                                <div class="sign__group">
+                                                    <a class="sign__btn" href="{{route('signin')}}">Đăng nhập</a>
+                                                </div>
+                                            @endif
                                         </form>
                                     </div>
                                     <!-- end comments -->

@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Histories;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Likes;
 use App\Models\Movies;
+use App\Models\Payments;
+use App\Models\Histories;
+use Illuminate\Support\Str;
+use App\Mail\UserRegistered;
+use App\Models\Subscription;
 use App\Models\Watch_laters;
 use Illuminate\Http\Request;
+use App\Http\Requests\Validate;
+use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
-use App\Mail\ResetPasswordMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -23,45 +28,76 @@ class UserController extends Controller
     public function get(){
         $watch_laters = Watch_laters::whereHas('movie', function($query) {
                 $query->where('isDeleted', 0)->where('status', 1);
-            })->where("id_user", 1)->orderBy("id","desc")->get();
+            })->where("id_user", auth()->user()->id)->orderBy("id","desc")->get();
+        $likes = Likes::whereHas('movie', function($query) {
+                $query->where('isDeleted', 0)->where('status', 1);
+            })->where("id_user", auth()->user()->id)->orderBy("id","desc")->get();
         $histories = Histories::whereHas('movie', function($query) {
                 $query->where('isDeleted', 0)->where('status', 1);
-            })->where("id_user", 1)->orderBy("created_at","desc")->get();
-        $user = User::find(1);
+            })->where("id_user", auth()->user()->id)->orderBy("created_at","desc")->get();
+        $payments = Payments::with("subscription")->where("id_user", auth()->user()->id)->get();
+        // dd($payments);
+        $user = User::find(auth()->user()->id);
         return view('users.profile',[
+            'likes'=>$likes,
             'watch_laters'=>$watch_laters,
             'histories'=>$histories,
+            'payments'=>$payments,
             'user'=>$user
         ]);
     }
-//     public function get(Request $request){
-//     $watch_laters = Watch_laters::with('get_movies')->where('id_user', 1)->get();
-//     $user = User::findOrFail(4);
-//     if ($request->isMethod('post')) {
-//         $request->validate([
-//             'name' => 'required|string|max:255',
-//             'email' => 'required|email|max:255',
-//             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-//         ]);
-//         $userUpdate = [
-//             'name' => $request->input('name'),
-//             'email' => $request->input('email'),
-//         ];
-//         if ($request->hasFile('image')) {
-//             if ($user->image) {
-//                 Storage::delete($user->image);
-//             }
-//             $imagePath = $request->file('image')->store('images', 'public');
-//             $userUpdate['image'] = $imagePath;
-//         }
-//         $user->update($userUpdate);
-//         return redirect()->back()->with('success', 'Cập nhật thông tin thành công!');
-//     }
-//     return view('users.profile', [
-//         'watch_laters' => $watch_laters,
-//         'user' => $user,
-//     ]);
-// }
+    public function sign__in(Validate $request){
+        $validated = $request->validated();
+
+        $email = $validated['email'];
+        $password = $validated['password'];
+
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            return redirect()->back()
+                ->with('error', 'Email không tồn tại!')
+                ->withInput();
+        }
+
+        if (!password_verify($password, $user->password)) {
+            return redirect()->back()
+                ->with('error', 'Mật khẩu không chính xác!')
+                ->withInput();
+        }
+
+        if (!$user->email_verified_at) {
+            return redirect()->back()
+                ->with('error', 'Vui lòng xác nhận email của bạn!')
+                ->withInput();
+        }
+
+        if (auth()->attempt($validated)) {
+            if (request('remember')) {
+                auth()->login(auth()->user(), true);
+                Cookie::queue(Cookie::make('remember_web', 'token_value', 7 * 24 * 60));
+            }
+
+            request()->session()->regenerate();
+
+            return redirect()->route('index')->with('success', 'Đăng nhập thành công!');
+        }
+
+        return redirect()->back()
+            ->with('error', 'Đăng nhập thất bại, vui lòng thử lại!')
+            ->withInput();
+    }
+
+
+    public function logout()
+    {
+        auth()->logout();
+
+        request()->session()->regenerateToken();  
+        request()->session()->invalidate();
+        Cookie::queue(Cookie::forget('remember_web'));
+        return redirect()->route('index')->with('success','Đăng xuất thành công!'); 
+    }
 
     public function admin__view(){
         return view('admins.user.list', [
@@ -252,5 +288,17 @@ public function register(Request $request)
         ]);
 
         return redirect()->route('signin')->with('success', 'Mật khẩu đã được đặt lại thành công.');
+    }
+    
+    public function check__login(){
+        if(auth()->check()){
+            return response()->json([
+                "isLogin" => true
+            ]);
+        }else{
+            return response()->json([
+                "isLogin" => false
+            ]);
+        }
     }
 }

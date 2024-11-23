@@ -24,39 +24,20 @@
 
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
-												<label class="sign__label" for="username">Tên</label>
+												<label class="sign__label" for="username">Tên gói</label>
 												<input id="username" type="text" class="sign__input" name="name">
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
-												<label class="sign__label">Gói</label>
-												<div>
-													<select name="duration" id="">
-														<option value="1">1</option>
-														<option value="3">3</option>
-														<option value="6">6</option>
-													</select>
-													<!-- <label for="duration">Chọn gói:</label><br>
-													<input type="radio" id="1" name="duration" value="1">
-													<label for="1">1</label><br>
-													<input type="radio" id="3" name="duration" value="3">
-													<label for="3">3</label><br>
-													<input type="radio" id="khac" name="duration" value="6">
-													<label for="6">6</label><br><br> -->
-												</div>
+												<label class="sign__label" for="price">Số ngày</label>
+												<input id="price" type="number" class="sign__input" name="duration">
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
 												<label class="sign__label" for="price">Giá</label>
 												<input id="price" type="number" class="sign__input" name="price">
-											</div>
-										</div>
-										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
-											<div class="sign__group">
-												<label class="sign__label" for="username">Ngày tạo</label>
-												<input id="username" type="date" class="sign__input" name="created_at">
 											</div>
 										</div>
 										<div class="col-12">

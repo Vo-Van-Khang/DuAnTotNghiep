@@ -64,20 +64,21 @@
 		<!-- người dùng thanh bên -->
 		<div class="sidebar__user">
 			<div class="sidebar__user-img">
-				<img src="img/user.svg" alt="">
+				<img src="{{auth()->user()->image}}" alt="">
 			</div>
 
 			<div class="sidebar__user-title">
-				<span>Quản trị viên</span>
-				<p>John Doe</p>
+				@if (auth()->user()->role == "admin")
+					<span>Quản trị viên</span>
+				@else
+					<span>Nhân viên</span>
+				@endif
+				<p>{{auth()->user()->name}}</p>
 			</div>
 
-			<button class="sidebar__user-btn" type="button">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-					<path
-						d="M4,12a1,1,0,0,0,1,1h7.59l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l4-4a1,1,0,0,0,.21-.33,1,1,0,0,0,0-.76,1,1,0,0,0-.21-.33l-4-4a1,1,0,1,0-1.42,1.42L12.59,11H5A1,1,0,0,0,4,12ZM17,2H7A3,3,0,0,0,4,5V8A1,1,0,0,0,6,8V5A1,1,0,0,1,7,4H17a1,1,0,0,1,1,1V19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V16a1,1,0,0,0-2,0v3a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V5A3,3,0,0,0,17,2Z" />
-				</svg>
-			</button>
+			<a class="sidebar__user-btn" href="{{route("index")}}">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4,12a1,1,0,0,0,1,1h7.59l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l4-4a1,1,0,0,0,.21-.33,1,1,0,0,0,0-.76,1,1,0,0,0-.21-.33l-4-4a1,1,0,1,0-1.42,1.42L12.59,11H5A1,1,0,0,0,4,12ZM17,2H7A3,3,0,0,0,4,5V8A1,1,0,0,0,6,8V5A1,1,0,0,1,7,4H17a1,1,0,0,1,1,1V19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V16a1,1,0,0,0-2,0v3a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V5A3,3,0,0,0,17,2Z"/></svg>
+			</a>
 		</div>
 
 		<!-- kết thúc người dùng thanh bên -->
@@ -191,8 +192,8 @@
 							d="M560-440q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM280-320q-33 0-56.5-23.5T200-400v-320q0-33 23.5-56.5T280-800h560q33 0 56.5 23.5T920-720v320q0 33-23.5 56.5T840-320H280Zm80-80h400q0-33 23.5-56.5T840-480v-160q-33 0-56.5-23.5T760-720H360q0 33-23.5 56.5T280-640v160q33 0 56.5 23.5T360-400Zm440 240H120q-33 0-56.5-23.5T40-240v-440h80v440h680v80ZM280-400v-320 320Z" />
 					</svg><span>Thanh toán</span></a>
 				<ul @class(['collapse sidebar__menu', 'show' => $selected == "pay"]) id="collapseMenuPay">
-					<li><a href="/admin/slides/list">Danh sách</a></li>
-					<li><a href="/admin/slides/add">Thêm</a></li>
+					<li><a href="{{route('admin.payment.list')}}">Danh sách</a></li>
+					<li><a href="{{route('admin.payment.add')}}">Thêm</a></li>
 				</ul>
 			</li>
 
@@ -222,7 +223,9 @@
 		@yield('content')
 	</main>
 	<!-- kết thúc nội dung chính -->
-	@include('layouts.shared.message')
+	<div class="message__container">
+		@include('layouts.shared.message')
+	</div>
 	@include('layouts.shared.loader')
 	<!-- JS -->
 	<script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>

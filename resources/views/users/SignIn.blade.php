@@ -41,7 +41,8 @@
                     <div class="col-12">
                         <div class="sign__content">
                             <!-- authorization form -->
-                            <form action="#" class="sign__form">
+                            <form action="{{route('signin')}}" method="POST" class="sign__form">
+                                @csrf
                                 <a href="{{route("index")}}" class="sign__logo">
                                     <img src="{{asset("images/storage/logo.png")}}" alt="" />
                                 </a>
@@ -51,7 +52,12 @@
                                         type="text"
                                         class="sign__input"
                                         placeholder="Email"
+                                        name="email"
+                                        value="{{old('email')}}"
                                     />
+                                    @error('email')
+                                        <span class="input__error" style="color: #df4a32">{{$message}}</span>
+                                    @enderror
                                 </div>
 
                                 <div class="sign__group">
@@ -59,7 +65,12 @@
                                         type="password"
                                         class="sign__input"
                                         placeholder="Mật khẩu"
+                                        name="password"
+                                        value="{{old('password')}}"
                                     />
+                                    @error('password')
+                                        <span class="input__error" style="color: #df4a32">{{$message}}</span>
+                                    @enderror
                                 </div>
 
                                 <div class="sign__group sign__group--checkbox">
@@ -72,7 +83,7 @@
                                     <label for="remember">Nhớ tôi cho lần đăng nhập sau?</label>
                                 </div>
 
-                                <button class="sign__btn" type="button">
+                                <button class="sign__btn">
                                     Đăng nhập
                                 </button>
 
@@ -95,7 +106,9 @@
         </div>
         <!-- end sign in -->
         @include('layouts.shared.loader')
-        @include('layouts.shared.message')
+        <div class="message__container">
+            @include('layouts.shared.message')
+        </div>
         <!-- JS -->
         <script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
         <script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>

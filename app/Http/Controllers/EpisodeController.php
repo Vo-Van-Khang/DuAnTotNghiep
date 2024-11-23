@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movies;
+use App\Models\Comments;
 use Illuminate\Http\Request;
 use App\Http\Requests\Validate;
 use Illuminate\Support\Facades\DB;
@@ -12,14 +13,28 @@ use Illuminate\Support\Facades\Storage;
 class EpisodeController extends Controller
 {
     public function get_by_movie($id_movie,$id_episode){
-        // $movie = DB::table("movies")->select("*")->where("id", $id_movie)->first();
-        
+        $movie = Movies::with('category')->find($id_movie);
+
+        $servers = DB::table('urls')
+        ->select('source')
+        ->where("type", 'episode')
+        ->where('media_id', $id_episode)
+        ->distinct()
+        ->get();
+
+        $server_selected = "server 1";
+        if(request("server")){
+            $server_selected = request("server");
+        }
+
         $urls = DB::table("urls")
         ->select("*")
         ->where("media_id", $id_episode)
         ->where("type", 'episode')
+        ->where("source",$server_selected)
+        ->orderBy("resolution","asc")
         ->get();
-
+        
         $episodes = DB::table("episodes")->select("*")->where("id_movie", $id_movie)->orderBy("episode","asc")->get();
         
         $episode_focus = DB::table("episodes")->select("*")->where("id", $id_episode)->first();
@@ -28,23 +43,20 @@ class EpisodeController extends Controller
         ->select("id_category")
         ->where("id",$id_movie)
         ->first();
-        // dd($category);
+
         $similars = DB::table("movies")
         ->select("*")
         ->where("id_category", $id_category->id_category)
         ->get();
 
-        $movie = Movies::with('category')->find($id_movie);
-
-
         if(true){
-            $check_watch_later = DB::table("watch_laters")->where("id_movie",$movie->id)->where("id_user",1)->count();
+            $check_watch_later = DB::table("watch_laters")->where("id_movie",$movie->id)->where("id_user",auth()->user()->id)->count();
         }else{
             $check_watch_later = 0;
         } 
 
         if(true){
-            $check_like = DB::table("likes")->where("id_movie",$movie->id)->where("id_user",1)->count();
+            $check_like = DB::table("likes")->where("id_movie",$movie->id)->where("id_user",auth()->user()->id)->count();
         }else{
             $check_like = 0;
         } 
@@ -58,14 +70,19 @@ class EpisodeController extends Controller
         $categories = DB::table("categories")
         ->get();
 
+        $comments = Comments::with("user")->with("reply_comments")->where("id_movie",$id_movie)->orderBy("created_at","desc")->get();
+        
         return view("clients.movie",[
             "movie"=>$movie,
+            "servers"=>$servers,
+            "server_selected"=>$server_selected,
             "urls"=>$urls,
             "likes"=>$likes,
             "episodes"=>$episodes,
             "similars" => $similars,
             "categories" => $categories,
             "episode_focus" => $episode_focus,
+            "comments" => $comments,
             "check_like" => $check_like,
             "check_watch_later" => $check_watch_later
         ]);
@@ -78,8 +95,10 @@ class EpisodeController extends Controller
             "selected" => "movie"
         ]);
     }
-    public function admin__update__form($id_movie,$id){
-        $episode = DB::table("episodes")->where("id",$id)->first();
+    public function admin__update__form($id){
+        $episodeQuery = DB::table("episodes")->where("id",$id);
+        $id_movie = $episodeQuery->value("id_movie");
+        $episode = $episodeQuery->first();
         $urls = DB::table("urls")->where("type","episode")->where("media_id",$id)->get();
         return view('admins.movie.episode.update', [
             "episode" => $episode,
@@ -89,31 +108,64 @@ class EpisodeController extends Controller
         ]);
     }
     public function admin__create(Validate $request , $movie){
-        $request -> validated();
+        $urls = request()->input('urls',[]); 
+        $resolutions = request()->input('resolutions',[]); 
+        $premiums = request()->input('premiums',[]);
+        $servers = request()->input('servers',[]);
+
+        $check = false;
+        $serverResolutionMap = []; // Mảng để lưu các resolution đã gặp cho mỗi server
+        
+        foreach ($servers as $index => $server) {
+            $resolution = $resolutions[$index] ?? null;
+            
+            if ($resolution) {
+                // Nếu server này chưa có trong mảng, khởi tạo mảng cho server
+                if (!isset($serverResolutionMap[$server])) {
+                    $serverResolutionMap[$server] = [];
+                }
+        
+                // Kiểm tra nếu resolution đã tồn tại trong server này
+                if (in_array($resolution, $serverResolutionMap[$server])) {
+                    $check = true;
+                    break; // Dừng lặp nếu tìm thấy trùng
+                }
+        
+                // Thêm resolution vào mảng của server này
+                $serverResolutionMap[$server][] = $resolution;
+            }
+        }
+        if($check){
+            return response()->json([
+                'success' => false,
+                'status' => 'error',
+                'message' => 'Đã có lỗi trùng độ phân giải trong cùng một server!'
+            ]);
+        }
+
         $episodeId = DB::table('episodes')->insertGetId([
             'episode' => $request->input('episode'),
             'id_movie' => $movie
         ]);
 
-        if ($request->hasFile('url')) {
-            foreach ($request->file('url') as $index => $file) {
-                if ($file) {
-                    $videoPath = $file->store('videos', 's3');
-                    Storage::disk('s3')->setVisibility($videoPath, 'public');
-                    $videoUrl = Storage::disk('s3')->url($videoPath);
-                    
-                    DB::table('urls')->insert([
-                        'url' => $videoUrl,
-                        'resolution' => $request->input("resolution.$index"), 
-                        'type' => 'episode', 
-                        'premium' => $request->input("premium.$index"), 
-                        'media_id' => $episodeId  
-                    ]);
-                }
+        foreach ($urls as $index => $url) {
+            if ($url) {
+               DB::table('urls')->insert([
+                    'url' => $url,
+                    'resolution' => $resolutions[$index],
+                    'type' => 'episode',
+                    'premium' => $premiums[$index] ?? null,
+                    'media_id' => $episodeId,
+                    'source' => $servers[$index] 
+                ]);
             }
         }
     
-        return redirect()->back()->with('success', 'Tập phim đã được thêm thành công!');
+        return response()->json([
+            'success' => true,
+            'status' => 'success',
+            'message' => 'Thêm tập phim thành công!'
+        ]);
     }
 
     public function admin__delete($id){
@@ -128,77 +180,86 @@ class EpisodeController extends Controller
         ]);
     }
 
-    public function admin__update(Validate $request, $id_movie,$id) {
-        $request->validated();
-
-        // Lấy thông tin bộ phim hiện tại
-        $episodeData = DB::table("episodes")->where('id', $id)->first();
-
-        // Cập nhật thông tin phim
-        DB::table("episodes")->where('id', $id)->update([
-            "episode" => $request->input('episode')
+    public function admin__update(Request $request, $id) {
+        $urls = $request->input('urls', []);
+        $url_ids = $request->input('url_ids', []);  
+        $premiums = $request->input('premiums', []);
+        $resolutions = $request->input('resolutions', []);
+        $servers = $request->input('servers', []);
+        
+        $check = false;
+        $serverResolutionMap = []; // Mảng để lưu các resolution đã gặp cho mỗi server
+    
+        foreach ($servers as $index => $server) {
+            $resolution = $resolutions[$index] ?? null;
+        
+            if ($resolution) {
+                // Nếu server này chưa có trong mảng, khởi tạo mảng cho server
+                if (!isset($serverResolutionMap[$server])) {
+                    $serverResolutionMap[$server] = [];
+                }
+        
+                // Kiểm tra nếu resolution đã tồn tại trong server này
+                if (in_array($resolution, $serverResolutionMap[$server])) {
+                    $check = true;
+                    break; // Dừng lặp nếu tìm thấy trùng
+                }
+        
+                // Thêm resolution vào mảng của server này
+                $serverResolutionMap[$server][] = $resolution;
+            }
+        }
+        if($check){
+            return response()->json([
+                'success' => false,
+                'status' => 'error',
+                'message' => 'Đã có lỗi trùng độ phân giải trong cùng một server!'
+            ]);
+        }
+        
+        $episode = DB::table('episodes')->where('id', $id)->first();
+    
+        if (!$episode) {
+            return response()->json(['success' => false, 'message' => 'Tập phim không tồn tại!'], 404);
+        }
+    
+        DB::table('episodes')->where('id', $id)->update([
+            'episode' => $request->input('episode')
         ]);
+    
+        // Duyệt qua từng url
+        foreach ($urls as $index => $url) {
+            // Nếu có id của url, thực hiện update, nếu không thì chèn mới
+            $upsertData = [
+                'url' => $url,
+                'resolution' => $resolutions[$index] ?? null,
+                'premium' => $premiums[$index] ?? 0,
+                'source' => $servers[$index] ?? 'server 1',
+                'type' => 'episode',
+                'media_id' => $id,
+            ];
 
-        $currentUrls = DB::table('urls')->where("type", "episode")->where('media_id', $id)->get();
-        $totalUrls = $request->file('url') ? count($request->file('url')) + $currentUrls->count() : 0;
-
-        // Cập nhật hoặc xóa URL hiện tại
-        foreach ($currentUrls as $index => $url) {
-            if (isset($request->url[$index])) {
-                $resolution = $request->resolution[$index];
-                $premium = $request->premium[$index];
-                $newUrl = $request->url[$index];
-
-                if ($request->hasFile("url.$index")) {
-                    $videoPath = $request->file("url.$index")->store('videos', 's3');
-                    Storage::disk('s3')->setVisibility($videoPath, 'public');
-                    $videoUrl = Storage::disk('s3')->url($videoPath);
-
-                    if ($url->url !== $videoUrl) {
-                        $oldVideoPath = parse_url($url->url, PHP_URL_PATH);
-                        if (Storage::disk('s3')->exists($oldVideoPath)) {
-                            Storage::disk('s3')->delete($oldVideoPath);
-                        }
+            if (isset($url_ids[$index]) && $url_ids[$index]) {
+                // Nếu có `url_id`, cập nhật bản ghi
+                $oldVideo = DB::table('urls')->where('id', $url_ids[$index]);
+                if($oldVideo->value("url") !== $url){
+                    $oldVideoPath = parse_url($oldVideo->value("url"), PHP_URL_PATH);
+                    if (Storage::disk('s3')->exists($oldVideoPath)) {
+                        Storage::disk('s3')->delete($oldVideoPath);
                     }
-
-                    $newUrl = $videoUrl;
                 }
-
-                DB::table('urls')->where('id', $url->id)->update([
-                    'url' => $newUrl,
-                    'resolution' => $resolution,
-                    'premium' => $premium,
-                ]);
+                $oldVideo->update($upsertData);
             } else {
-                $resolution = $request->resolution[$index];
-                $premium = $request->premium[$index];
-                DB::table('urls')->where('id', $url->id)->update([
-                    'resolution' => $resolution,
-                    'premium' => $premium,
-                ]);
+                // Nếu không có `url_id`, chèn mới
+                DB::table('urls')->insert($upsertData);
             }
         }
-
-        // Thêm URL mới nếu có thêm file
-        if ($totalUrls > $currentUrls->count()) {
-            for ($index = $currentUrls->count(); $index < $totalUrls; $index++) {
-                if ($request->hasFile("url.$index")) {
-                    $videoPath = $request->file("url.$index")->store('videos', 's3');
-                    Storage::disk('s3')->setVisibility($videoPath, 'public');
-                    $videoUrl = Storage::disk('s3')->url($videoPath);
-
-                    DB::table('urls')->insert([
-                        'url' => $videoUrl,
-                        'resolution' => $request->input("resolution.$index"),
-                        'premium' => $request->input("premium.$index"),
-                        'type' => 'episode',
-                        'media_id' => $id,
-                    ]);
-                }
-            }
-        }
-
-        return redirect()->back()->with('success', 'Tập phim đã được cập nhật thành công!');
+    
+        return response()->json([
+            'success' => true,
+            'status' => 'success',
+            'message' => 'Cập nhật tập phim thành công!'
+        ]);
     }
  
     public function admin__remove__url($id){

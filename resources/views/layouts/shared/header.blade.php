@@ -64,13 +64,6 @@
                         </li>
 
                         <li class="header__nav-item">
-                            <a
-                                class="header__nav-link"
-                                href="{{route("about")}}"
-                                >Về chúng tôi</a>
-                        </li>
-
-                        <li class="header__nav-item">
                             <a class="header__nav-link header__nav-link--premium" href="{{route("subscription")}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/></svg>
                                 Mua gói</a>
@@ -110,22 +103,17 @@
                                 aria-labelledby="dropdownMenu3"
                             >
                                 <li>
-                                    <a href="{{route("profile")}}">Hồ sơ</a>
-                                </li>
-                                <li>
                                     <a href="{{route("contact")}}">Liên hệ</a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="/admin/category/list"
-                                        target="_blank"
-                                        >Trang Quản Trị</a
-                                    >
                                 </li>
                                 <li>
                                     <a href="{{route("privacy")}}"
                                         >Chính sách bảo mật</a
                                     >
+                                </li>
+                                <li>
+                                    <a
+                                        href="{{route("about")}}"
+                                        >Về chúng tôi</a>
                                 </li>
                             </ul>
                         </li>
@@ -135,7 +123,7 @@
                         <form action="{{route('search')}}" class="header__form">
                             <input
                                 class="header__form-input"
-                                type="text"
+                                type="search"
                                 placeholder="Nội dung tìm kiếm... "
                                 name="search"
                             />
@@ -182,7 +170,7 @@
                                 />
                             </svg>
                         </button>
-
+                        @guest
                         <a href="{{route("signin")}}" class="header__user">
                             <span>Đăng nhập</span>
                             <svg
@@ -194,6 +182,14 @@
                                 />
                             </svg>
                         </a>
+                            @endguest
+            
+                        @auth
+                            <a href="{{route("profile")}}" class="header__user">
+                                <span style="white-space: nowrap">{{auth()->user()->name}}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M400-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM80-160v-112q0-33 17-62t47-44q51-26 115-44t141-18h14q6 0 12 2-8 18-13.5 37.5T404-360h-4q-71 0-127.5 18T180-306q-9 5-14.5 14t-5.5 20v32h252q6 21 16 41.5t22 38.5H80Zm560 40-12-60q-12-5-22.5-10.5T584-204l-58 18-40-68 46-40q-2-14-2-26t2-26l-46-40 40-68 58 18q11-8 21.5-13.5T628-460l12-60h80l12 60q12 5 22.5 11t21.5 15l58-20 40 70-46 40q2 12 2 25t-2 25l46 40-40 68-58-18q-11 8-21.5 13.5T732-180l-12 60h-80Zm40-120q33 0 56.5-23.5T760-320q0-33-23.5-56.5T680-400q-33 0-56.5 23.5T600-320q0 33 23.5 56.5T680-240ZM400-560q33 0 56.5-23.5T480-640q0-33-23.5-56.5T400-720q-33 0-56.5 23.5T320-640q0 33 23.5 56.5T400-560Zm0-80Zm12 400Z"/></svg>
+                            </a>
+                        @endauth
                     </div>
                 </div>
             </div>

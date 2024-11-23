@@ -379,7 +379,6 @@ $(document).ready(function() {
         return false;
     }
     $(window).on('load', initializePlayer());
-
     /*==============================
     Modal
     ==============================*/
@@ -467,8 +466,8 @@ $(document).ready(function() {
         });
     }
 
-
 });
+
 
 window.addEventListener('load',()=>{
     document.querySelector('#loader').style.display = "none";
@@ -479,20 +478,73 @@ if(document.querySelector(".page-404__btn")){
         window.history.back();
     })
 }
+
 if(document.querySelector('form') != null){
 	document.querySelector('form').addEventListener('submit', function(event) {
         document.querySelector('#loader').style.display = 'flex';
 	});
 }
 
-if(document.querySelector('.message_box') !== null){
-    const hide_message = document.querySelector('.hide_message');
-    const message_box = document.querySelector('.message_box');
-    hide_message.addEventListener('click',() => {
-        message_box.style.display = "none";
+function messageBySession() {
+	if(sessionStorage.getItem("message")){
+		let storedMessage = JSON.parse(sessionStorage.getItem("message"));
+		let msg = storedMessage[0];
+		let status = storedMessage[1];
+		
+		let template = `
+			<div class="message_box ${status}">
+			${msg}
+			<svg class="hide_message" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+			</div>
+		`
+		document.querySelector('.message__container').insertAdjacentHTML('beforeend', template)
+	}
+	
+	if(document.querySelector('.message_box')){
+		const hide_message = document.querySelectorAll('.hide_message');
+		const message_box = document.querySelectorAll('.message_box');
+		hide_message.forEach((e,index)=>{
+			e.addEventListener("click",()=>{
+				message_box[index].remove();
+				if(sessionStorage.getItem("message")) sessionStorage.removeItem("message")
+			})
+		})
+		message_box.forEach((e)=>{
+			e.addEventListener("animationend",()=>{
+				e.remove();
+				if(sessionStorage.getItem("message")) sessionStorage.removeItem("message")
+			})
+		})
+	}
+}
+messageBySession();
+
+function add__notification(message, status) {
+    sessionStorage.setItem('message', JSON.stringify([message, status]));
+    messageBySession();
+}
+if(document.querySelector('.isLogin__false')){
+    document.querySelectorAll('.isLogin__false').forEach((e)=>{
+        e.addEventListener('click',()=>{
+            add__notification("Vui lòng đăng nhập để sử dụng tính năng này!", "error")
+        })
     })
-    message_box.addEventListener("animationend",()=>{
-        message_box.style.display = "none";
+}
+if(document.querySelector('.change__server__btn')){
+    let change__server__btn = document.querySelectorAll('.change__server__btn');
+    change__server__btn.forEach((e)=>{
+        e.addEventListener('click',()=>{
+            let server = e.getAttribute("server");
+            let currentUrl = new URL(window.location.href);
+
+            if (server !== 'server 1') {
+                currentUrl.searchParams.set('server', server);
+                window.location.href = currentUrl.toString();
+            } else {
+                currentUrl.searchParams.delete('server');
+                window.location.href = currentUrl.toString();
+            }
+        })
     })
 }
 
@@ -532,7 +584,6 @@ if(document.querySelector('.watch__later__button') != null){
         });
     })
 }
-
 
 if (document.querySelector('#copy__url')) {
     const copy__url__button = document.querySelector('#copy__url');
@@ -625,7 +676,6 @@ if(document.querySelector('#watch__later__button') != null){
     });
 }
 
-
 if (document.querySelector('.remove__btn')) {
     let id_remove = null;
     let type_remove = null;
@@ -680,6 +730,28 @@ if (document.querySelector('.remove__btn')) {
     document.querySelector('#modal__remove__btn').addEventListener('click', remove);
 }
 
+if(document.querySelector('.views__movie')){
+    let count = document.querySelector('.views__movie');
+    let id_movie = document.querySelector('#information__movie').getAttribute("id_movie");
+    setTimeout(()=>{
+        fetch(`/movie/update-view/${id_movie}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                count.innerText = Number(count.textContent) + 1;
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }, 10000)
+}
 
 if (document.querySelector(".comment__submit__btn")) {
     let comment__submit__btn = document.querySelector(".comment__submit__btn");
@@ -940,6 +1012,7 @@ function comment__count() {
 
 function movie__ajax(id) {
     const comments__list = document.querySelector(".comments__list");
+    const views = document.querySelector('.views__movie');
     fetch(`/movie/ajax/${id}`,{
         method: 'GET',
         headers: {
@@ -951,22 +1024,33 @@ function movie__ajax(id) {
     .then(data => {
         if (data.success) {
             document.querySelector('#likes').innerText = data.likes;
+            views.innerText = data.views;
             comments__list.innerHTML = "";
 
             data.comments.forEach(comment => {
+                const isOwner = data.user_id === comment.user.id; 
                 const commentItem = `
                     <li class="comments__item item__remove" id_remove="${comment.id}" type_remove="comment">
                         <div class="comments__autor">
                             <div>
                                 <img class="comments__avatar" src="${comment.user.image}" alt="" />
-                                <span class="comments__name">${comment.user.name}</span>
+                                <span class="comments__name">
+                                    ${comment.user.name}
+                                    ${comment.user.premium ? `
+                                        <svg class="svg__premium" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffe600">
+                                            <path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
+                                        </svg>
+                                    `  : ""}
+                                </span>
                                 <span class="comments__time">${comment.created_at}</span>
                             </div>
-                            <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="${comment.id}" type_remove="comment">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-                                </svg>
-                            </a>
+                            ${data.user_login && isOwner ? `
+                                <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="${comment.id}" type_remove="comment">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                    </svg>
+                                </a>
+                            `:""}
                         </div>
                         <p class="comments__text">${comment.content}</p>
                         <div class="comments__actions">
@@ -986,19 +1070,60 @@ function movie__ajax(id) {
                                     <li class="comments__item comments__item--answer item__remove" id_remove="${reply.id}" type_remove="reply_comment">
                                         <div class="comments__autor">
                                             <div>
-                                            <span class="comments__name">${reply.content}</span>
+                                                <span class="comments__name">
+                                                    ${reply.user.name}
+                                                    ${reply.user.premium ? `
+                                                        <svg class="svg__premium" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffe600">
+                                                            <path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
+                                                        </svg>
+                                                    `  : ""}
+                                                </span>
                                                 <img class="comments__avatar" src="${reply.user.image}" alt="" />
                                                 <span class="comments__time">${reply.created_at}</span>
                                             </div>
-                                            <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="${reply.id}" type_remove="reply_comment">
-                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                                                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-                                                </svg>
-                                            </a>
+                                            ${data.user_login && data.user_id === reply.user.id ? `
+                                                <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="${reply.id}" type_remove="reply_comment">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                                    </svg>
+                                                </a>
+                                            ` : ""}
                                         </div>
                                         <p class="comments__text">
-                                            <span>@${reply.user_reply.name}</span> ${reply.content}
+                                            <span ${reply.user_reply.premium ? `class="comments__text--premium"`:""}>
+                                                @${reply.user_reply.name}
+                                            </span> 
+                                            ${reply.content}
                                         </p>
+                                        <div class="comments__actions">
+                                            <button type="button" class="reply__comment__btn" name_user="${reply.user.name}" id_user="${reply.user.id}" id_comment="${comment.id}">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="512"
+                                                    height="512"
+                                                    viewBox="0 0 512 512"
+                                                >
+                                                    <polyline
+                                                        points="400 160 464 224 400 288"
+                                                        style="
+                                                            fill: none;
+                                                            stroke-linecap: round;
+                                                            stroke-linejoin: round;
+                                                            stroke-width: 32px;
+                                                        "
+                                                    />
+                                                    <path
+                                                        d="M448,224H154C95.24,224,48,273.33,48,332v20"
+                                                        style="
+                                                            fill: none;
+                                                            stroke-linecap: round;
+                                                            stroke-linejoin: round;
+                                                            stroke-width: 32px;
+                                                        "
+                                                    /></svg
+                                                ><span>Trả Lời</span>
+                                            </button>
+                                        </div>
                                     </li>
                                 `
                             )
@@ -1019,4 +1144,23 @@ if(document.querySelector(".comments__list")){
         let id = document.querySelector(".comments__list").getAttribute('id_movie')
         movie__ajax(id);
     },2000)
+}
+
+if(document.querySelector(".payment__information")){
+    const subscription__item = document.querySelectorAll(".subscription__item");
+    const subscription__item__radio = document.querySelectorAll(".subscription__item--radio");
+    const subscription__duration = document.querySelector(".subscription__duration");
+    const subscription__price = document.querySelector(".subscription__price");
+    const subscription__name = document.querySelector(".subscription__name");
+    const subscription__total = document.querySelector(".subscription__total");
+
+    subscription__item.forEach((e, index)=>{
+        e.addEventListener("click",()=>{
+            subscription__item__radio[index].checked = true;
+            subscription__duration.innerText = subscription__item__radio[index].getAttribute("duration") + " Ngày";
+            subscription__price.innerText = Number(subscription__item__radio[index].getAttribute("price")).toLocaleString('vi-VN') + " VND";
+            subscription__name.innerText = subscription__item__radio[index].getAttribute("subscription__name");
+            subscription__total.innerText = Number(subscription__item__radio[index].getAttribute("price")).toLocaleString('vi-VN') + " VND";
+        })
+    })
 }
