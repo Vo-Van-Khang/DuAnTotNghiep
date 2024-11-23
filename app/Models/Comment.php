@@ -24,13 +24,5 @@ class Comment extends Model
         return $query->where('isDeleted', 0);
     }
     // Thiết lập quan hệ với Movie và User (nếu cần)
-    public function movie()
-    {
-        return $this->belongsTo(Movies::class, 'id_movie');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'id_user');
-    }
+    
 }

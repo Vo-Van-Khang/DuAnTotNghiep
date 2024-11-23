@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\comment\comment;
 
+use App\Models\Comments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -35,96 +36,43 @@ class CommentController extends Controller
 
 
     // Hiển thị danh sách bình luận cho một bộ phim cụ thể
-    public function index($id_movie)
+    public function admin__view()
     {
-        $comments = DB::table('comments')
-            ->where('id_movie', $id_movie)
+        $comments = Comments::with('movie')
+            ->with('user')
             ->where('isDeleted', 0)
             ->get();
 
-        return view('comments.index', compact('comments', 'id_movie'));
-    }
-    public function someFunction()
-    {
-        $id_movie = 1; // Hoặc lấy từ database
-        return view('layouts.layout-admin', compact('id_movie'));
-    }
-    public function show($id_movie)
-    {
-        $comments = Comment::where('movie_id', $id_movie)->get();
-        return view('index', compact('comments', 'id_movie'));
-    }
-    // Hiển thị bình luận cho một bộ phim cụ thể (nếu cần)
-    public function showComments($id_movie)
-    {
-        return view('comments.index', compact('id_movie'));
-    }
-
-    // Chỉnh sửa bình luận
-    public function edit($id)
-    {
-        $comment = DB::table('comments')->where('id', $id)->first();
-
-        if (!$comment) {
-            return redirect()->back()->with('error', 'Bình luận không tồn tại.');
-        }
-
-        return view('comments.edit', compact('comment'));
-    }
-
-    // Cập nhật bình luận
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'content' => 'required|string|max:255',
+        return view('admins.comment.list', [
+            "comments" => $comments,
+            "selected" => "comment"
         ]);
-
-        $comment = DB::table('comments')->where('id', $id)->first();
-
-        if (!$comment) {
-            return redirect()->back()->with('error', 'Bình luận không tồn tại.');
-        }
-
-        $updated = DB::table('comments')
-            ->where('id', $id)
-            ->update([
-                'content' => $request->content,
-                'updated_at' => now(),
+    }
+    public function admin__status__update($id){
+        $show = false;
+        $status = DB::table("comments")->where("id", $id)->value("status");
+        
+        if ($status == 0) {
+            DB::table("comments")->where("id", $id)->update([
+                "status" => 1
             ]);
-
-        if ($updated) {
-            $id_movie = $comment->id_movie; // Lấy id_movie từ bình luận
-            return redirect()->route('comments.index', $id_movie)->with('success', 'Bình luận đã được cập nhật.');
+            $show = true;
+        } else {
+            DB::table("comments")->where("id", $id)->update([
+                "status" => 0
+            ]);
         }
-
-        return redirect()->back()->with('error', 'Cập nhật bình luận thất bại.');
+        return response()->json([
+            "show" => $show,
+            "success" => true
+        ]);
     }
-
-    // Xóa bình luận
-    public function destroy($id)
-    {
-        $comment = DB::table('comments')->where('id', $id)->first();
-
-        if (!$comment) {
-            return redirect()->back()->with('error', 'Bình luận không tồn tại.');
-        }
-
-        $id_movie = $comment->id_movie;
-
-        // Đánh dấu bình luận là đã xóa
-        DB::table('comments')->where('id', $id)->update(['isDeleted' => 1]);
-
-        return redirect()->route('comments.index', $id_movie)->with('success', 'Bình luận đã được xóa.');
-    }
-
-    // Hiển thị bình luận bị đánh dấu
-    public function flaggedComments()
-    {
-        $flaggedComments = DB::table('comments')
-            ->where('status', 1)
-            ->where('isDeleted', 0)
-            ->get();
-
-        return view('comments.flagged', compact('flaggedComments'));
+    public function admin__delete($id){
+        DB::table("comments")->where("id",$id)->update([
+            "isDeleted" => 1
+        ]);
+        return response()->json([
+            "success" => true
+        ]);
     }
 }

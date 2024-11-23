@@ -67,12 +67,13 @@ Route::post('/admin/trash/comment/remove/{id}', [TrashController::class, 'admin_
 Route::post('/admin/trash/notification/remove/{id}', [TrashController::class, 'admin__notification__remove']);
 Route::post('/admin/trash/slide/remove/{id}', [TrashController::class, 'admin__slide__remove']);
 
-Route::get('/admins/comments/index', [CommentController::class, 'index'])->name('comments.index');
-Route::get('/comments/{id}/edit', [CommentController::class, 'edit'])->name('comments.edit');
-Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
-Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
-Route::get('/comments/flagged', [CommentController::class, 'flaggedComments'])->name('comments.flagged');
-
+Route::get('/admin/comment/list', [CommentController::class, 'admin__view'])->name("admin.comment.list");
+Route::get('/admin/comment/add', [CommentController::class, 'admin__add'])->name("admin.comment.add");
+Route::post('/admin/comment/add', [CommentController::class, 'admin__create'])->name("admin.comment.add");
+Route::get('/admin/comment/update/{id}', [CommentController::class, 'admin__update__form'])->name("admin.comment.update");
+Route::post('/admin/comment/update/{id}', [CommentController::class, 'admin__update'])->name("admin.comment.update");
+Route::delete('/admin/comment/delete/{id}', [CommentController::class, 'admin__delete']);
+Route::post('/admin/comment/status/update/{id}', [CommentController::class, 'admin__status__update']);
 
 Route::get('/admin/payment/list', function () {
     return view('admins.payment.list');

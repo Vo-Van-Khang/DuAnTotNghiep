@@ -124,7 +124,7 @@
 			</li>
 
 			<li class="sidebar__nav-item">
-				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "comments"])
+				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "comment"])
 					data-toggle="collapse" href="#collapseMenuComments" role="button" aria-expanded="false"
 					aria-controls="collapseMenu">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -133,10 +133,9 @@
 					</svg>
 					<span>Bình luận</span>
 				</a>
-				<ul @class(['collapse sidebar__menu', 'showComments' => $selected == "comments"])
+				<ul @class(['collapse sidebar__menu', 'showComments' => $selected == "comment"])
 					id="collapseMenuComments">
-					<li><a href="{{route('comments.index')}}">Xem bình luận</a>
-					</li>
+					<li><a href="{{route('admin.comment.list')}}">Danh sách</a></li>
 				</ul>
 
 
