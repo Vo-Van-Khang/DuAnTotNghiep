@@ -144,15 +144,14 @@ Route::get("/all", [MovieController::class, 'allMovie'])->name('allMovie');
 Route::get('/search', [MovieController::class,'search'])->name("search");
 Route::get('/search/ajax/{value}', [AjaxController::class,'search']);
 
-Route::get('/movie/{id}', [MovieController::class,'get_id'])->name("movie");
-Route::get('/movie/{movie}/episode/{episode}', [EpisodeController::class,'get_by_movie'])->name("episode");
+Route::get('/movie/{id}', [MovieController::class, 'get_id'])->name("movie");
+Route::get('/movie/{movie}/episode/{episode}', [EpisodeController::class, 'get_by_movie'])->name("episode");
 
-Route::post('/movie/like/{id}', [LikeController::class,'like']);
-Route::post('/movie/watch_later/{id}', [WatchLaterController::class,'watch_later']);
+Route::post('/movie/like/{id}', [LikeController::class, 'like']);
+Route::post('/movie/watch_later/{id}', [WatchLaterController::class, 'watch_later']);
 
 Route::delete('/watch_later/remove/{id}', [WatchLaterController::class,'remove_by_id']);
 Route::delete('/history/remove/{id}', [HistoryController::class,'remove_by_id']);
-Route::delete('/like/remove/{id}', [LikeController::class,'remove_by_id']);
 
 Route::get('/movie/ajax/{id}', [AjaxController::class,'movie']);
 Route::get('/movie/comments_count/{id}', [AjaxController::class,'comments_count']);
@@ -164,8 +163,8 @@ Route::post('/movie/update-view/{id}', [MovieController::class,'movie__update__v
 Route::get('/movie/filter/ajax', [MovieController::class,'movie__filter']);
 
 
-Route::delete('/comment/remove/{id}', [CommentController::class,'remove_by_id']);
-Route::delete('/reply_comment/remove/{id}', [ReplyCommentController::class,'remove_by_id']);
+Route::delete('/comment/remove/{id}', [CommentController::class, 'remove_by_id']);
+Route::delete('/reply_comment/remove/{id}', [ReplyCommentController::class, 'remove_by_id']);
 
 Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [UserController::class, 'register']);
