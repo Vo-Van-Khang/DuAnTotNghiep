@@ -32,4 +32,7 @@ class Movies extends Model
     public function get_episodes(){
         return $this->hasMany(Episodes::class, 'id_movie'); 
     }
+    public function likes(){
+        return $this->hasMany(Likes::class, 'id_movie'); 
+    }
 }

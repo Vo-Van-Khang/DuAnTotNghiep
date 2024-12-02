@@ -9,7 +9,7 @@ class CommentFilterController extends Controller
 {
     public function listAdmin()
     {
-        $commentFilters = Comment_Filters::all(); 
+        $commentFilters = Comment_Filters::paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));; 
         return view('admins.comment_filter.list', ['commentFilters' => $commentFilters, "selected" => "comment_filter"]);
     }
 

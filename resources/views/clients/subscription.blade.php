@@ -37,10 +37,10 @@
                     <div class="col-12 col-xl-6 w-100" style="max-width:100%">
                             <h3>Chọn gói</h3>
                             <div class="subscriptions__select">
-                                @foreach ($subscriptions as $subscription)
+                                @foreach ($subscriptions as $index => $subscription)
                                     <div class="item subscription__item">
                                         <div class="sign__input--radio">
-                                            <input class="sign__input--radio subscription__item--radio" duration="{{$subscription->duration}}" price="{{$subscription->price}}" subscription__name="{{$subscription->name}}" type="radio" name="subscription" value="{{$subscription->id}}" @checked($subscriptions[0] === $subscription)>
+                                            <input class="sign__input--radio subscription__item--radio" duration="{{$subscription->duration}}" price="{{$subscription->price}}" subscription__name="{{$subscription->name}}" type="radio" name="subscription" value="{{$subscription->id}}" @checked($plan == $index)>
                                         </div>
                                         <div class="information">
                                             <p class="pack">
@@ -80,21 +80,21 @@
                     <div class="col-12 item">
                         <p>
                             Thời hạn gói
-                            <span class="subscription__duration">{{$subscriptions[0]->duration}} Ngày</span>
+                            <span class="subscription__duration">{{$subscriptions[$plan]->duration}} Ngày</span>
                         </p>
                         <p>
                             Giá gói
-                            <span class="subscription__price">{{$subscriptions[0]->price ? number_format($subscriptions[0]->price, 0, ',', '.') : '0'}} VND</span>
+                            <span class="subscription__price">{{$subscriptions[$plan]->price ? number_format($subscriptions[$plan]->price, 0, ',', '.') : '0'}} VND</span>
                         </p>
                         <p>
                             Dịch vụ
-                            <span class="subscription__name">{{$subscriptions[0]->name}}</span>
+                            <span class="subscription__name">{{$subscriptions[$plan]->name}}</span>
                         </p>
                     </div>
                     <div class="pay__total">
                         <div class="price">
                             <p>Tổng thanh toán:</p>
-                            <span class="subscription__total">{{$subscriptions[0]->price ? number_format($subscriptions[0]->price, 0, ',', '.') : '0'}} VND</span>
+                            <span class="subscription__total">{{$subscriptions[$plan]->price ? number_format($subscriptions[$plan]->price, 0, ',', '.') : '0'}} VND</span>
                         </div>
                         <button type="submit" name="redirect">Thanh toán</button>
                         <div class="col-12">

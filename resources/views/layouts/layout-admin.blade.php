@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
 	<link rel="stylesheet" href="{{asset('css/admin.css')}}">
 
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<!-- Favicons -->
 	<link rel="icon" type="image/png" href="{{asset('images/storage/logo.png')}}" sizes="32x32">
 	<link rel="apple-touch-icon" href="{{asset('images/storage/logo.png')}}">
@@ -102,12 +103,25 @@
 				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "user"]) data-toggle="collapse" href="#collapseMenuUser" role="button" aria-expanded="false" aria-controls="collapseMenu"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.3,12.22A4.92,4.92,0,0,0,14,8.5a5,5,0,0,0-10,0,4.92,4.92,0,0,0,1.7,3.72A8,8,0,0,0,1,19.5a1,1,0,0,0,2,0,6,6,0,0,1,12,0,1,1,0,0,0,2,0A8,8,0,0,0,12.3,12.22ZM9,11.5a3,3,0,1,1,3-3A3,3,0,0,1,9,11.5Zm9.74.32A5,5,0,0,0,15,3.5a1,1,0,0,0,0,2,3,3,0,0,1,3,3,3,3,0,0,1-1.5,2.59,1,1,0,0,0-.5.84,1,1,0,0,0,.45.86l.39.26.13.07a7,7,0,0,1,4,6.38,1,1,0,0,0,2,0A9,9,0,0,0,18.74,11.82Z"/></svg><span>Người dùng</span></a>
 				<ul @class(['collapse sidebar__menu', 'show' => $selected == "user"]) id="collapseMenuUser">
 					<li><a href="/admin/user/list">Danh sách</a></li>
-					<li style="display: none"></li>
+					<li><a href="{{route('admin.employee.list')}}">Quản lý nhân viên</a></li>
 				</ul>
 			</li>
 
 			<li class="sidebar__nav-item">
-				<a href="binhluan.html" @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "comment"])><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8,11a1,1,0,1,0,1,1A1,1,0,0,0,8,11Zm4,0a1,1,0,1,0,1,1A1,1,0,0,0,12,11Zm4,0a1,1,0,1,0,1,1A1,1,0,0,0,16,11ZM12,2A10,10,0,0,0,2,12a9.89,9.89,0,0,0,2.26,6.33l-2,2a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,22h9A10,10,0,0,0,12,2Zm0,18H5.41l.93-.93a1,1,0,0,0,.3-.71,1,1,0,0,0-.3-.7A8,8,0,1,1,12,20Z"/></svg> <span>Bình luận</span></a>
+				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "comment"])
+					data-toggle="collapse" href="#collapseMenuComments" role="button" aria-expanded="false"
+					aria-controls="collapseMenu">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+						<path
+							d="M8,11a1,1,0,1,0,1,1A1,1,0,0,0,8,11Zm4,0a1,1,0,1,0,1,1A1,1,0,0,0,12,11Zm4,0a1,1,0,1,0,1,1A1,1,0,0,0,16,11ZM12,2A10,10,0,0,0,2,12a9.89,9.89,0,0,0,2.26,6.33l-2,2a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,22h9A10,10,0,0,0,12,2Zm0,18H5.41l.93-.93a1,1,0,0,0,.3-.71,1,1,0,0,0-.3-.7A8,8,0,1,1,12,20Z" />
+					</svg>
+					<span>Bình luận</span>
+				</a>
+				<ul @class(['collapse sidebar__menu', 'showComments' => $selected == "comment"])
+					id="collapseMenuComments">
+					<li><a href="{{route('admin.comment.list')}}">Danh sách</a></li>
+					<li style="display: none"></li>
+				</ul>
 			</li>
 
 			<li class="sidebar__nav-item">
@@ -121,8 +135,9 @@
 			<li class="sidebar__nav-item">
 				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "statistic"]) data-toggle="collapse" href="#collapseMenuStatistic" role="button" aria-expanded="false" aria-controls="collapseMenu"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M640-160v-280h160v280H640Zm-240 0v-640h160v640H400Zm-240 0v-440h160v440H160Z"/></svg><span>Thống kê</span></a>
 				<ul @class(['collapse sidebar__menu', 'show' => $selected == "statistic"]) id="collapseMenuStatistic">
-					<li><a href="">Đánh giá phim</a></li>
-					<li><a href="">Tài chính</a></li>
+					<li><a href="{{route('admin.statistic.list')}}">Danh sách</a></li>
+					<li style="display: none"></li>
+					
 				</ul>
 			</li>
 
@@ -143,7 +158,11 @@
 			</li>
 
 			<li class="sidebar__nav-item">
-				<a href="thongbao.html" @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "notification"])><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z"/></svg><span>Thông báo</span></a>
+				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "notification"]) data-toggle="collapse" href="#collapseMenuNotification" role="button" aria-expanded="false" aria-controls="collapseMenu"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z"/></svg><span> Thông báo</span></a>
+				<ul @class(['collapse sidebar__menu', 'show' => $selected == "notification"]) id="collapseMenuNotification">
+					<li><a href="{{route('admin.notification.list')}}">Danh sách</a></li>
+					<li><a href="{{route('admin.notification.add')}}">Thêm</a></li>
+				</ul>
 			</li>
 
 			<li class="sidebar__nav-item">

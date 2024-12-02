@@ -49,4 +49,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function notifications(){
+        return $this->hasMany(Notifications::class, 'id_receive_user');
+    }
 }

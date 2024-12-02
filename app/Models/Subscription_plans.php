@@ -17,4 +17,8 @@ class Subscription_plans extends Model
       'price',
       'created_at'
     ];
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class, 'id_plan'); 
+    }
 }

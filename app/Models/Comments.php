@@ -26,4 +26,9 @@ class Comments extends Model
     public function reply_comments(){
       return $this->hasMany(Reply_comments::class, 'id_comment'); 
     }
+
+    public function movie()
+    {
+        return $this->belongsTo(Movies::class, 'id_movie');
+    }
 }

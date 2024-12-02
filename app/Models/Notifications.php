@@ -13,17 +13,18 @@ class Notifications extends Model
     public $timestamps = false;
     protected $fillable = [
       'id',
-      'title',
-      'description',
-      'thumbnail',
-      'cast',
-      'director',
-      'release_year',
-      'id_category',
-      'country',
-      'views',
+      'content',
+      'id_send_user',
+      'id_receive_user',
       'status',
-      'duration',
-      'created_at'
+      'created_at',
+      'isDeleted'
     ];
+
+    public function receive_user(){
+      return $this->belongsTo(User::class, 'id_receive_user'); 
+    }
+    public function send_user(){
+      return $this->belongsTo(User::class, 'id_send_user'); 
+    }
 }

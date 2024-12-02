@@ -87,7 +87,7 @@
                                         <div class="col-12 col-md-4 col-lg-12 col-xl-4">
                                             <div class="sign__group">
                                                 <label class="sign__label">Server</label>
-                                                <select class="sign__select server__select" name="server[]" isUpdate="true">
+                                                <select class="sign__select server__select" name="server[]">
                                                     <option value="">Chưa chọn</option>
                                                     <option value="server 1">Server 1</option>
                                                     <option value="server 2">Server 2</option>

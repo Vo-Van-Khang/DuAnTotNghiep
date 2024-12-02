@@ -70,8 +70,13 @@ class EpisodeController extends Controller
         $categories = DB::table("categories")
         ->get();
 
-        $comments = Comments::with("user")->with("reply_comments")->where("id_movie",$id_movie)->orderBy("created_at","desc")->get();
-        
+        $comments = Comments::with("user, reply_comments")
+        ->with("reply_comments")
+        ->where("id_movie",$id_movie)
+        ->orderBy("created_at","desc");
+        $comments_count =  $comments->count();
+        $comments =  $comments->paginate(5);
+
         return view("clients.movie",[
             "movie"=>$movie,
             "servers"=>$servers,
@@ -82,13 +87,14 @@ class EpisodeController extends Controller
             "similars" => $similars,
             "categories" => $categories,
             "episode_focus" => $episode_focus,
+            "comments_count" => $comments_count,
             "comments" => $comments,
             "check_like" => $check_like,
             "check_watch_later" => $check_watch_later
         ]);
     }
     public function admin__add($id_movie){
-        $episodes = DB::table("episodes")->where("id_movie",$id_movie)->get();
+        $episodes = DB::table("episodes")->where("id_movie",$id_movie)->orderBy('episode','asc')->get();
         return view('admins.movie.episode.add', [
             "episodes" => $episodes,
             "movie" => $id_movie,
@@ -227,33 +233,50 @@ class EpisodeController extends Controller
             'episode' => $request->input('episode')
         ]);
     
-        // Duyệt qua từng url
-        foreach ($urls as $index => $url) {
-            // Nếu có id của url, thực hiện update, nếu không thì chèn mới
-            $upsertData = [
-                'url' => $url,
-                'resolution' => $resolutions[$index] ?? null,
-                'premium' => $premiums[$index] ?? 0,
-                'source' => $servers[$index] ?? 'server 1',
-                'type' => 'episode',
-                'media_id' => $id,
-            ];
-
-            if (isset($url_ids[$index]) && $url_ids[$index]) {
-                // Nếu có `url_id`, cập nhật bản ghi
-                $oldVideo = DB::table('urls')->where('id', $url_ids[$index]);
-                if($oldVideo->value("url") !== $url){
-                    $oldVideoPath = parse_url($oldVideo->value("url"), PHP_URL_PATH);
-                    if (Storage::disk('s3')->exists($oldVideoPath)) {
-                        Storage::disk('s3')->delete($oldVideoPath);
-                    }
+        // Lấy danh sách URL hiện có
+        $existingUrls = DB::table('urls')->where('type', 'episode')->where('media_id', $id)->get();
+    
+        // Xóa URL không còn được sử dụng
+        foreach ($existingUrls as $existingUrl) {
+            if (!in_array($existingUrl->id, $url_ids)) {
+                // Xóa video cũ khỏi S3
+                $oldVideoPath = parse_url($existingUrl->url, PHP_URL_PATH);
+                if (Storage::disk('s3')->exists($oldVideoPath)) {
+                    Storage::disk('s3')->delete($oldVideoPath);
                 }
-                $oldVideo->update($upsertData);
-            } else {
-                // Nếu không có `url_id`, chèn mới
-                DB::table('urls')->insert($upsertData);
+                // Xóa URL khỏi database
+                DB::table('urls')->where('id', $existingUrl->id)->delete();
             }
         }
+    
+        // Cập nhật hoặc chèn URL mới
+        foreach ($urls as $index => $url) {
+            if (isset($url_ids[$index]) && in_array($url_ids[$index], $existingUrls->pluck('id')->toArray())) {
+                // Cập nhật URL nếu $url_id tồn tại
+                $oldVideoPath = parse_url(DB::table('urls')->where("id",$url_ids[$index])->value("url"),PHP_URL_PATH);
+                if (Storage::disk('s3')->exists($oldVideoPath)) {
+                    Storage::disk('s3')->delete($oldVideoPath);
+                }
+                DB::table('urls')->where('id', $url_ids[$index])->update([
+                    'url' => $url,
+                    'resolution' => $resolutions[$index],
+                    'premium' => $premiums[$index],
+                    'source' => $servers[$index],
+                    'type' => 'episode',
+                    'media_id' => $id,
+                ]);
+            } else {
+                // Thêm mới URL nếu không có $url_id
+                DB::table('urls')->insert([
+                    'url' => $url,
+                    'resolution' => $resolutions[$index],
+                    'premium' => $premiums[$index],
+                    'source' => $servers[$index],
+                    'type' => 'episode',
+                    'media_id' => $id,
+                ]);
+            }
+        }      
     
         return response()->json([
             'success' => true,

@@ -7,7 +7,7 @@
             <div class="section__bg"></div>
             <div class="container">
                 <!-- article -->
-                <div class="article" id="information__movie" id_movie="{{$movie->id}}">
+                <div class="article" id="information__movie" id_movie="{{$movie->id}}" @if(auth()->check() && auth()->user()->premium) user__premium="true" @endif>
                     <div class="row">
                         <div class="col-12 col-xl-8">
                             <!-- article content -->
@@ -159,7 +159,7 @@
                             <!-- categories -->
                             <div class="categories">
                                 <h3 class="categories__title">Thể loại</h3>
-                                    <a class="categories__item" href="{{route("category")}}">{{$movie->category->name}}</a>
+                                    <a class="categories__item" href="{{route("category", $movie->category->id)}}">{{$movie->category->name}}</a>
                             </div>
                             <!-- end categories -->
 
@@ -195,7 +195,7 @@
                                             aria-selected="true"
                                         >
                                             <h4>Bình luận</h4>
-                                            <span class="comment__count">{{$comments->count()}}</span>
+                                            <span class="comment__count" id_movie="{{$movie->id}}">{{$comments_count}}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -209,206 +209,6 @@
                                         id="tab-1"
                                         role="tabpanel"
                                         >
-                                        <ul class="comments__list" id_movie="{{$movie->id}}">
-                                            @foreach ($comments as $comment)
-                                                <li class="comments__item item__remove" id_remove="{{$comment->id}}" type_remove="comment">
-                                                    <div class="comments__autor">
-                                                        <div>
-                                                            <img
-                                                                class="comments__avatar"
-                                                                src="{{$comment->user->image}}"
-                                                                alt=""
-                                                            />
-                                                            <span class="comments__name">
-                                                                {{$comment->user->name}}
-                                                                @if ($comment->user->premium)
-                                                                    <svg class="svg__premium" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffe600">
-                                                                        <path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
-                                                                    </svg>
-                                                                @endif
-                                                            </span>
-                                                            <span class="comments__time"
-                                                                >{{$comment->created_at}}</span
-                                                            >
-                                                        </div>
-                                                        @if (auth()->check() && auth()->id() == $comment->user->id)
-                                                            <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn" id_remove="{{$comment->id}}" type_remove="comment">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                                                            </a>
-                                                        @endif
-                                                    </div>
-                                                    <p class="comments__text">
-                                                        {{$comment->content}}
-                                                    </p>
-                                                    <div class="comments__actions">
-                                                        
-
-                                                        <button type="button" class="reply__comment__btn" name_user=" {{$comment->user->name}}" id_user="{{$comment->user->id}}" id_comment="{{$comment->id}}">
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="512"
-                                                                height="512"
-                                                                viewBox="0 0 512 512"
-                                                            >
-                                                                <polyline
-                                                                    points="400 160 464 224 400 288"
-                                                                    style="
-                                                                        fill: none;
-                                                                        stroke-linecap: round;
-                                                                        stroke-linejoin: round;
-                                                                        stroke-width: 32px;
-                                                                    "
-                                                                />
-                                                                <path
-                                                                    d="M448,224H154C95.24,224,48,273.33,48,332v20"
-                                                                    style="
-                                                                        fill: none;
-                                                                        stroke-linecap: round;
-                                                                        stroke-linejoin: round;
-                                                                        stroke-width: 32px;
-                                                                    "
-                                                                /></svg
-                                                            ><span>Trả Lời</span>
-                                                        </button>
-                                                    </div>
-                                                </li> 
-                                                <div class="reply__comments__container">
-                                                    @foreach ($comment->reply_comments as $reply_comment)  
-                                                        <li
-                                                            class="comments__item comments__item--answer item__remove"
-                                                            id_remove="{{$reply_comment->id}}" type_remove="reply_comment"
-                                                            >
-                                                            <div class="comments__autor">
-                                                                <div>
-                                                                    <img
-                                                                        class="comments__avatar"
-                                                                        src="{{asset($reply_comment->user->image)}}"
-                                                                        alt=""
-                                                                    />
-                                                                    <span class="comments__name">
-                                                                        {{$reply_comment->user->name}}
-                                                                        @if ($reply_comment->user->premium)
-                                                                            <svg class="svg__premium" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffe600">
-                                                                                <path d="m387-412 35-114-92-74h114l36-112 36 112h114l-93 74 35 114-92-71-93 71ZM240-40v-309q-38-42-59-96t-21-115q0-134 93-227t227-93q134 0 227 93t93 227q0 61-21 115t-59 96v309l-240-80-240 80Zm240-280q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-159l160-41 160 41v-124q-35 20-75.5 31.5T480-240q-44 0-84.5-11.5T320-283v124Zm160-62Z"/>
-                                                                            </svg>
-                                                                        @endif
-                                                                    </span>
-                                                                    <span class="comments__time"
-                                                                        >{{$reply_comment->created_at}}</span
-                                                                    >
-                                                                </div>
-                                                                @if (auth()->check() && auth()->id() == $reply_comment->user->id)
-                                                                    <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn"  id_remove="{{$reply_comment->id}}" type_remove="reply_comment">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                                                                    </a>
-                                                                @endif
-                                                            </div>
-                                                            <p class="comments__text">
-                                                                <span @class(['comments__text--premium' => $reply_comment->user_reply->premium]) >{{ "@" . $reply_comment->user_reply->name }}</span>
-                                                                {{$reply_comment->content}}
-                                                            </p>
-                                                            <div class="comments__actions">
-            
-                                                                <button type="button" class="reply__comment__btn" name_user=" {{$reply_comment->user->name}}" id_user="{{$reply_comment->user->id}}" id_comment="{{$comment->id}}">
-                                                                    <svg
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        width="512"
-                                                                        height="512"
-                                                                        viewBox="0 0 512 512"
-                                                                    >
-                                                                        <polyline
-                                                                            points="400 160 464 224 400 288"
-                                                                            style="
-                                                                                fill: none;
-                                                                                stroke-linecap: round;
-                                                                                stroke-linejoin: round;
-                                                                                stroke-width: 32px;
-                                                                            "
-                                                                        />
-                                                                        <path
-                                                                            d="M448,224H154C95.24,224,48,273.33,48,332v20"
-                                                                            style="
-                                                                                fill: none;
-                                                                                stroke-linecap: round;
-                                                                                stroke-linejoin: round;
-                                                                                stroke-width: 32px;
-                                                                            "
-                                                                        /></svg
-                                                                    ><span>Trả Lời</span>
-                                                                </button>
-                                                            </div>
-                                                        </li>
-                                                    @endforeach
-                                                </div>
-                                            @endforeach
-
-                                        </ul>
-
-                                        <div
-                                            class="catalog__paginator-wrap catalog__paginator-wrap--comments"
-                                            >      
-                                            <span class="catalog__pages"
-                                                >5 đến 16</span
-                                            >
-
-                                            <ul class="catalog__paginator">
-                                                <li>
-                                                    <a href="#">
-                                                        <svg
-                                                            width="14"
-                                                            height="11"
-                                                            viewBox="0 0 14 11"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M0.75 5.36475L13.1992 5.36475"
-                                                                stroke-width="1.2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                            />
-                                                            <path
-                                                                d="M5.771 10.1271L0.749878 5.36496L5.771 0.602051"
-                                                                stroke-width="1.2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                            />
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                                <li class="active">
-                                                    <a href="#">1</a>
-                                                </li>
-                                                <li><a href="#">2</a></li>
-                                                <li><a href="#">3</a></li>
-                                                <li><a href="#">4</a></li>
-                                                <li>
-                                                    <a href="#">
-                                                        <svg
-                                                            width="14"
-                                                            height="11"
-                                                            viewBox="0 0 14 11"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <path
-                                                                d="M13.1992 5.3645L0.75 5.3645"
-                                                                stroke-width="1.2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                            />
-                                                            <path
-                                                                d="M8.17822 0.602051L13.1993 5.36417L8.17822 10.1271"
-                                                                stroke-width="1.2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
-                                                            />
-                                                        </svg>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-
                                         <form action="#" class="comments__form">
                                             <div class="sign__group">
                                                 <textarea
@@ -420,35 +220,66 @@
                                                 <span style="color: #df4a32; display:none" id="comment__error"></span>
                                             </div>
                                             @if (auth()->check())
-                                                <div class="sign__group" style="gap: 20px">
-                                                    <button
-                                                        type="button"
-                                                        class="sign__btn comment__submit__btn"
-                                                        id_movie="{{$movie->id}}"
-                                                    >
-                                                        Gửi
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        class="sign__btn reply__comment__submit__btn"
-                                                        id_movie="{{$movie->id}}"
-                                                        style="display:none"
-                                                    >
-                                                        Trả lời
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        class="sign__reply__btn user__reply__btn">
-                                                        <span class="user__reply">User</span>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>  
-                                                    </button>
-                                                </div>
+                                                @if(auth()->user()->status == 0)
+                                                    <div class="sign__group" style="gap: 20px">
+                                                        <button
+                                                            type="button"
+                                                            class="sign__btn isBan"
+                                                            id_movie="{{$movie->id}}"
+                                                        >
+                                                            Gửi
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            class="sign__btn isBan"
+                                                            id_movie="{{$movie->id}}"
+                                                            style="display:none"
+                                                        >
+                                                            Trả lời
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            class="sign__reply__btn user__reply__btn">
+                                                            <span class="user__reply">User</span>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>  
+                                                        </button>
+                                                    </div>
+                                                @else
+                                                    <div class="sign__group" style="gap: 20px">
+                                                        <button
+                                                            type="button"
+                                                            class="sign__btn comment__submit__btn"
+                                                            id_movie="{{$movie->id}}"
+                                                        >
+                                                            Gửi
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            class="sign__btn reply__comment__submit__btn"
+                                                            id_movie="{{$movie->id}}"
+                                                            style="display:none"
+                                                        >
+                                                            Trả lời
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            class="sign__reply__btn user__reply__btn">
+                                                            <span class="user__reply">User</span>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>  
+                                                        </button>
+                                                    </div>
+                                                @endif
                                             @else
                                                 <div class="sign__group">
-                                                    <a class="sign__btn" href="{{route('signin')}}">Đăng nhập</a>
+                                                    <a class="sign__btn" href="{{route('login')}}">Đăng nhập</a>
                                                 </div>
                                             @endif
                                         </form>
+                                        <ul class="comments__list" id_movie="{{$movie->id}}">
+                                          
+
+                                        </ul>
+                                        <div class="comments__observer"></div>
                                     </div>
                                     <!-- end comments -->
                                 </div>

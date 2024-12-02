@@ -14,7 +14,8 @@ class ReplyCommentController extends Controller
             "id_user" => auth()->user()->id,
             "id_user_reply" => request('id__user__reply'),
             "id_comment" => request('id__comment'),
-            "content" => request("comment__content")
+            "content" => request("comment__content"),
+            "status" => 1
         ]);
         $comment = DB::table("comments")->where("id", request('id__comment'))->first();
         $reply_comment = DB::table("reply_comments")->where("id", $id)->first();
@@ -30,6 +31,31 @@ class ReplyCommentController extends Controller
     }
     public function remove_by_id($id){
         DB::table("reply_comments")->where('id',$id)->delete();
+        return response()->json([
+            "success" => true
+        ]);
+    }
+    public function admin__status__update($id){
+        $show = false;
+        $status = DB::table("reply_comments")->where("id", $id)->value("status");
+        
+        if ($status == 0) {
+            DB::table("reply_comments")->where("id", $id)->update([
+                "status" => 1
+            ]);
+            $show = true;
+        } else {
+            DB::table("reply_comments")->where("id", $id)->update([
+                "status" => 0
+            ]);
+        }
+        return response()->json([
+            "show" => $show,
+            "success" => true
+        ]);
+    }
+    public function admin__delete($id){
+        DB::table("reply_comments")->where("id",$id)->delete();
         return response()->json([
             "success" => true
         ]);

@@ -8,7 +8,7 @@
                 <div class="profile">
                     <div class="profile__user">
                         <div class="profile__avatar">
-                            <img src="img/avatar.svg" alt="" />
+                            <img src="{{    auth()->user()->image}}" alt="" />
                         </div>
                         <div class="profile__meta">
                             <h3>{{auth()->user()->name}}</h3>
@@ -122,39 +122,39 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if ($payments->count() > 0)
-                                            @foreach ($payments as $payment)
+                                        @if ($subscriptions->count() > 0)
+                                            @foreach ($subscriptions as $subscription)
                                                 <tr>
                                                     <td>
                                                         <div
                                                             class="main__table-text"
                                                         >
-                                                            {{$payment->subscription->subscription_plan->name}}
+                                                            {{$subscription->subscription_plan->name}}
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div
                                                             class="main__table-text"
                                                         >
-                                                            {{$payment->subscription->start_date}}
+                                                            {{$subscription->start_date}}
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div
                                                             class="main__table-text main__table-text--rate"
                                                         >
-                                                            {{$payment->subscription->end_date}}
+                                                            {{$subscription->end_date}}
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div
                                                             class="main__table-text"
                                                         >
-                                                            {{$payment->subscription->subscription_plan->price ? number_format($payment->subscription->subscription_plan->price, 0, ',', '.') : '0'}} VND
+                                                            {{$subscription->subscription_plan->price ? number_format($subscription->subscription_plan->price, 0, ',', '.') : '0'}} VND
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        @if ($payment->subscription->end_date < time())
+                                                        @if (!$subscription->payment_status)
                                                             <div
                                                                 class="main__table-text main__table-text--red"
                                                             >
@@ -187,7 +187,7 @@
                         <div class="dashbox">
                             <div class="dashbox__title">
                                 <h3>
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
                                     Phim đã thích
                                 </h3>
                             </div>
@@ -370,83 +370,13 @@
                                     </ul>
                                 </div>
                             </div>
-
                             @endforeach
-                            <!-- paginator -->
-                             <div class="row">
-                                 <div class="col-12">
-                                     <div class="catalog__paginator-wrap">
-                                         <span class="catalog__pages"
-                                             >12 from 144</span
-                                         >
-
-                                         <ul class="catalog__paginator">
-                                             <li>
-                                                 <a href="#">
-                                                     <svg
-                                                         width="14"
-                                                         height="11"
-                                                         viewBox="0 0 14 11"
-                                                         fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg"
-                                                     >
-                                                         <path
-                                                             d="M0.75 5.36475L13.1992 5.36475"
-                                                             stroke-width="1.2"
-                                                             stroke-linecap="round"
-                                                             stroke-linejoin="round"
-                                                         />
-                                                         <path
-                                                             d="M5.771 10.1271L0.749878 5.36496L5.771 0.602051"
-                                                             stroke-width="1.2"
-                                                             stroke-linecap="round"
-                                                             stroke-linejoin="round"
-                                                         />
-                                                     </svg>
-                                                 </a>
-                                             </li>
-                                             <li class="active">
-                                                 <a href="#">1</a>
-                                             </li>
-                                             <li><a href="#">2</a></li>
-                                             <li><a href="#">3</a></li>
-                                             <li><a href="#">4</a></li>
-                                             <li>
-                                                 <a href="#">
-                                                     <svg
-                                                         width="14"
-                                                         height="11"
-                                                         viewBox="0 0 14 11"
-                                                         fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg"
-                                                     >
-                                                         <path
-                                                             d="M13.1992 5.3645L0.75 5.3645"
-                                                             stroke-width="1.2"
-                                                             stroke-linecap="round"
-                                                             stroke-linejoin="round"
-                                                         />
-                                                         <path
-                                                             d="M8.17822 0.602051L13.1993 5.36417L8.17822 10.1271"
-                                                             stroke-width="1.2"
-                                                             stroke-linecap="round"
-                                                             stroke-linejoin="round"
-                                                         />
-                                                     </svg>
-                                                 </a>
-                                             </li>
-                                         </ul>
-                                     </div>
-                                 </div>
-                             </div>
-                             <!-- end paginator -->
+                            
                     @else
                         <p style="width:100%;margin:20px 0 0;color:#fff;text-align:center">Không có dữ liệu</p>
                     @endif
                 </div>
                 <!-- end favorites -->
-
-
             </div>
 
             <div class="tab-pane fade" id="tab-3" role="tabpanel">
@@ -457,7 +387,7 @@
                                 <!-- details form -->
                                 <div class="col-12 col-lg-6">
                                     <form
-                                        action="{{ route('profile') }}"
+                                        action="/profile/update"
                                          method="POST" enctype="multipart/form-data"
                                         class="sign__form sign__form--profile sign__form--first"
                                     >
@@ -504,7 +434,7 @@
                                                     <input
                                                         id="email"
                                                         type="text"
-                                                        name="email"
+                                                        name="email" disabled
                                                         class="sign__input"
                                                         value="{{$user->email}}"
                                                     />
@@ -565,67 +495,73 @@
                                 <!-- password form -->
                                 <div class="col-12 col-lg-6">
                                     <form
-    action="{{ route('profile') }}"
-    method="POST"
-    class="sign__form sign__form--profile"
->
-    @csrf
-    <div class="row">
-        <div class="col-12">
-            <h4 class="sign__title">Thay đổi mật khẩu</h4>
-        </div>
+                                        action="/profile/changePassword"
+                                        method="POST"
+                                        class="sign__form sign__form--profile"
+                                    >
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4 class="sign__title">Thay đổi mật khẩu</h4>
+                                            </div>
 
-        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-            <div class="sign__group">
-                <label class="sign__label" for="current_password">Mật khẩu cũ</label>
-                <input
-                    id="current_password"
-                    type="password"
-                    name="current_password"
-                    class="sign__input"
-                    required
-                />
-            </div>
-        </div>
+                                            <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                                <div class="sign__group">
+                                                    <label class="sign__label" for="current_password">Mật khẩu cũ</label>
+                                                    <input
+                                                        id="current_password"
+                                                        type="password"
+                                                        name="current_password"
+                                                        class="sign__input"
+                                                    />
+                                                    @error('current_password')
+                                                        <p class="error" style="color:#df4a32;">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+                                            </div>
 
-        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-            <div class="sign__group">
-                <label class="sign__label" for="new_password">Mật khẩu mới</label>
-                <input
-                    id="new_password"
-                    type="password"
-                    name="new_password"
-                    class="sign__input"
-                    required
-                />
-            </div>
-        </div>
+                                            <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                                <div class="sign__group">
+                                                    <label class="sign__label" for="new_password">Mật khẩu mới</label>
+                                                    <input
+                                                        id="new_password"
+                                                        type="password"
+                                                        name="password"
+                                                        class="sign__input"
+                                                    />
+                                                    @error('password')
+                                                        <p class="error" style="color:#df4a32;">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+                                            </div>
 
-        <div class="col-12 col-md-6 col-lg-12 col-xl-6">
-            <div class="sign__group">
-                <label class="sign__label" for="new_password_confirmation">Nhập lại mật khẩu mới</label>
-                <input
-                    id="new_password_confirmation"
-                    type="password"
-                    name="new_password_confirmation"
-                    class="sign__input"
-                    required
-                />
-            </div>
-        </div>
+                                            <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                                <div class="sign__group">
+                                                    <label class="sign__label" for="new_password_confirmation">Nhập lại mật khẩu mới</label>
+                                                    <input
+                                                        id="new_password_confirmation"
+                                                        type="password"
+                                                        name="password_confirmation"
+                                                        class="sign__input"
+                                                    />
+                                                    @error('password_confirmation')
+                                                        <p class="error" style="color:#df4a32;">{{$message}}</p>
+                                                    @enderror
+                                                </div>
+                                            </div>
 
-        <div class="col-12">
-            <button
-                class="sign__btn"
-                type="submit"
-                name="action"
-                value="change_password"
-            >
-                Đổi mật khẩu
-            </button>
-        </div>
-    </div>
-</form>
+                                            <div class="col-12">
+                                                <button
+                                                    class="sign__btn"
+                                                    type="submit"
+                                                    name="action"
+                                                    value="change_password"
+                                                >
+                                                    Đổi mật khẩu
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
 
                                 </div>
                                 <!-- end password form -->

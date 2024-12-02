@@ -68,7 +68,7 @@
                                     Gửi
                                 </button>
                                 <span class="sign__text">Bạn không muốn đổi mật khẩu
-                                <a href="{{ route('signin') }}">Đăng nhập!</a></span>
+                                <a href="{{ route('login') }}">Đăng nhập!</a></span>
                                 @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror <span class="sign__text">Chúng tôi sẽ gửi xác nhận vào Email của

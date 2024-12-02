@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subscription_plans;
 use stdClass;
 use App\Models\Movies;
 use App\Models\Slides;
@@ -78,8 +79,12 @@ class MovieController extends Controller
         ->select("*")
         ->get();
 
-        $comments = Comments::with("user")->with("reply_comments")->where("id_movie",$id)->orderBy("created_at","desc")->get();
-
+        $comments = Comments::with("user", "reply_comments")
+        ->where("id_movie", $id)
+        ->orderBy("created_at", "desc");
+        $comments_count =  $comments->count();
+        $comments =  $comments->paginate(5);
+        // dd($comments_count);
         $episode_focus = new stdClass();
         $episode_focus->episode = 1;
 
@@ -92,6 +97,7 @@ class MovieController extends Controller
             "episodes"=>$episodes,
             "similars" => $similars,
             "categories" => $categories,
+            "comments_count" => $comments_count,
             "comments" => $comments,
             "episode_focus" => $episode_focus,
             "check_like" => $check_like,
@@ -99,9 +105,10 @@ class MovieController extends Controller
         ]);
     }
     public function index(){
-        $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->limit(8)->get();
+        $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->get();
         $slides = Slides::with('movie')->where('status', 1)->where('isDeleted', 0)->get();
-        $categories = DB::table("categories")->get();
+        $subscription_plans = Subscription_plans::get();
+        $categories = DB::table("categories")->limit(3)->get();
 
         $watch_later_movies = [];
         if (auth()->check()) {
@@ -113,29 +120,53 @@ class MovieController extends Controller
         return view('/clients/HomePage', [
             'movies' => $movies, 
             'slides' => $slides, 
+            'subscription_plans' => $subscription_plans, 
             'categories' => $categories,
             "watch_later_movies" => $watch_later_movies
         ]);
     }
 
     public function admin__view(){
-        $movies = Movies::with('category')->where("isDeleted",0)->get();
+        $movies = Movies::with('category')
+        ->where("isDeleted",0)
+        ->orderBy("created_at","desc")
+        ->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));
+        
         return view('admins.movie.list', [
             "movies" => $movies,
             "selected" => "movie"
         ]);
     }
     Public function allMovie(){
-        $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->get();
-        return view('/clients/all', ['movies' => $movies]);
+        $movies = Movies::with('category')
+        ->where("status", 1)
+        ->where("isDeleted", 0)
+        ->orderBy('created_at', "desc")
+        ->get();
+        $categories = DB::table("categories")->get();
+        $release_years = Movies::distinct()->orderBy("release_year","asc")->pluck("release_year");
+        return view('/clients/all', [
+            'movies' => $movies,
+            'categories' => $categories,
+            'release_years' => $release_years,
+        ]);
     }
     Public function search(Request $request){
         {
             $search = $request->input('search');
             $movies = Movies::with('category')
                 ->where('title', 'LIKE', "%{$search}%")
+                ->where("status", 1)
+                ->where("isDeleted", 0)
+                ->orderBy('created_at', "desc")
                 ->get();
-            return view('/clients/search', ['movies'=> $movies]);
+            $categories = DB::table("categories")->get();
+            $release_years = Movies::distinct()->orderBy("release_year","asc")->pluck("release_year");
+            return view('/clients/search', [
+                'movies' => $movies,
+                'categories' => $categories,
+                'release_years' => $release_years,
+            ]);
         }
     }
 
@@ -284,43 +315,14 @@ class MovieController extends Controller
         $premiums = $request->input('premiums', []);
         $resolutions = $request->input('resolutions', []);
         $servers = $request->input('servers', []);
-        
-        $check = false;
-        $serverResolutionMap = []; // Mảng để lưu các resolution đã gặp cho mỗi server
     
-        foreach ($servers as $index => $server) {
-            $resolution = $resolutions[$index] ?? null;
-        
-            if ($resolution) {
-                // Nếu server này chưa có trong mảng, khởi tạo mảng cho server
-                if (!isset($serverResolutionMap[$server])) {
-                    $serverResolutionMap[$server] = [];
-                }
-        
-                // Kiểm tra nếu resolution đã tồn tại trong server này
-                if (in_array($resolution, $serverResolutionMap[$server])) {
-                    $check = true;
-                    break; // Dừng lặp nếu tìm thấy trùng
-                }
-        
-                // Thêm resolution vào mảng của server này
-                $serverResolutionMap[$server][] = $resolution;
-            }
-        }
-        if($check){
-            return response()->json([
-                'success' => false,
-                'status' => 'error',
-                'message' => 'Đã có lỗi trùng độ phân giải trong cùng một server!'
-            ]);
-        }
-        
         $movie = DB::table('movies')->where('id', $id)->first();
     
         if (!$movie) {
             return response()->json(['success' => false, 'message' => 'Phim không tồn tại!'], 404);
         }
-
+    
+        // Xử lý ảnh thumbnail
         if ($request->hasFile('thumbnail')) {
             if ($movie->thumbnail && file_exists(public_path($movie->thumbnail))) {
                 unlink(public_path($movie->thumbnail)); 
@@ -333,6 +335,7 @@ class MovieController extends Controller
             $imagePath = $movie->thumbnail;
         }
     
+        // Cập nhật thông tin phim
         DB::table('movies')->where('id', $id)->update([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
@@ -344,36 +347,53 @@ class MovieController extends Controller
             'country' => $request->input('country'),
             'status' => $request->input('status'),
             'duration' => $request->input('duration'),
+            'isSeries' => request('isSeries')
         ]);
     
-        
-        // Duyệt qua từng url
-        foreach ($urls as $index => $url) {
-            // Nếu có id của url, thực hiện update, nếu không thì chèn mới
-            $upsertData = [
-                'url' => $url,
-                'resolution' => $resolutions[$index] ?? null,
-                'premium' => $premiums[$index] ?? 0,
-                'source' => $servers[$index] ?? 'server 1',
-                'type' => 'movie',
-                'media_id' => $id,
-            ];
-
-            if (isset($url_ids[$index]) && $url_ids[$index]) {
-                // Nếu có `url_id`, cập nhật bản ghi
-                $oldVideo = DB::table('urls')->where('id', $url_ids[$index]);
-                if($oldVideo->value("url") !== $url){
-                    $oldVideoPath = parse_url($oldVideo->value("url"), PHP_URL_PATH);
-                    if (Storage::disk('s3')->exists($oldVideoPath)) {
-                        Storage::disk('s3')->delete($oldVideoPath);
-                    }
+        // Lấy danh sách URL hiện có
+        $existingUrls = DB::table('urls')->where('type', 'movie')->where('media_id', $id)->get();
+    
+        // Xóa URL không còn được sử dụng
+        foreach ($existingUrls as $existingUrl) {
+            if (!in_array($existingUrl->id, $url_ids)) {
+                // Xóa video cũ khỏi S3
+                $oldVideoPath = parse_url($existingUrl->url, PHP_URL_PATH);
+                if (Storage::disk('s3')->exists($oldVideoPath)) {
+                    Storage::disk('s3')->delete($oldVideoPath);
                 }
-                $oldVideo->update($upsertData);
-            } else {
-                // Nếu không có `url_id`, chèn mới
-                DB::table('urls')->insert($upsertData);
+                // Xóa URL khỏi database
+                DB::table('urls')->where('id', $existingUrl->id)->delete();
             }
         }
+    
+        // Cập nhật hoặc chèn URL mới
+        foreach ($urls as $index => $url) {
+            if (isset($url_ids[$index]) && in_array($url_ids[$index], $existingUrls->pluck('id')->toArray())) {
+                // Cập nhật URL nếu $url_id tồn tại
+                $oldVideoPath = parse_url(DB::table('urls')->where("id",$url_ids[$index])->value("url"),PHP_URL_PATH);
+                if (Storage::disk('s3')->exists($oldVideoPath)) {
+                    Storage::disk('s3')->delete($oldVideoPath);
+                }
+                DB::table('urls')->where('id', $url_ids[$index])->update([
+                    'url' => $url,
+                    'resolution' => $resolutions[$index],
+                    'premium' => $premiums[$index],
+                    'source' => $servers[$index],
+                    'type' => 'movie',
+                    'media_id' => $id,
+                ]);
+            } else {
+                // Thêm mới URL nếu không có $url_id
+                DB::table('urls')->insert([
+                    'url' => $url,
+                    'resolution' => $resolutions[$index],
+                    'premium' => $premiums[$index],
+                    'source' => $servers[$index],
+                    'type' => 'movie',
+                    'media_id' => $id,
+                ]);
+            }
+        }        
     
         return response()->json([
             'success' => true,
@@ -381,6 +401,7 @@ class MovieController extends Controller
             'message' => 'Cập nhật phim thành công!'
         ]);
     }
+    
     
 
     public function admin__url__add(){
@@ -399,12 +420,15 @@ class MovieController extends Controller
 
     public function admin__remove__all__url(){
         $urls = request()->input('urls'); 
-        foreach ($urls as $index => $url) {
-            if ($url) {
-                $oldVideoPath = parse_url($url, PHP_URL_PATH);
-                if (Storage::disk('s3')->exists($oldVideoPath)) {
-                    Storage::disk('s3')->delete($oldVideoPath);
-                }
+
+        $existingUrls = DB::table('urls')->whereIn('url', $urls)->pluck('url')->toArray();
+
+        $urlsToDelete = array_diff($urls, $existingUrls);
+
+        foreach ($urlsToDelete as $url) {
+            $oldVideoPath = parse_url($url, PHP_URL_PATH);
+            if (Storage::disk('s3')->exists($oldVideoPath)) {
+                Storage::disk('s3')->delete($oldVideoPath);
             }
         }
     }
@@ -418,6 +442,46 @@ class MovieController extends Controller
         DB::table("movies")->where("id", $id)->increment('views',1);
         return response()->json([
             "success" => true
+        ]);
+    }
+
+    public function movie__filter(Request $request){
+        $search = $request->input('search');
+        $filter__genres = $request->input('filter__genres');
+        $filter__years = $request->input('filter__years');
+        $grade = $request->input('grade');
+
+        $movies = Movies::with('category')
+        ->where("status",1)
+        ->where("isDeleted",0);
+
+        if (!empty($search)) {
+            $movies->where("title",'like', "%{$search}%");
+        }
+
+        if (!empty($filter__genres)) {
+            $movies->where('id_category', $filter__genres); // Lọc theo genre
+        }
+        
+        if (!empty($filter__years)) {
+            $movies->where('release_year', $filter__years); // Lọc theo year
+        }
+        
+        if(!empty($grade)){
+            if($grade == "featured"){
+                $movies->withCount('likes')
+                ->orderBy('likes_count', 'desc');
+            }elseif($grade == "newest"){
+                $movies->orderBy('created_at', "desc"); 
+            }else{
+                $movies->orderBy('views', "desc"); 
+            }
+        }
+
+        $movies = $movies->get(); 
+        return response()->json([
+            "success" => true,
+            "movies" => $movies
         ]);
     }
 }

@@ -32,6 +32,9 @@
 										<div class="sign__group">
 											<label class="sign__label" for="name">Nội dung</label>
 											<input id="name" type="text" name="name" class="sign__input" placeholder="Nội dung">
+											@error('name')
+												<span style="color: #df4a32">{{$message}}</span>
+											@enderror
 										</div>
 									</div>
 									<div class="col-12 col-md-6 col-lg-12 col-xl-6">

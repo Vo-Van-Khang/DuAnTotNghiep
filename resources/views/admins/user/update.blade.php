@@ -12,12 +12,12 @@
 							<!-- người dùng hồ sơ -->
 							<div class="profile__user">
 								<div class="profile__avatar">
-									<img src="https://cdn-icons-png.flaticon.com/512/219/219986.png" alt="">
+									<img src="{{asset($user->image)}}" alt="">
 								</div>
 								<!-- hoặc đỏ -->
 								<div class="profile__meta profile__meta--green">
-									<h3>Tên người dùng <span>(Đã phê duyệt)</span></h3>
-									<span>ID FlixTV: 23562</span>
+									<h3>{{$user->name}}<span>@if ($user->email_verified_at) (Đã phê duyệt) @endif</span></h3>
+									<span>ID: {{$user->id}}</span>
 								</div>
 							</div>
 							<!-- kết thúc người dùng hồ sơ -->
@@ -42,7 +42,10 @@
 									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 										<div class="sign__group">
 											<label class="sign__label" for="username">Tên :</label>
-											<input id="username" type="text" value="{{$user->name}}" name="name" class="sign__input" >
+											<input id="username" type="text" value="{{$user->name}}" name="name" class="sign__input">
+											@error('name')
+												<span style="color: #df4a32">{{$message}}</span>
+											@enderror
 										</div>
 									</div>
                                     <div class="col-12 col-md-6 col-lg-12 col-xl-6">
@@ -54,7 +57,7 @@
 									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 										<div class="sign__group">
 											<label class="sign__label" for="email">Email</label>
-											<input id="email" type="text" value="{{$user->email}}" name="email" class="sign__input" >
+											<input id="email" type="text" value="{{$user->email}}" name="email" class="sign__input" disabled>
 										</div>
 									</div>
 
@@ -70,29 +73,18 @@
 										<div class="sign__group">
 											<label class="sign__label" for="status">Trạng thái :</label>
                                             <select class="js-example-basic-single" id="status" name="status">
-                                                <option value="0" {{ $user->status == 0 ? 'selected' : '' }}>Hoạt động</option>
-                                                <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>Bị cấm</option>
+                                                <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>Hoạt động</option>
+                                                <option value="0" {{ $user->status == 0 ? 'selected' : '' }}>Bị cấm</option>
                                             </select>
 										</div>
 									</div>
 
 									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                         <div class="sign__group">
-                                            <label class="sign__label" for="subscription">Premium</label>
-                                            <select class="js-example-basic-single" id="subscription" name="premium">
-                                                <option value="0" {{ $user->premium == 0 ? 'selected' : '' }}>Có</option>
-                                                <option value="1" {{ $user->premium == 1 ? 'selected' : '' }}>Không</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-									<div class="col-12 col-md-6 col-lg-12 col-xl-6">
-                                        <div class="sign__group">
                                             <label class="sign__label" for="rights">Vai trò</label>
                                             <select class="js-example-basic-single" id="rights" name="role">
                                                 <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>Người dùng</option>
-                                                <option value="staff" {{ $user->role == 'staff' ? 'selected' : '' }}>Người điều hành</option>
-                                                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Quản trị viên</option>
+                                                <option value="staff" {{ $user->role == 'staff' ? 'selected' : '' }}>Nhân viên</option>
                                             </select>
                                         </div>
                                     </div>

@@ -48,18 +48,9 @@
                             ></a>
 
                             <ul
-                                class="dropdown-menu header__nav-menu"
+                                class="dropdown-menu header__nav-menu header__nav-menu-category"
                                 aria-labelledby="dropdownMenu1"
                             >
-                                <li>
-                                    <a href="{{route("category")}}">Hoạt hình</a>
-                                </li>
-                                <li>
-                                    <a href="catalog.html">Hành động</a>
-                                </li>
-                                <li>
-                                    <a href="catalog.html">Tình cảm</a>
-                                </li>
                             </ul>
                         </li>
 
@@ -115,49 +106,76 @@
                                         href="{{route("about")}}"
                                         >Về chúng tôi</a>
                                 </li>
+
+                            </ul>
+                        </li>
+                        <li class="header__nav-item">
+                            <a
+                                class="header__nav-link header__nav-link--more header__nav-link--notification"
+                                href="#"
+                                role="button"
+                                id="dropdownMenu4"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z"/></svg>
+                            </a>
+
+                            <ul
+                                class="dropdown-menu header__nav-menu header__nav-menu--scroll header__nav-menu-notification"
+                                aria-labelledby="dropdownMenu4"
+                            >
+                                
                             </ul>
                         </li>
                     </ul>
-
+                    
                     <div class="header__actions">
                         <form action="{{route('search')}}" class="header__form">
-                            <input
-                                class="header__form-input"
-                                type="search"
-                                placeholder="Nội dung tìm kiếm... "
-                                name="search"
-                            />
-                            <button
-                                class="header__form-btn"
-                                type="submit"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
+                            <div class="header__form-input--container">
+                                <input
+                                    class="header__form-input"
+                                    type="search"
+                                    placeholder="Nội dung tìm kiếm... "
+                                    name="search"
+                                    autocomplete="off"
+                                />
+                                <button
+                                    class="header__form-btn"
+                                    type="submit"
                                 >
-                                    <path
-                                        d="M21.71,20.29,18,16.61A9,9,0,1,0,16.61,18l3.68,3.68a1,1,0,0,0,1.42,0A1,1,0,0,0,21.71,20.29ZM11,18a7,7,0,1,1,7-7A7,7,0,0,1,11,18Z"
-                                    />
-                                </svg>
-                            </button>
-                            <button
-                                type="button"
-                                class="header__form-close"
-                            >
-                                <svg
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 20 20"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            d="M21.71,20.29,18,16.61A9,9,0,1,0,16.61,18l3.68,3.68a1,1,0,0,0,1.42,0A1,1,0,0,0,21.71,20.29ZM11,18a7,7,0,1,1,7-7A7,7,0,0,1,11,18Z"
+                                        />
+                                    </svg>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="header__form-close"
                                 >
-                                    <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M14.3345 0.000183105H5.66549C2.26791 0.000183105 0.000488281 2.43278 0.000488281 5.91618V14.0842C0.000488281 17.5709 2.26186 20.0002 5.66549 20.0002H14.3335C17.7381 20.0002 20.0005 17.5709 20.0005 14.0842V5.91618C20.0005 2.42969 17.7383 0.000183105 14.3345 0.000183105ZM5.66549 1.50018H14.3345C16.885 1.50018 18.5005 3.23515 18.5005 5.91618V14.0842C18.5005 16.7653 16.8849 18.5002 14.3335 18.5002H5.66549C3.11525 18.5002 1.50049 16.7655 1.50049 14.0842V5.91618C1.50049 3.23856 3.12083 1.50018 5.66549 1.50018ZM7.07071 7.0624C7.33701 6.79616 7.75367 6.772 8.04726 6.98988L8.13137 7.06251L9.99909 8.93062L11.8652 7.06455C12.1581 6.77166 12.6329 6.77166 12.9258 7.06455C13.1921 7.33082 13.2163 7.74748 12.9984 8.04109L12.9258 8.12521L11.0596 9.99139L12.9274 11.8595C13.2202 12.1524 13.2202 12.6273 12.9273 12.9202C12.661 13.1864 12.2443 13.2106 11.9507 12.9927L11.8666 12.9201L9.99898 11.052L8.13382 12.9172C7.84093 13.2101 7.36605 13.2101 7.07316 12.9172C6.80689 12.6509 6.78269 12.2343 7.00054 11.9407L7.07316 11.8566L8.93843 9.99128L7.0706 8.12306C6.77774 7.83013 6.77779 7.35526 7.07071 7.0624Z"
-                                    />
-                                </svg>
-                            </button>
+                                    <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 20 20"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            clip-rule="evenodd"
+                                            d="M14.3345 0.000183105H5.66549C2.26791 0.000183105 0.000488281 2.43278 0.000488281 5.91618V14.0842C0.000488281 17.5709 2.26186 20.0002 5.66549 20.0002H14.3335C17.7381 20.0002 20.0005 17.5709 20.0005 14.0842V5.91618C20.0005 2.42969 17.7383 0.000183105 14.3345 0.000183105ZM5.66549 1.50018H14.3345C16.885 1.50018 18.5005 3.23515 18.5005 5.91618V14.0842C18.5005 16.7653 16.8849 18.5002 14.3335 18.5002H5.66549C3.11525 18.5002 1.50049 16.7655 1.50049 14.0842V5.91618C1.50049 3.23856 3.12083 1.50018 5.66549 1.50018ZM7.07071 7.0624C7.33701 6.79616 7.75367 6.772 8.04726 6.98988L8.13137 7.06251L9.99909 8.93062L11.8652 7.06455C12.1581 6.77166 12.6329 6.77166 12.9258 7.06455C13.1921 7.33082 13.2163 7.74748 12.9984 8.04109L12.9258 8.12521L11.0596 9.99139L12.9274 11.8595C13.2202 12.1524 13.2202 12.6273 12.9273 12.9202C12.661 13.1864 12.2443 13.2106 11.9507 12.9927L11.8666 12.9201L9.99898 11.052L8.13382 12.9172C7.84093 13.2101 7.36605 13.2101 7.07316 12.9172C6.80689 12.6509 6.78269 12.2343 7.00054 11.9407L7.07316 11.8566L8.93843 9.99128L7.0706 8.12306C6.77774 7.83013 6.77779 7.35526 7.07071 7.0624Z"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="header__form-result">
+                              
+                            </div>
                         </form>
 
                         <button class="header__search" type="button">
@@ -171,7 +189,7 @@
                             </svg>
                         </button>
                         @guest
-                        <a href="{{route("signin")}}" class="header__user">
+                        <a href="{{route("login")}}" class="header__user">
                             <span>Đăng nhập</span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

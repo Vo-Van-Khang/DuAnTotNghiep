@@ -1,85 +1,32 @@
 @extends('layouts.layout')
 @section('content')
- <div class="container">
-    <h1 style="color: aliceblue">Kết quả tìm kiếm :  </h1>
- </div>
         <div class="catalog">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
+                        <h1 style="color: aliceblue;margin-bottom:30px">Kết quả tìm kiếm:</h1>
+                    </div>
+                    <div class="col-12">
                         <div class="catalog__nav">
+                            <input type="hidden" value="{{request()->input('search')}}" class="filter__search">
                             <div class="catalog__select-wrap">
-                                <select class="catalog__select" name="genres">
-                                    <option value="All genres">
+                                <select class="catalog__select select2-hidden-accessible filter__genres" name="genres">
+                                    <option value="">
                                         Tất cả thể loại
                                     </option>
-                                    <option value="Action/Adventure">
-                                        Hành động/Phiêu lưu
-                                    </option>
-                                    <option value="Animals">Con vật</option>
-                                    <option value="Animation">Hoạt hình</option>
-                                    <option value="Biography">Tiểu sử</option>
-                                    <option value="Comedy">Comedy</option>
-                                    <option value="Cooking">Nấu ăn</option>
-                                    <option value="Dance">Nhảy</option>
-                                    <option value="Documentary">
-                                        Phim tài liệu
-                                    </option>
-                                    <option value="Drama">Kịch</option>
-                                    <option value="Education">Giáo dục</option>
-                                    <option value="Entertainment">
-                                        Giải trí
-                                    </option>
-                                    <option value="Family">Gia đình</option>
-                                    <option value="Fantasy">Tưởng tượng</option>
-                                    <option value="History">Lịch sử</option>
-                                    <option value="Horror">Kinh dị</option>
-                                    <option value="Independent">Độc lập</option>
-                                    <option value="International">
-                                        Quốc tế
-                                    </option>
-                                    <option value="Kids & Family">
-                                        Trẻ em & Gia đình
-                                    </option>
-                                    <option value="Medical">Về y học</option>
-                                    <option value="Military/War">
-                                        Quân sự/Chiến tranh
-                                    </option>
-                                    <option value="Music">Music</option>
-                                    <option value="Mystery/Crime">
-                                        Bí ẩn/Tội ác
-                                    </option>
-                                    <option value="Nature">Thiên nhiên</option>
-                                    <option value="Paranormal">Huyền bí</option>
-                                    <option value="Politics">Chính trị</option>
-                                    <option value="Racing">Đua xe</option>
-                                    <option value="Romance">Lãng mạn</option>
-                                    <option value="Sci-Fi/Horror">
-                                        Sci-Fi/Horror
-                                    </option>
-                                    <option value="Science">Science</option>
-                                    <option value="Science Fiction">
-                                        Khoa học viễn tưởng
-                                    </option>
-                                    <option value="Science/Nature">
-                                        Khoa học/Tự nhiên
-                                    </option>
-                                    <option value="Travel">Du lịch</option>
-                                    <option value="Western">Phương Tây</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{$category->id}}">
+                                            {{$category->name}}
+                                        </option>
+                                    @endforeach
                                 </select>
-
-                                <select class="catalog__select" name="years">
-                                    <option value="All the years">
+                                <select class="catalog__select select2-hidden-accessible filter__years" name="years">
+                                    <option value="">
                                         Tất cả các năm
                                     </option>
-                                    <option value="1">'50s</option>
-                                    <option value="2">'60s</option>
-                                    <option value="3">'70s</option>
-                                    <option value="4">'80s</option>
-                                    <option value="5">'90s</option>
-                                    <option value="6">2000-10</option>
-                                    <option value="7">2010-20</option>
-                                    <option value="8">2021</option>
+                                    @foreach ($release_years as $release_year)
+                                        <option value="{{$release_year}}">{{$release_year}}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -87,23 +34,26 @@
                                 <input
                                     type="radio"
                                     name="grade"
-                                    id="featured"
+                                    id="newest"
                                     checked="checked"
+                                    value="newest"
+                                /><label for="newest">Mới nhất</label>
+                                <input
+                                    type="radio"
+                                    name="grade"
+                                    id="featured"
+                                    value="featured"
                                 /><label for="featured">Nổi bật</label>
                                 <input
                                     type="radio"
                                     name="grade"
                                     id="popular"
+                                    value="popular"
                                 /><label for="popular">Phố biển</label>
-                                <input
-                                    type="radio"
-                                    name="grade"
-                                    id="newest"
-                                /><label for="newest">Mới nhất</label>
                             </div>
                         </div>
 
-                        <div class="row row--grid">
+                        <div class="row row--grid filter__container">
                             @if($movies->isEmpty())
                 <h4>Không tìm thấy sản phẩm nào phù hợp.</h4>
                         @else

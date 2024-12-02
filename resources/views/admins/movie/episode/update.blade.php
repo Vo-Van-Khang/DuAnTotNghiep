@@ -31,8 +31,8 @@
                                 <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                     <div class="sign__group">
                                         <label class="sign__label">Tập</label>
-                                        <input type="number" name="episode" class="sign__input input__data" placeholder="Tập" value="{{$episode->episode}}">
-                                        <span class="input__error" style="color: #df4a32"></span>
+                                        <input type="text" name="episode" class="sign__input input__data" placeholder="Tập" min="2" value="{{$episode->episode}}">
+                                        <span class="input__error" style="color: #df4a32">Tập phim là bắt buộc!</span>
                                     </div>
                                 </div>
 
@@ -54,21 +54,21 @@
                             <div class="row">
                                 <div class="col-12 d-flex" style="padding-right: 0">
                                     <h2 class="sign__title" style="width: fit-content;margin-right:auto">Đường dẫn</h2>
-                                    <button class="btn" style="height: fit-content" id="add__url" type="button">
+                                    <button class="btn add__button" style="height: fit-content" id="add__url" type="button">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
                                     </button>
                                 </div>
                                 <div id="url__items" style="width:100%">
                                     @foreach ($urls as $index => $url)
-                                    <div class="row item__url" id_url="{{$url->id}}" type__url="movie">
+                                    <div class="row item__url" id__url="{{$url->id}}" type__url="movie">
                                         <div class="col-12 d-flex">
                                             <h4 class="sign__title-small">Đường dẫn {{$index + 1}}</h4>
                                             @if ($index + 1 != 1)
-                                            <button class="btn remove__url__item" type="button">
-                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                                                    <path d="M200-440v-80h560v80H200Z"/>
-                                                </svg>
-                                            </button>
+                                                <a class="btn remove__url__item open-modal" href="#modal-delete">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                                        <path d="M200-440v-80h560v80H200Z"/>
+                                                    </svg>
+                                                </a>
                                             @endif
                                         </div>
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-12">
@@ -135,7 +135,7 @@
                                             <div class="upload__progress__container">
                                                 <div class="upload__progress__bar">0%</div>
                                             </div>
-                                            <button class="sign__btn sign__btn--upload" uploaded="true" type="button">Tải lên</button>
+                                            <button class="sign__btn sign__btn--upload sign__btn--old" uploaded="true" type="button">Tải lên</button>
                                         </div>
                                     </div>
                                     @endforeach
@@ -152,4 +152,17 @@
         </div>
     </div>
 </div>
+
+<!-- modal delete -->
+<div id="modal-delete" class="zoom-anim-dialog mfp-hide modal">
+    <h6 class="modal__title">Xóa mục</h6>
+
+    <p class="modal__text">Bạn có chắc chắn muốn xóa mục này không?</p>
+
+    <div class="modal__btns">
+       <button class="modal__btn modal__btn--apply" id="modal__remove__url__btn" type="button">Xóa</button>
+       <button class="modal__btn modal__btn--dismiss" type="button">Bỏ qua</button>
+    </div>
+</div>
+<!-- end modal delete -->
 @endsection

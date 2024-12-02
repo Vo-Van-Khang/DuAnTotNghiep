@@ -49,6 +49,7 @@ class Validate extends FormRequest
     public function messages(): array
     {
         return [
+            'name.required' => 'Nội dung là bắt buộc.',
             'email.required' => 'Email là bắt buộc.',
             'email.email' => 'Email không hợp lệ.',
             'password.required' => 'Mật khẩu là bắt buộc.',

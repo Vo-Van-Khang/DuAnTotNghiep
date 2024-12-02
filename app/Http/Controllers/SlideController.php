@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 class SlideController extends Controller
 {
     public function admin__view(){
-        $slides = Slides::with('movie')->where("isDeleted",0)->get();
+        $slides = Slides::with('movie')->where("isDeleted",0)->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));
         // dd($slides);
         return view('admins.slides.list', [
             "slides" => $slides,

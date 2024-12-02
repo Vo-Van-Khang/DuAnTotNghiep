@@ -41,7 +41,7 @@
                     <div class="col-12">
                         <div class="sign__content">
                             <!-- authorization form -->
-                            <form action="{{route('signin')}}" method="POST" class="sign__form">
+                            <form action="{{route('login')}}" method="POST" class="sign__form">
                                 @csrf
                                 <a href="{{route("index")}}" class="sign__logo">
                                     <img src="{{asset("images/storage/logo.png")}}" alt="" />

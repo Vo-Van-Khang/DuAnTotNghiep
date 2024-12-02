@@ -255,7 +255,6 @@ limitText.forEach((i)=>{
 if(document.querySelector('#add__url') != null){
 	const submit__btn = document.querySelector('.submit__btn');
 	let data_saved = false;
-
 	document.querySelector('#add__url').addEventListener('click', function() {
 		const container = document.querySelector('#url__items');
 		const resolution__select = document.querySelectorAll('.resolution__select');
@@ -342,6 +341,7 @@ if(document.querySelector('#add__url') != null){
 
 		document.querySelectorAll(".resolution__selected").forEach((e)=>{
 			e.closest('.item__url').classList.add("item__url--disabled");
+			e.closest('.item__url').classList.add("item__url--saved");
 		})
 	});
 
@@ -437,6 +437,11 @@ if(document.querySelector('#add__url') != null){
 				server__select__error.innerHTML = "";
 				if(video__input.type == "file"){
 					if (video__input.files && video__input.files.length > 0) {
+						if (button.classList.contains("sign__btn--old")) {
+							if (!confirm("Nếu cập nhật đường dẫn cũ này thì các đường dẫn cũ khác sẽ bị xóa!")) {
+								return;
+							}
+						}
 						uploadVideoUrl()
 					} else {
 						video__input__error.innerHTML = "Video là bắt buộc!";
@@ -446,6 +451,11 @@ if(document.querySelector('#add__url') != null){
 					if (urlValue) {
 						if (urlValue.startsWith("http://") || urlValue.startsWith("https://")) {
 							video__input.classList.add("sign__input--validated");
+							if (button.classList.contains("sign__btn--old")) {
+								if (!confirm("Nếu cập nhật đường dẫn cũ này thì các đường dẫn cũ khác sẽ bị xóa!")) {
+									return;
+								}
+							}
 							uploadVideoUrl();
 						} else {
 							video__input__error.innerHTML = "Url của bạn nhập không đúng định dạng!";
@@ -547,6 +557,12 @@ if(document.querySelector('#add__url') != null){
 					document.querySelector('#add__url').disabled = false;
 				}
 
+				item__url.classList.add("item__url--saved");
+				document.querySelectorAll(".item__url").forEach(item =>{
+					if(!item.classList.contains("item__url--saved") && server__select.getAttribute("isUpdate") == "true"){
+						item.remove();
+					}
+				})
 				// formData.forEach((value, key) => {
 				// 	console.log(`${key}:`, value);
 				// });
@@ -571,11 +587,7 @@ if(document.querySelector('#add__url') != null){
 						}
 
 						video__uploaded.value = data.url;
-
-						resolution__selected.forEach((e)=>{
-							e.closest('.item__url').classList.remove("item__url--disabled");
-						})
-
+						
 						if(item__url.querySelector('.server__selected')) item__url.querySelector('.server__selected').value = "";
 						if(item__url.querySelector('.resolution__selected')) item__url.querySelector('.resolution__selected').value = "";
 						item__url.classList.add("item__url--editing");
@@ -592,50 +604,54 @@ if(document.querySelector('#add__url') != null){
 	});
 	
 	document.addEventListener('DOMContentLoaded', function() {
+		const modal__remove__url__btn = document.querySelector('#modal__remove__url__btn');
 		document.getElementById('url__items').addEventListener('click', function(event) {
 			if (event.target.closest('.remove__url__item')) {
-				// Tìm item__url cha và xóa nó
+
 				const itemUrlRemove = event.target.closest('.item__url');
 				if (itemUrlRemove) {
 					const itemUrl = itemUrlRemove.closest('.item__url');
-					if(itemUrl.getAttribute("id_url")){
-						let id = itemUrl.getAttribute("id_url");
-						let type = itemUrl.getAttribute("type__url");
-						// return console.log(type);
-						if(confirm("Bạn có muốn xóa đường dẫn này không?")){
-							document.querySelector('#loader').style.display = 'flex';
-
-							fetch(`/admin/${type}/url/remove/${id}`,{
-								method: 'DELETE',
-								headers: {
-									'Content-Type': 'application/json',
-									'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-								}
-							})
-							.then(response => response.json())
-							.then(data => {
-								if(data.success){
-									itemUrlRemove.remove();
-									document.querySelector('#loader').style.display = 'none';
-								}else{
-									console.log("Xóa url thất bại");
-								}
-							})
-							.catch(error => {
-								console.error(error);
-							});
-						}
+					if(itemUrl.getAttribute("id__url")){
+						modal__remove__url__btn.setAttribute("id__url", itemUrl.getAttribute("id__url"));
+						modal__remove__url__btn.setAttribute("type__url", itemUrl.getAttribute("type__url"));
 					}else{
 						itemUrlRemove.remove();
 						document.querySelector('#add__url').disabled = false;
 						checkSubmitButton();
 						document.querySelectorAll(".resolution__selected").forEach((e)=>{
 							e.closest('.item__url').classList.remove("item__url--disabled");
+							e.closest('.item__url').classList.remove("item__url--saved");
 						})
 					}
 				}
 			}
 		});
+
+		function delete__url() {
+			document.querySelector('#loader').style.display = 'flex';
+			let id__url = modal__remove__url__btn.getAttribute('id__url');
+			let type__url = modal__remove__url__btn.getAttribute('type__url');
+			// return console.log(document.querySelector(`.item__url[id__url="${id__url}"][type__url="${type__url}"]`));
+			fetch(`/admin/${type__url}/url/remove/${id__url}`,{
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+				}
+			})
+			.then(response => response.json())
+			.then(data => {
+				if(data.success){
+					document.querySelector(`.item__url[id__url="${id__url}"][type__url="${type__url}"]`).remove();
+					document.querySelector('#loader').style.display = 'none';
+				}
+			})
+			.catch(error => {
+				console.error(error);
+			});
+		}
+
+		if(modal__remove__url__btn) modal__remove__url__btn.addEventListener('click', delete__url)
 	});
 
 	const input__data = document.querySelectorAll(".input__data");
@@ -644,6 +660,7 @@ if(document.querySelector('#add__url') != null){
 
 	input__data.forEach((item, index)=>{
 		oldMsg.push(input__error[index].textContent);
+		validateForm(item, index);
 		item.addEventListener('input',()=>{
 			if(validateForm(item, index)){
 				item.classList = "sign__input sign__input--validated input__data";
@@ -714,7 +731,6 @@ if(document.querySelector('#add__url') != null){
 				}
 			}
 		}
-
 		if (message) {
 			input__error[index].innerText = message;
 			item.focus();
@@ -743,10 +759,6 @@ if(document.querySelector('#add__url') != null){
 
 		if(isFormValid){
 			let formData = new FormData();
-			let serverResolutionMap = {}; 
-			let check = false; 
-			let errorMessage = '';
-			let serverFound;
 
 			input__data.forEach((item)=>{
 				if(item.type == "file"){
@@ -759,67 +771,7 @@ if(document.querySelector('#add__url') != null){
 			video__uploaded.forEach((item)=>{
 				formData.append("urls[]", item.value);
 			})
-			// Giả sử bạn có 2 mảng `server__selected` và `resolution__selected`
-			server__selected.forEach((serverItem, index) => {
-				let serverValue = serverItem.value;
-				let resolutionValue = resolution__selected[index]?.value;
 
-				if (serverValue && resolutionValue) {
-					// Nếu chưa có server này trong mảng, khởi tạo
-					if (!serverResolutionMap[serverValue]) {
-						serverResolutionMap[serverValue] = [];
-					}
-
-					// Thêm độ phân giải vào mảng của server tương ứng
-					serverResolutionMap[serverValue].push(resolutionValue);
-				}
-			});
-
-			// Giả sử phần tử đang sửa có attribute `data-server` và `data-resolution` để nhận diện
-			let editingServer = document.querySelector(".item__url--editing"); // Lấy phần tử đang sửa
-			let editedServerValue = editingServer.querySelector(".server__select").value;
-			let editedResolutionValue = editingServer.querySelector(".resolution__select").value;
-
-			// Kiểm tra xem resolution đã chọn có trùng với server đã chọn không
-			if (serverResolutionMap[editedServerValue] && serverResolutionMap[editedServerValue].includes(editedResolutionValue)) {
-				check = true;
-				errorMessage = `Độ phân giải ${editedResolutionValue}p đã có trên ${editedServerValue}!`;
-				serverFound = editingServer.querySelector(".server__select");
-			}
-		
-			if (check) {
-				sessionStorage.setItem('message', JSON.stringify([errorMessage, "error"]));
-				messageBySession();
-
-				let serverFound__item__url = serverFound.closest(".item__url");
-				let serverFound__resolution__select = serverFound__item__url.querySelector(".resolution__select");
-				let serverFound__premium__select = serverFound__item__url.querySelector(".premium__select");
-				let serverFound__video__input = serverFound__item__url.querySelector(".video__input");
-				let serverFound__button = serverFound__item__url.querySelector(".sign__btn--upload");
-
-				serverFound.disabled = false;
-				serverFound__resolution__select.disabled = false;
-				serverFound__premium__select.disabled = false;
-				serverFound__video__input.disabled = false;
-				serverFound__button.disabled = false;
-				document.querySelector("#add__url").disabled = true;
-				serverFound__item__url.querySelector(".upload__progress__bar").style.width = '0%';
-				serverFound__item__url.querySelector(".upload__progress__bar").innerText = '0%';
-				serverFound__item__url.querySelector(".upload__progress__container").style.display = "none";
-
-				serverFound__item__url.classList.remove("item__url--success");
-				serverFound__item__url.classList.add("item__url--error");
-
-				serverFound.scrollIntoView({
-					behavior: 'smooth',
-					block: 'center',
-					inline: 'nearest'
-				});;
-				serverFound__button.removeAttribute("uploaded");
-				// console.log();
-				return;
-			}
-			
 			server__select.forEach((item, index) => {
 				let value = item.value || server__selected[index].value;
 				formData.append("servers[]", value);
@@ -864,11 +816,11 @@ if(document.querySelector('#add__url') != null){
 					if(data.success){
 						data_saved = true;
 						sessionStorage.setItem('message', JSON.stringify([data.message, data.status]));
-						
+						// return console.log(isAdd, type);
 						if(type == "episode"){
-							window.location = `/admin/episode/add/${id_movie}`
+							window.location.href = `/admin/episode/add/${id_movie}`
 						}else{
-							window.location = "/admin/movie/list"
+							window.location.href = "/admin/movie/list"
 						}
 					}
 				})
@@ -878,7 +830,6 @@ if(document.querySelector('#add__url') != null){
 			}else{
 				let type = submit__btn.getAttribute("type__update");
 				let id = submit__btn.getAttribute("id__upload")
-
 				fetch(`/admin/${type}/update/${id}`, {
 					method: 'POST',
 					headers: {
@@ -891,11 +842,11 @@ if(document.querySelector('#add__url') != null){
 					if(data.success){
 						data_saved = true;
 						sessionStorage.setItem('message', JSON.stringify([data.message, data.status]));
-						
+						// return console.log(isAdd, type);
 						if(type == "episode"){
-							window.location = `/admin/episode/update/${id}`
+							window.location.href = `/admin/episode/update/${id}`
 						}else{
-							window.location = `/admin/movie/update/${id}`
+							window.location.href = `/admin/movie/update/${id}`
 						}
 					}
 				})
@@ -905,7 +856,6 @@ if(document.querySelector('#add__url') != null){
 			}
 		}
 	})
-
 	window.addEventListener('beforeunload', function(event) {
 		if(!data_saved){
 			const video__uploaded = document.querySelectorAll(".video__uploaded");
@@ -915,7 +865,8 @@ if(document.querySelector('#add__url') != null){
 			video__uploaded.forEach((item) => {
 				formData.append("urls[]", item.value);
 			});
-		
+			
+			console.log("remove all", formData);
 			// Lấy CSRF token
 			const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 			formData.append('_token', token);
@@ -953,7 +904,7 @@ if(document.querySelector('.status__update__btn') != null){
 		let status__item__update = document.querySelectorAll(`.status__item__update`);
 		let id = button.getAttribute('id_status');
 		let type_status = button.getAttribute('type_status');
-
+		
 		button.addEventListener('click',()=>{
 			document.querySelector('#loader').style.display = 'flex';
 
@@ -968,26 +919,40 @@ if(document.querySelector('.status__update__btn') != null){
 			.then(data =>{
 				if(data.success){
 					if(type_status != "user"){
-						if(data.show){
-							status__item__update[index].innerText = "Hiển thị";
-							status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
+						if(type_status != "reply_comment"){
+							if(data.show){
+								status__item__update[index].innerText = "Hiển thị";
+								status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
 
-							document.querySelector('#loader').style.display = 'none';
+								document.querySelector('#loader').style.display = 'none';
+							}else{
+								status__item__update[index].innerText = "Ẩn";
+								status__item__update[index].classList = "status__item__update main__table-text main__table-text--red";
+
+								document.querySelector('#loader').style.display = 'none';
+							}
 						}else{
-							status__item__update[index].innerText = "Ẩn";
-							status__item__update[index].classList = "status__item__update main__table-text main__table-text--red";
+							if(data.show){
+								status__item__update[index].innerText = "Hiển thị";
+								status__item__update[index].classList = "status__item__update main__table-text--secondary main__table-text--green";
 
-							document.querySelector('#loader').style.display = 'none';
+								document.querySelector('#loader').style.display = 'none';
+							}else{
+								status__item__update[index].innerText = "Ẩn";
+								status__item__update[index].classList = "status__item__update main__table-text--secondary main__table-text--red";
+
+								document.querySelector('#loader').style.display = 'none';
+							}
 						}
 					}else{
-						if(!data.ban){
-							status__item__update[index].innerText = "Hoạt động";
-							status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
-
-							document.querySelector('#loader').style.display = 'none';
-						}else{
+						if(data.ban){
 							status__item__update[index].innerText = "Bị cấm";
 							status__item__update[index].classList = "status__item__update main__table-text main__table-text--red";
+							
+							document.querySelector('#loader').style.display = 'none';
+						}else{
+							status__item__update[index].innerText = "Bình thường";
+							status__item__update[index].classList = "status__item__update main__table-text main__table-text--green";
 
 							document.querySelector('#loader').style.display = 'none';
 						}
@@ -1047,6 +1012,44 @@ if (document.querySelector('.remove__btn__ajax') != null) {
 }
 
 
+if (document.querySelector('.role__update__btn') != null) {
+    let id_update = null;
+	let role__item__update = document.querySelectorAll(`.role__item__update`);
+
+    document.addEventListener('click', (event) => {
+		if(event.target && event.target.closest('.role__update__btn')){
+			id_update = event.target.closest('.role__update__btn').getAttribute('id_update');
+		}
+    });
+
+
+    function roleUpdate() {
+        if (!id_update) return;
+
+        document.querySelector('#loader').style.display = 'flex';
+
+        fetch(`/admin/employee/role/update/${id_update}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+				window.location.href = "/admin/employee/list";
+            }
+            id_update = null;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    document.querySelector('#modal__role__btn').addEventListener('click', roleUpdate);
+}
+
 if (document.querySelector('.trash__restore__btn') != null) {
     let id_trash = null;
     let type_trash = null;
@@ -1091,7 +1094,6 @@ if (document.querySelector('.trash__restore__btn') != null) {
     document.querySelector('#modal__restore__btn').addEventListener('click', trashRestore);
 }
 
-
 if(document.querySelector('.trash__remove__btn') != null){
 	let id_trash = null
 	let type_trash = null
@@ -1128,4 +1130,207 @@ if(document.querySelector('.trash__remove__btn') != null){
     document.querySelector('#modal__remove__btn').addEventListener('click', trashRemove);
 }
 
+// Chart
+if(document.getElementById('budgetChart')){
+	const budgetChart = document.getElementById('budgetChart');
+	const budgetData = JSON.parse(document.querySelector('meta[name="budget-data"]').getAttribute('content'));
+	console.log(budgetData);
+	new Chart(budgetChart, {
+		type: 'bar',
+		data: budgetData,
+		options: {
+			plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: '#fff', // Màu chữ của legend
+                    }
+                }
+            },
+			scales: {
+			  y: {
+				beginAtZero: true,
+				title: {
+					display: true,
+					color: '#fff',
+					text: 'Số Tiền (VND)', // Thêm "VND" vào tiêu đề của trục y
+				},
+				ticks: {
+					color: '#fff', // Màu chữ trên trục Y
+				},
+				grid: {
+					color: 'rgba(255, 255, 255, 0.1)', // Màu lưới
+				}
+			},
+				x: {
+					ticks: {
+						color: '#fff', // Màu chữ trên trục X
+					},
+					grid: {
+						color: 'rgba(255, 255, 255, 0.1)', // Màu lưới
+					}
+				}
+			}
+		},
+	});
+}
+if(document.getElementById('premiumUserChart')){
+	const premiumUserChart = document.getElementById('premiumUserChart');
+	const premiumUserData = JSON.parse(document.querySelector('meta[name="premium-data"]').getAttribute('content'));
+	console.log(premiumUserData);
+	new Chart(premiumUserChart, {
+		type: 'doughnut',
+		data: premiumUserData,
+		options: {
+			plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: '#fff', // Màu chữ của legend
+                    }
+                }
+            },
+		}
+	});
+}
+if(document.getElementById('categoryChart')){
+	const categoryChart = document.getElementById('categoryChart');
+	const categoryData = JSON.parse(document.querySelector('meta[name="category-data"]').getAttribute('content'));
+	console.log(categoryData);
+	new Chart(categoryChart, {
+		type: 'doughnut',
+		data: categoryData,
+		options: {
+			plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: '#fff', // Màu chữ của legend
+                    }
+                }
+            },
+		}
+	});
+}
+if(document.getElementById('topMoviesChart')){
+	const topMoviesChart = document.getElementById('topMoviesChart');
+	const topMoviesData = JSON.parse(document.querySelector('meta[name="top-movies-data"]').getAttribute('content'));
+	new Chart(topMoviesChart, {
+		type: 'bar',
+		data: topMoviesData,
+		  options: {
+			plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: '#fff', // Màu chữ của legend
+                    }
+                }
+            },
+			scales: {
+			  y: {
+				beginAtZero: true,
+				title: {
+					display: true,
+					color: '#fff',
+					text: 'Lượt thích (likes)', // Thêm "VND" vào tiêu đề của trục y
+				},
+				ticks: {
+					stepSize: 1, 
+					color: '#fff', // Màu chữ trên trục Y
+				},
+				grid: {
+					color: 'rgba(255, 255, 255, 0.1)', // Màu lưới
+				}
+			},
+				x: {
+					ticks: {
+						color: '#fff', // Màu chữ trên trục X
+					},
+					grid: {
+						color: 'rgba(255, 255, 255, 0.1)', // Màu lưới
+					}
+				}
+			}
+		},
+	})
+}
 
+if(document.querySelector('.paginator__paginator')){
+	const type_paginator = document.querySelector('.paginator__paginator').getAttribute('type_paginator');
+	const page = document.querySelector('.paginator__paginator').getAttribute('page');
+	const paginator__pages = document.querySelector('.paginator__pages');
+	const paginator__paginator = document.querySelector('.paginator__paginator');
+	const paginator__container = document.querySelector('.paginator__container');
+
+	fetch(`/paginator/amount/${type_paginator}?page=${page}`,{
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+		}
+	})
+	.then(response => response.json())
+	.then(data =>{
+		if(data.success){
+			paginator__pages.innerHTML = `${Math.min(Number(page) * 8, data.amount)} từ ${data.amount}`;
+			if(data.number > 1){
+				paginator__paginator.innerHTML += `<li class="paginator__paginator-previous">
+					<svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.75 5.36475L13.1992 5.36475" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.771 10.1271L0.749878 5.36496L5.771 0.602051" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+				  </li>`;
+			
+				for (let i = 0; i < Number(data.number); i++) {
+					let template = `
+					<li class="paginator__paginator-number ${ data.current == i + 1 ? "active" : "" }" paginator="${i + 1}">${i + 1}</li>
+					`
+					paginator__paginator.innerHTML += template;
+				}
+				
+				paginator__paginator.innerHTML += `<li class="paginator__paginator-next">
+					<svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.1992 5.3645L0.75 5.3645" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8.17822 0.602051L13.1993 5.36417L8.17822 10.1271" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+				</li>`;
+			}
+			paginator__container.style.visibility = "visible";
+		}
+	})
+	.catch(error => {
+		console.error(error);
+	});
+
+	paginator__paginator.addEventListener('click',(e)=>{
+
+		if (e.target && e.target.closest('.paginator__paginator-number')) {
+			let item = e.target.closest('.paginator__paginator-number');
+			if (!item.classList.contains("active")) {
+                let currentUrl = new URL(window.location.href);
+				currentUrl.searchParams.set('page', item.getAttribute("paginator"));
+                window.location.href = currentUrl.toString();
+			}
+		}
+
+		if (e.target && e.target.closest('.paginator__paginator-previous')) {
+			let item = e.target.closest('.paginator__paginator');
+			if (!item.classList.contains("active")) {
+                let currentUrl = new URL(window.location.href);
+				if(Number(item.getAttribute("page")) > 1){
+					currentUrl.searchParams.set('page', Number(item.getAttribute("page")) - 1);
+					window.location.href = currentUrl.toString();
+				}
+			}
+		}
+
+		if (e.target && e.target.closest('.paginator__paginator-next')) {
+			let item = e.target.closest('.paginator__paginator');
+			let number = document.querySelectorAll('.paginator__paginator-number').length;
+			// return console.log(number);
+			if (!item.classList.contains("active")) {
+                let currentUrl = new URL(window.location.href);
+				if(Number(item.getAttribute("page")) < number){
+					currentUrl.searchParams.set('page', Number(item.getAttribute("page")) + 1);
+					window.location.href = currentUrl.toString();
+				}
+			}
+		}
+
+	})
+}

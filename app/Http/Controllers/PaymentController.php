@@ -13,13 +13,21 @@ use Illuminate\Support\Facades\Mail;
 class PaymentController extends Controller
 {
     public function get(){
-        $subscriptions = DB::table('subscription_plans')->select()->get();
-        return view('clients.subscription', ['subscriptions' => $subscriptions]);
+        $subscriptions = DB::table('subscription_plans')
+        ->where("isDeleted",0)
+        ->get();
+        $plan = request()->has('plan') ? request('plan') : 0;
+        return view('clients.subscription', [
+            'subscriptions' => $subscriptions,
+            'plan' => $plan
+        ]);
     }
 
     function listpayment()
     {
-        $subscriptions = DB::table('subscription_plans')->select()->get();
+        $subscriptions = Subscription_plans::with("subscriptions")
+        ->where("isDeleted",0)
+        ->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));
         return view('admins.payment.list', ['subscriptions' => $subscriptions], ["selected" => "pay"]);
     }
     function addpayment()
@@ -53,9 +61,10 @@ class PaymentController extends Controller
     }
 
     
-    public function deletepayment($id){
+    public function admin__delete($id){
         $subscriptionsDelete = Subscription_plans::find($id);
-        if($subscriptionsDelete->delete()){
+        $subscriptionsDelete->isDeleted = 1;
+        if($subscriptionsDelete->save()){
             return response()->json([
                 "success" => true
             ]);
@@ -177,7 +186,7 @@ class PaymentController extends Controller
                     DB::table('subscriptions')->where('id', $subscription->id)->update([
                         'start_date' => now(),
                         'end_date' => now()->addDays($subscriptionPlan->duration),
-                        'payment_status' => 'active',
+                        'payment_status' => 1,
                     ]);
                     $subscription_id = $subscription->id;
                 } else {
@@ -187,7 +196,7 @@ class PaymentController extends Controller
                         'id_plan' => $subscriptionPlan->id,
                         'start_date' => now(),
                         'end_date' => now()->addDays($subscriptionPlan->duration),
-                        'payment_status' => 'active',
+                        'payment_status' => 1,
                     ]);
                 }
 
@@ -207,6 +216,13 @@ class PaymentController extends Controller
                 // Gửi email
                 Mail::to(auth()->user()->email)->send(new PaymentSuccessMail(auth()->user(), $subscriptionPlan));
                 
+                $user = DB::table("users")->where("role","admin")->first();
+                DB::table('notifications')->insert([
+                    'id_send_user' => $user->id,
+                    'id_receive_user' => auth()->user()->id,
+                    'content' => "{$subscriptionPlan->name} đã được thanh toán thành công! Cảm ơn bạn đã sử dụng dịch vụ"
+                ]);
+
                 return redirect()->route('profile')->with('success', 'Thanh toán thành công!');
             } else {
                 return redirect()->route('subscription')->with('error', 'Thanh toán thất bại!');

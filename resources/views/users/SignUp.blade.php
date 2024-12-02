@@ -96,7 +96,7 @@
                                 </button>
         
                                 <span class="sign__text">Đã có tài khoản?
-                                    <a href="{{ route('signin') }}">Đăng nhập!</a></span>
+                                    <a href="{{ route('login') }}">Đăng nhập!</a></span>
         
                                 <span class="sign__text">Sau khi đăng kí vui lòng vào mail để xác nhận</span>
                             </form>

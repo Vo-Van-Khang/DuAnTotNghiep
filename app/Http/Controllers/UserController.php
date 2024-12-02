@@ -35,14 +35,14 @@ class UserController extends Controller
         $histories = Histories::whereHas('movie', function($query) {
                 $query->where('isDeleted', 0)->where('status', 1);
             })->where("id_user", auth()->user()->id)->orderBy("created_at","desc")->get();
-        $payments = Payments::with("subscription")->where("id_user", auth()->user()->id)->get();
-        // dd($payments);
+        $subscriptions = Subscription::with("subscription_plan")->where("id_user", auth()->user()->id)->get();
+        
         $user = User::find(auth()->user()->id);
         return view('users.profile',[
             'likes'=>$likes,
             'watch_laters'=>$watch_laters,
             'histories'=>$histories,
-            'payments'=>$payments,
+            'subscriptions'=>$subscriptions,
             'user'=>$user
         ]);
     }
@@ -99,9 +99,48 @@ class UserController extends Controller
         return redirect()->route('index')->with('success','Đăng xuất thành công!'); 
     }
 
-    public function admin__view(){
-        return view('admins.user.list', [
-            "selected" => "user"
+    public function userUpdate(Request $request){
+        $name = $request->input('name');
+        $userUpdate = User::find(auth()->id());
+        if ($request->hasFile('image')) {
+            $image = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images/users'), $image);
+            $userUpdate->image = $image;
+        }
+        $userUpdate->name = $name;
+        if($userUpdate->save()){
+            return redirect()->back()->with('success', 'Cập nhật thông tin thành công!');
+    }
+    }
+
+    public function changePassword(){
+        request()->validate([
+            'password' => 'required|confirmed|min:5',
+            'current_password' => 'required|min:5',
+        ],[
+            'password.required' => 'Mật khẩu là bắt buộc.',
+            'password.confirmed' => 'Mật khẩu của bạn không khớp nhau.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'current_password.required' => 'Mật khẩu cũ là bắt buộc.',
+            'current_password.min' => 'Mật khẩu cũ phải có ít nhất 8 ký tự.',
+        ]);
+        $user = User::find(auth()->id());
+        if(Request('current_password') === $user -> password){
+            $user->password = Request('password');
+            if($user->save()){
+            return redirect()->back()->with('success', 'Thay đổi mật khẩu thành công!');
+            }
+        }else{
+            return redirect()->back()->with('error', 'Mật khẩu cũ không đúng!');
+        }
+
+    }
+
+    public function admin__employee__view(){
+        $users = db::table('users')->select('*')->where("isDeleted", 0)->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));
+        return view('admins.user.employee', [
+            "selected" => "user",
+            'users' => $users
         ]);
     }
     public function admin__add(){
@@ -117,7 +156,7 @@ class UserController extends Controller
 
 
     public function show(){
-        $users = db::table('users')->select('*')->where("isDeleted", 0)->get();
+        $users = db::table('users')->select('*')->where("isDeleted", 0)->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));
         return view('admins/user/list', ['users' => $users ,  "selected" => "user"]);
     }
 
@@ -126,23 +165,22 @@ class UserController extends Controller
         return view('admins/user/update', ['user' => $userEdit,"selected" => "user"]);
     }
 
-    public function update(Request $request){
+    public function update(Validate $request){
+            $validated = $request->validated();
             $id = $request->input('id');
             $name = $request->input('name');
-            $email = $request->input('email');
             $status = $request->input('status');
-            $premium = $request->input('premium');
             $role = $request->input('role');
             $userUpdate = User::find($id);
             if ($request->hasFile('image')) {
                 $image = time().'.'.$request->image->extension();
                 $request->image->move(public_path('images/users'), $image);
-                $userUpdate->image = $image;
+                $imageName = "/images/users/" . $image;
+                $userUpdate->image = $imageName;
             }
+
             $userUpdate->name = $name;
-            $userUpdate->email = $email;
             $userUpdate->status = $status;
-            $userUpdate->premium = $premium;
             $userUpdate->role = $role;
             if($userUpdate->save()){
                 return redirect('admin/user/list');
@@ -194,8 +232,9 @@ public function register(Request $request)
 
         // Xử lý ảnh
         if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images/users'), $imageName);
+            $image = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/users'), $image);
+            $imageName = "/images/users/" . $image;
         } else {
             $imageName = '/images/users/user.jpg';
         }
@@ -300,5 +339,60 @@ public function register(Request $request)
                 "isLogin" => false
             ]);
         }
+    }
+
+    public function admin__status__update($id) {
+        $ban = true;
+        $status = DB::table("users")->where("id", $id)->value("status");
+        
+        if ($status == 0) {
+            DB::table("users")->where("id", $id)->update([
+                "status" => 1
+            ]);
+            $ban = false;
+
+            $user = DB::table("users")->where("role","admin")->first();
+            if($user){
+                DB::table('notifications')->insert([
+                    'id_send_user' => $user->id,
+                    'id_receive_user' => $id,
+                    'content' => 'Chúng tôi đã mở cấm tài khoản của bạn, hãy văn minh lên nhé!'
+                ]);
+            }
+        } else {
+            DB::table("users")->where("id", $id)->update([
+                "status" => 0
+            ]);
+
+            $user = DB::table("users")->where("role","admin")->first();
+            if($user){
+                DB::table('notifications')->insert([
+                    'id_send_user' => $user->id,
+                    'id_receive_user' => $id,
+                    'content' => 'Chúng tôi đã cấm tài khoản của bạn, bạn không thể sử dụng các chức năng bình luận!'
+                ]);
+            }
+        }
+        return response()->json([
+            "ban" => $ban,
+            "success" => true
+        ]);
+    }
+    public function admin__role__update($id) {
+        $role = DB::table("users")->where("id", $id)->value("role");
+        
+        if ($role == "user") {
+            DB::table("users")->where("id", $id)->update([
+                "role" => "staff"
+            ]);
+        } else {
+            DB::table("users")->where("id", $id)->update([
+                "role" => "user"
+            ]);
+        }
+        
+        return response()->json([
+            "success" => true
+        ]);
     }
 }
