@@ -142,7 +142,13 @@
                         </td>
 
                         <td>
-                            <div class="main__table-text">{{$user->role}}</div>
+                            @if ($user->role == "admin")
+								<div class="main__table-text">Admin</div>
+							@elseif($user->role == "staff")
+								<div class="main__table-text">Nhân viên</div>
+							@else
+								<div class="main__table-text">Khách hàng</div>
+							@endif
                         </td>
 
                         <td>

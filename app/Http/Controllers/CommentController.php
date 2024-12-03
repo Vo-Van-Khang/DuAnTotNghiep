@@ -34,49 +34,6 @@ class CommentController extends Controller
             "success" => true
         ]);
     }
-
-
-    // Hiển thị danh sách bình luận cho một bộ phim cụ thể
-    public function admin__view()
-    {
-        $comments = Comments::with('movie')
-            ->with('user')
-            ->where('isDeleted', 0)
-            ->get();
-
-        return view('admins.comment.list', [
-            "comments" => $comments,
-            "selected" => "comment"
-        ]);
-    }
-    public function admin__status__update($id){
-        $show = false;
-        $status = DB::table("comments")->where("id", $id)->value("status");
-        
-        if ($status == 0) {
-            DB::table("comments")->where("id", $id)->update([
-                "status" => 1
-            ]);
-            $show = true;
-        } else {
-            DB::table("comments")->where("id", $id)->update([
-                "status" => 0
-            ]);
-        }
-        return response()->json([
-            "show" => $show,
-            "success" => true
-        ]);
-    }
-    public function admin__delete($id){
-        DB::table("comments")->where("id",$id)->update([
-            "isDeleted" => 1
-        ]);
-        return response()->json([
-            "success" => true
-        ]);
-    }
-
     public function admin__view()
     {
         $perPage = request()->input('per_page', 8);

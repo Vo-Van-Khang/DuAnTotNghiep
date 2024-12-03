@@ -869,7 +869,7 @@ $(document).ready(function() {
         });
     }
     
-    if (document.querySelector('.remove__btn')) {
+    if (document.querySelector('#modal-delete')) {
         let id_remove = null;
         let type_remove = null;
     
@@ -959,7 +959,7 @@ $(document).ready(function() {
             if(comment__content.value != ""){
                 comment__error.style.display = "none";
                 document.querySelector('#loader').style.display = 'flex';
-    
+           
                 fetch(`/movie/${id}/comment/add`,{
                     method: 'POST',
                     headers: {
@@ -1058,19 +1058,30 @@ $(document).ready(function() {
             let button = event.target.closest('.reply__comment__btn');
             if (button) {
                 let item = button;
-                let name_user = item.getAttribute("name_user");
-                user__reply.innerText = name_user;
-                user__reply__btn.style.display = "flex";
-                comment__submit__btn.style.display = "none";
-                reply__comment__submit__btn.setAttribute('id_user', item.getAttribute('id_user'));
-                reply__comment__submit__btn.setAttribute('id_comment', item.getAttribute('id_comment'));
-                reply__comment__submit__btn.style.display = "flex";
-                comment__content.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                    inline: 'nearest'
-                });
-                comment__content.focus({ preventScroll: true });
+                if(!item.parentElement.parentElement.querySelector('.reply__form')){
+                    if(document.querySelector('.reply__form')){
+                        let reply__forms = document.querySelectorAll('.reply__form');
+                        reply__forms.forEach(item => {
+                            if(item.querySelector('.reply__comment__submit__btn').getAttribute('id__comment') != item.getAttribute('id_comment')){
+                                item.remove();
+                            }
+                        })
+                    }
+    
+                    let template = `
+                        <div class="reply__form">
+                            <input type="text" class="sign__input" id="reply__comment__content">
+                            <button type="button" class="sign__btn reply__comment__submit__btn" id_movie="${comments__list.getAttribute('id_movie')}" id_user="${item.getAttribute('id_user')}" id__comment="${item.getAttribute('id_comment')}">
+                                Trả lời
+                            </button>
+                        </div>
+                        <span style="color: #df4a32; display:none" id="reply__comment__error"></span>
+                    `
+                    item.parentElement.previousElementSibling.insertAdjacentHTML('afterend',template);
+                    document.querySelector('#reply__comment__content').focus();
+                }else{
+                    item.parentElement.parentElement.querySelector('.reply__form').remove();
+                }
             }
             if (event.target.closest('.open-modal')) {
                 $(event.target.closest('.open-modal')).magnificPopup({
@@ -1086,114 +1097,126 @@ $(document).ready(function() {
             reply__comment__submit__btn.style.display = "none"
         })
     
-        reply__comment__submit__btn.addEventListener('click', (button)=>{
-            let id = button.target.getAttribute('id_movie');
-            let id__user__reply = button.target.getAttribute('id_user');
-            let id__comment = button.target.getAttribute('id_comment');
-            if(comment__content.value != ""){
-                comment__error.style.display = "none";
-                document.querySelector('#loader').style.display = 'flex';
-    
-                fetch(`/movie/${id}/reply_comment/add`,{
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ 
-                        id__user__reply: id__user__reply,
-                        id__comment: id__comment,
-                        comment__content: comment__content.value 
+        comments__list.addEventListener('click', (event)=>{
+            if(event.target && event.target.closest('.reply__comment__submit__btn')){
+                let id = event.target.getAttribute('id_movie');
+                let id__user__reply = event.target.getAttribute('id_user');
+                let id__comment = event.target.getAttribute('id__comment');
+                let reply__comment__error = document.querySelector('#reply__comment__error');
+                let reply__comment__content = document.querySelector("#reply__comment__content");
+
+                if(reply__comment__content.value != ""){
+                    reply__comment__error.style.display = "none";
+                    document.querySelector('#loader').style.display = 'flex';
+        
+                    fetch(`/movie/${id}/reply_comment/add`,{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ 
+                            id__user__reply: id__user__reply,
+                            id__comment: id__comment,
+                            comment__content: reply__comment__content.value 
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        let commentParent = comments__list.querySelector(`.reply__comment__btn[id_comment="${id__comment}"]`).closest('.comments__item');
-                        let replyContainer = commentParent.nextElementSibling;
-                        let template = `  <li
-                                            class="comments__item comments__item--answer item__remove"
-                                            id_remove="${data.reply_comment.id}" type_remove="reply_comment"
-                                            >
-                                            <div class="comments__autor">
-                                                <div>
-                                                    <img
-                                                        class="comments__avatar"
-                                                        src="${data.user.image}"
-                                                        alt=""
-                                                    />
-                                                    <span class="comments__name"
-                                                        >${data.user.name}</span
-                                                    >
-                                                    <span class="comments__time"
-                                                        >${data.reply_comment.created_at}</span
-                                                    >
-                                                </div>
-                                                <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn"  id_remove="${data.reply_comment.id}" type_remove="reply_comment">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                                                </a>
-                                            </div>
-                                            <p class="comments__text">
-                                                <span>@${data.name_user}</span>
-                                                ${data.reply_comment.content}
-                                            </p>
-                                            <div class="comments__actions">
-                                                <span></span>
-                                                <button type="button" class="reply__comment__btn" name_user="${data.user.name}" id_user="${data.user.id}" id_comment="${id__comment}">
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="512"
-                                                        height="512"
-                                                        viewBox="0 0 512 512"
-                                                    >
-                                                        <polyline
-                                                            points="400 160 464 224 400 288"
-                                                            style="
-                                                                fill: none;
-                                                                stroke-linecap: round;
-                                                                stroke-linejoin: round;
-                                                                stroke-width: 32px;
-                                                            "
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            let commentParent = comments__list.querySelector(`.reply__comment__btn[id_comment="${id__comment}"]`).closest('.comments__item');
+                            let replyContainer = commentParent.nextElementSibling;
+                            let template = `  <li
+                                                class="comments__item comments__item--answer item__remove"
+                                                id_remove="${data.reply_comment.id}" type_remove="reply_comment"
+                                                >
+                                                <div class="comments__autor">
+                                                    <div>
+                                                        <img
+                                                            class="comments__avatar"
+                                                            src="${data.user.image}"
+                                                            alt=""
                                                         />
-                                                        <path
-                                                            d="M448,224H154C95.24,224,48,273.33,48,332v20"
-                                                            style="
-                                                                fill: none;
-                                                                stroke-linecap: round;
-                                                                stroke-linejoin: round;
-                                                                stroke-width: 32px;
-                                                            "
-                                                        /></svg
-                                                    ><span>Trả Lời</span>
-                                                </button>
-                                            </div>
-                                        </li>`
-                        replyContainer.insertAdjacentHTML('beforeend', template);
-    
-                        let newReplyComment = replyContainer.lastElementChild;
-                        newReplyComment.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center',
-                            inline: 'nearest'
-                        });
-                        comment__content.value = "";
-                        user__reply__btn.click();
-                        comment__count();
-                    }else{
-                        console.log("Thêm bình luận không thành công");
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-                .finally(() => {
-                    document.querySelector('#loader').style.display = 'none';
-                });
-    
-            }else{
-                comment__error.style.display = "block";
-                comment__error.innerText = "Nội dung không được để trống!"
+                                                        <span class="comments__name"
+                                                            >${data.user.name}</span
+                                                        >
+                                                        <span class="comments__time"
+                                                            >${data.reply_comment.created_at}</span
+                                                        >
+                                                    </div>
+                                                    <a href="#modal-delete" class="open-modal comments__delete__btn remove__btn"  id_remove="${data.reply_comment.id}" type_remove="reply_comment">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                                                    </a>
+                                                </div>
+                                                <p class="comments__text">
+                                                    <span>@${data.name_user}</span>
+                                                    ${data.reply_comment.content}
+                                                </p>
+                                                <div class="comments__actions">
+                                                    <span></span>
+                                                    <button type="button" class="reply__comment__btn" name_user="${data.user.name}" id_user="${data.user.id}" id_comment="${id__comment}">
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="512"
+                                                            height="512"
+                                                            viewBox="0 0 512 512"
+                                                        >
+                                                            <polyline
+                                                                points="400 160 464 224 400 288"
+                                                                style="
+                                                                    fill: none;
+                                                                    stroke-linecap: round;
+                                                                    stroke-linejoin: round;
+                                                                    stroke-width: 32px;
+                                                                "
+                                                            />
+                                                            <path
+                                                                d="M448,224H154C95.24,224,48,273.33,48,332v20"
+                                                                style="
+                                                                    fill: none;
+                                                                    stroke-linecap: round;
+                                                                    stroke-linejoin: round;
+                                                                    stroke-width: 32px;
+                                                                "
+                                                            /></svg
+                                                        ><span>Trả Lời</span>
+                                                    </button>
+                                                </div>
+                                            </li>`
+                            replyContainer.insertAdjacentHTML('beforeend', template);
+                            if(replyContainer.querySelector('.hide__reply__comments')) replyContainer.querySelector('.hide__reply__comments').remove();
+                            let newReplyComment = replyContainer.lastElementChild;
+                            const hide__template = `
+                                <p class="hide__reply__comments"> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="15px"><path d="m177-120-57-57 184-183H200v-80h240v240h-80v-104L177-120Zm343-400v-240h80v104l183-184 57 57-184 183h104v80H520Z"/></svg>
+                                    Ẩn bình luận trả lời
+                                </p>
+                            `;
+                            replyContainer.insertAdjacentHTML("beforeend",hide__template);
+                            newReplyComment.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center',
+                                inline: 'nearest'
+                            });
+                            reply__comment__content.value = "";
+                            document.querySelector('.reply__form').remove();
+                            reply__comment__error.remove();
+                            comment__count();
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    })
+                    .finally(() => {
+                        document.querySelector('#loader').style.display = 'none';
+                    });
+        
+                }else{
+                    reply__comment__error.style.display = "block";
+                    reply__comment__error.innerText = "Nội dung không được để trống!"
+                }
             }
+           
         })
     }
     function comment__count() {
@@ -1438,7 +1461,7 @@ $(document).ready(function() {
     
             if(e.target && e.target.closest(".hide__reply__comments")){
                 let item = e.target.closest(".hide__reply__comments ").parentElement.previousElementSibling ;
-                let reply__comments__container = e.target.closest(".hide__reply__comments ").parentElement;
+                let reply__comments__container = e.target.closest(".hide__reply__comments").parentElement;
                 let show__button = item.querySelector(".show__reply__comments");
                 // let reply__comments__container = item.nextElementSibling;
     
@@ -1581,4 +1604,80 @@ window.addEventListener("DOMContentLoaded",()=>{
     .catch(error => {
         console.error(error);
     });
+})
+
+if(document.querySelector('.nav__direction')){
+    const nav__direction = document.querySelectorAll('.nav__direction');
+    nav__direction.forEach((e, index) => {
+        e.addEventListener('click',()=>{
+            sessionStorage.setItem('nav__direction',index);
+        })
+    })
+    if(sessionStorage.getItem('nav__direction')){
+        nav__direction[sessionStorage.getItem('nav__direction')].click();
+    }
+}else{
+    if(sessionStorage.getItem('nav__direction')){
+        sessionStorage.removeItem('nav__direction');
+    }
+}
+if(document.querySelector('.show__pay__history')){
+    const show__pay__history = document.querySelectorAll('.show__pay__history');
+    show__pay__history.forEach(e => {
+        e.addEventListener('click',()=>{
+            let id = e.getAttribute('id__subscription');
+            fetch(`/show/pay__history/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.body.insertAdjacentHTML('beforeend', `
+                            <div class="pay__history">
+                                <div class="container">
+                                    <h2>Thông tin thanh toán</h2>
+                                    <div class="col-12 item">
+                                        <p>
+                                            Tài khoản:
+                                            <span>${data.user.email}</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-12 item">
+                                        <p>
+                                            Ngày mua:
+                                            <span>${data.payment.date}</span>
+                                        </p>
+                                        <p>
+                                            Giá gói:
+                                            <span>${Number(data.payment.amount).toLocaleString('vi-VN') + " VND"}</span>
+                                        </p>
+                                        <p>
+                                            Phương thức:
+                                            <span>${data.payment.method}</span>
+                                        </p>
+                                        <p>
+                                            Mã giao dịch:
+                                            <span>${data.transactionID}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                    `)
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        })
+    })
+}
+
+document.addEventListener('click',(e)=>{
+    if(e.target.closest('.pay__history') && !e.target.closest('.container')){
+        e.target.closest('.pay__history').remove();
+    }
 })

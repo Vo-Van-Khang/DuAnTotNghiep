@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Likes;
 use App\Models\Movies;
 use App\Models\Payments;
+use App\Mail\ContactMail;
 use App\Models\Histories;
 use Illuminate\Support\Str;
 use App\Mail\UserRegistered;
@@ -125,12 +126,12 @@ class UserController extends Controller
             'current_password.min' => 'Mật khẩu cũ phải có ít nhất 8 ký tự.',
         ]);
         $user = User::find(auth()->id());
-        if(Request('current_password') === $user -> password){
-            $user->password = Request('password');
-            if($user->save()){
-            return redirect()->back()->with('success', 'Thay đổi mật khẩu thành công!');
+        if (Hash::check(Request('current_password'), $user->password)) {
+            $user->password = Hash::make(Request('password'));
+            if ($user->save()) {
+                return redirect()->back()->with('success', 'Thay đổi mật khẩu thành công!');
             }
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Mật khẩu cũ không đúng!');
         }
 
@@ -250,7 +251,7 @@ public function register(Request $request)
             'image' => $imageName,
             'role' => 'user',
             'email_verified_at' => null,
-            'status' => '1',
+            'status' => 1,
             'premium' => false,
             'remember_token' => Str::random(10),
             'created_at' => now(),
@@ -262,10 +263,10 @@ public function register(Request $request)
         try {
             Mail::to($request->email)->send(new UserRegistered($user));
         } catch (\Exception $e) {
-            return redirect()->route('signin')->with('error', 'Đăng ký thành công nhưng không thể gửi email xác nhận.');
+            return redirect()->route('login')->with('error', 'Đăng ký thành công nhưng không thể gửi email xác nhận.');
         }
 
-        return redirect()->route('signin')->with('success', 'Đăng ký thành công, vui lòng kiểm tra email để xác nhận tài khoản.');
+        return redirect()->route('login')->with('success', 'Đăng ký thành công, vui lòng kiểm tra email để xác nhận tài khoản.');
     }
     public function forgotPassword()
     {
@@ -326,7 +327,7 @@ public function register(Request $request)
             'password' => Hash::make($password),
         ]);
 
-        return redirect()->route('signin')->with('success', 'Mật khẩu đã được đặt lại thành công.');
+        return redirect()->route('login')->with('success', 'Mật khẩu đã được đặt lại thành công.');
     }
     
     public function check__login(){
@@ -394,5 +395,19 @@ public function register(Request $request)
         return response()->json([
             "success" => true
         ]);
+    }
+
+    public function contact(Validate $request){
+        $request->validated();
+        $details = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'content' => $request->content,
+        ];
+        // dd($details->name);
+        // Gửi email
+        Mail::to('dumdumteam.dev@gmail.com')->send(new ContactMail($details));
+
+        return back()->with('success', 'Email đã được gửi thành công!');
     }
 }

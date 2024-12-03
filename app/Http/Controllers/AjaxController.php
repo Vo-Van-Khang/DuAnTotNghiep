@@ -111,7 +111,6 @@ class AjaxController extends Controller
             ->with("reply_comments")
             ->where("id_movie", $id)
             ->where("status",1)
-            ->where("isDeleted",0)
             ->orderBy("created_at", "desc")
             ->paginate($perPage, ['*'], 'page', $page);
 
@@ -164,6 +163,18 @@ class AjaxController extends Controller
             "reply_comments" => $reply_comments,
             "user_login" => $user_login,
             "user_id" => $user_id
+        ]);
+    }
+
+    public function show__pay__history($id){
+        $payment = DB::table("payments")->where('id_sub',$id)->first();
+        $transactionID = strtotime($payment->date);
+        $user = auth()->user();
+        return response()->json([
+            "success" => true,
+            "payment" => $payment,
+            "transactionID" => $transactionID,
+            "user" => $user
         ]);
     }
 }

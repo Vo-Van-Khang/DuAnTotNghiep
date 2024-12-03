@@ -31,7 +31,7 @@
                     >
                         <li class="nav-item">
                             <a
-                                class="nav-link active"
+                                class="nav-link nav__direction active"
                                 data-toggle="tab"
                                 href="#tab-1"
                                 role="tab"
@@ -43,7 +43,7 @@
 
                         <li class="nav-item">
                             <a
-                                class="nav-link"
+                                class="nav-link nav__direction"
                                 data-toggle="tab"
                                 href="#tab-2"
                                 role="tab"
@@ -55,7 +55,7 @@
 
                         <li class="nav-item">
                             <a
-                                class="nav-link"
+                                class="nav-link nav__direction"
                                 data-toggle="tab"
                                 href="#tab-3"
                                 role="tab"
@@ -119,6 +119,7 @@
                                             <th>NGÀY HẾT HẠN</th>
                                             <th>GIÁ GÓI</th>
                                             <th>TÌNH TRẠNG</th>
+                                            <th>LỊCH SỬ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -167,6 +168,13 @@
                                                                 Đang sử dụng
                                                             </div>
                                                         @endif
+                                                    </td>
+                                                    <td>
+                                                        <div class="main__table-text main__table-btns">
+                                                            <button class="main__table-btn main__table-btn--view show__pay__history" id__subscription="{{$subscription->id}}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M440-200h80v-40h40q17 0 28.5-11.5T600-280v-120q0-17-11.5-28.5T560-440H440v-40h160v-80h-80v-40h-80v40h-40q-17 0-28.5 11.5T360-520v120q0 17 11.5 28.5T400-360h120v40H360v80h80v40ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-560v-160H240v640h480v-480H520ZM240-800v160-160 640-640Z"/></svg>
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             @endforeach

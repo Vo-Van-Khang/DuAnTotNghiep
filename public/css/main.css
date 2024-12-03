@@ -2057,6 +2057,7 @@ body::-webkit-scrollbar-thumb {
 
 .profile__avatar img {
     width: 100%;
+    object-fit: cover;
 }
 
 @media (min-width: 768px) {
@@ -4851,6 +4852,31 @@ body::-webkit-scrollbar-thumb {
 .reply__comments__container .comments__item--answer:last-of-type{
     margin-bottom: 10px;
 }
+.reply__form{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background-color: #2b3c58;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.reply__form input{
+    background-color: #2b3c58;
+}
+.reply__form input:focus{
+    background-color: #2b3c58;
+    border: 0;
+}
+.reply__form button{
+    width: fit-content;
+    height: 100%;
+    font-size: 12px;
+    padding: 7px 15px;
+    margin: 0;
+    margin-right: 10px;
+    white-space: nowrap;
+}
 .comments__actions {
     display: flex;
     flex-direction: row;
@@ -7043,4 +7069,28 @@ input.is-invalid:focus {
 .payment__information .pay__total button:hover{
     background-color: #f2f2f2;
     color: #131720;
+}
+
+.pay__history{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #151f309e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 888;
+}
+.pay__history .container{
+    background-color: #151f30;
+    width: 40%;
+    padding: 20px;
+    border-radius: 5px;
+    color: #f2f2f2;
+    border: 1px solid #2f80ed;
+}
+.pay__history .container h2{
+    text-align: center;
 }

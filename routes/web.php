@@ -122,6 +122,7 @@ Route::middleware(['checkRoleMiddleware'])->group(function () {
 Route::get("/", [MovieController::class, 'index'])->name('index');
 Route::view('/about', 'clients.about')->name("about");
 Route::view('/contact', 'clients.contact')->name("contact");
+Route::post('/contact', [UserController::class, 'contact'])->name("contact");
 Route::get('/subscription', [PaymentController::class , 'get'])->middleware('auth')->name("subscription");
 Route::post('/subscription/payment', [PaymentController::class , 'payment'])->name("subscription.payment");
 Route::get('/subscription/payment/return/{id_plan}', [PaymentController::class , 'payment__return'])->name("subscription.payment.return");
@@ -131,6 +132,7 @@ Route::view('/privacy', 'clients.privacy')->name("privacy");
 Route::post('/check/payment', [AjaxController::class,'check__payment']);
 Route::get('/nav/ajax', [AjaxController::class,'nav']);
 Route::get('/notification/update/status', [AjaxController::class,'notification__update__status']);
+Route::get('/show/pay__history/{id}', [AjaxController::class,'show__pay__history']);
 
 Route::view('/signin', 'users.SignIn')->name("login");
 Route::post('/signin',[UserController::class , 'sign__in'])->name("login");
@@ -162,7 +164,6 @@ Route::post('/movie/{id}/reply_comment/add', [ReplyCommentController::class,'rep
 Route::post('/movie/update-view/{id}', [MovieController::class,'movie__update__view']);
 Route::get('/movie/filter/ajax', [MovieController::class,'movie__filter']);
 
-
 Route::delete('/comment/remove/{id}', [CommentController::class, 'remove_by_id']);
 Route::delete('/reply_comment/remove/{id}', [ReplyCommentController::class, 'remove_by_id']);
 
@@ -172,16 +173,15 @@ Route::get('/verify/{token}', function ($token) {
     $user = DB::table('users')->where('remember_token', $token)->first();
 
     if (!$user) {
-        return redirect()->route('signin')->with('error', 'Token không hợp lệ.');
+        return redirect()->route('login')->with('error', 'Token không hợp lệ.');
     }
 
     DB::table('users')->where('id', $user->id)->update([
         'email_verified_at' => now(),
-        'status' => '0',
         'remember_token' => null,
     ]);
 
-    return redirect()->route('signin')->with('success', 'Email của bạn đã được xác nhận. Vui lòng đăng nhập.');
+    return redirect()->route('login')->with('success', 'Email của bạn đã được xác nhận. Vui lòng đăng nhập.');
 })->name('verify');
 Route::get('/forgot-password', [UserController::class, 'forgotPassword'])->name('forgot-password.form');
 Route::post('/forgot-password', [UserController::class, 'sendReset'])->name('forgot-password.send');

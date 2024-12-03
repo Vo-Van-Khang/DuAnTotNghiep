@@ -13,7 +13,7 @@
             <div class="col-12 col-xl-6">
                 <ul class="breadcrumb">
                     <li class="breadcrumb__item">
-                        <a href="index.html">Trang chủ</a>
+                        <a href="{{route('index')}}">Trang chủ</a>
                     </li>
                     <li
                     class="breadcrumb__item breadcrumb__item--active"
@@ -33,9 +33,11 @@
         <div class="row">
             <div class="col-12 col-lg-7 col-xl-8">
                 <form
-                    action="#"
+                    action="{{route('contact')}}"
                     class="sign__form sign__form--contacts"
+                    method="POST"
                 >
+                    @csrf
                     <div class="row">
                         <div class="col-12 col-xl-6">
                             <div class="sign__group">
@@ -44,33 +46,44 @@
                                     name="name"
                                     class="sign__input"
                                     placeholder="Tên của bạn"
+                                    value="{{old('name')}}"
                                 />
+                                @error('name')
+									<span style="color: #df4a32">{{$message}}</span>
+								@enderror
                             </div>
                         </div>
 
                         <div class="col-12 col-xl-6">
                             <div class="sign__group">
                                 <input
-                                    type="text"
+                                    type="email"
                                     name="email"
                                     class="sign__input"
                                     placeholder="Email của bạn"
+                                    value="{{old('email')}}"
                                 />
+                                @error('email')
+									<span style="color: #df4a32">{{$message}}</span>
+								@enderror
                             </div>
                         </div>
 
                         <div class="col-12">
                             <div class="sign__group">
                                 <textarea
-                                    name="text"
+                                    name="content"
                                     class="sign__textarea"
                                     placeholder="Tin nhắn của bạn"
-                                ></textarea>
+                                >{{old('content')}}</textarea>
+                                @error('content')
+									<span style="color: #df4a32">{{$message}}</span>
+								@enderror
                             </div>
                         </div>
 
                         <div class="col-12 col-xl-3">
-                            <button type="button" class="sign__btn">
+                            <button type="submit" class="sign__btn">
                                 Gửi
                             </button>
                         </div>
@@ -87,13 +100,13 @@
                 </p>
                 <ul class="contacts__list">
                     <li>
-                        <a href="tel:+18092345678"
+                        <a href="tel:+84346074020"
                             >Số điện thoại: +84 346 074 020</a
                         >
                     </li>
                     <li>
-                        <a href="mailto:support@flixtv.template"
-                            >Email: dumdumsupport@gmail.com</a
+                        <a href="mailto:dumdumteam.dev@gmail.com"
+                            >Email: dumdumteam.dev@gmail.com</a
                         >
                     </li>
                 </ul>
