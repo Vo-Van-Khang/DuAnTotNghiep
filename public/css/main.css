@@ -454,22 +454,30 @@ body::-webkit-scrollbar-thumb {
     display: flex;
     flex-direction: column;
     color: #f2f2f2;
+    cursor: default;
 }
-.header__nav-menu-notification li{
+.header__nav-menu-notification li, .header__nav-menu-notification a{
     display: flex;
+    align-items: flex-start;
     flex-direction: column;
     border-bottom: 1px solid rgba(47, 128, 237, 0.1);
     padding: 15px 0;
     gap: 10px;
     margin-bottom: 0;
+    font-size: 16px;
+    color: #ffffff;
 }
-.header__nav-menu-notification li p{
+.header__nav-menu-notification a:hover{
+    color: #ffffff;
+}
+.header__nav-menu-notification li p, .header__nav-menu-notification a p{
     display: flex;
     justify-content: space-between;
+    width: 100%;
     margin: 0;
     font-size: 12px;
 }
-.header__nav-menu-notification li:last-child{
+.header__nav-menu-notification li:last-child, .header__nav-menu-notification a:last-child{
     border: 0;
 }
 
@@ -2049,6 +2057,7 @@ body::-webkit-scrollbar-thumb {
     display: block;
     position: relative;
     width: 40px;
+    height: 40px;
     cursor: pointer;
     overflow: hidden;
     border-radius: 10px;
@@ -2057,6 +2066,7 @@ body::-webkit-scrollbar-thumb {
 
 .profile__avatar img {
     width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
@@ -3980,7 +3990,7 @@ body::-webkit-scrollbar-thumb {
     width: auto;
     color: #e0e0e0;
     font-size: 14px;
-    background-color: #151f30;
+    background-color: #223b65;
     border-radius: 12px;
     padding: 0 12px;
     margin-bottom: 20px;
@@ -5026,6 +5036,7 @@ body::-webkit-scrollbar-thumb {
     padding: 20px;
     border: 1px solid rgba(47, 128, 237, 0.1);
     margin-top: 60px;
+    margin-bottom: 20px;
     background-color: #131720;
 }
 
@@ -7085,7 +7096,7 @@ input.is-invalid:focus {
 }
 .pay__history .container{
     background-color: #151f30;
-    width: 40%;
+    width: 50%;
     padding: 20px;
     border-radius: 5px;
     color: #f2f2f2;
@@ -7093,4 +7104,8 @@ input.is-invalid:focus {
 }
 .pay__history .container h2{
     text-align: center;
+    margin-bottom: 20px;
+}
+.pay__history .container th{
+    font-size: 13px;
 }

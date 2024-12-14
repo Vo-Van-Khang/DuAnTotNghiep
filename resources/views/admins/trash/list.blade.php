@@ -225,7 +225,7 @@
                                     <a title="Phục hồi" href="#modal-restore" class="main__table-btn main__table-btn--banned open-modal trash__restore__btn" id_trash="{{$subscription_plan->id}}" type_trash="subscription_plan">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M160-160v-80h110l-16-14q-52-46-73-105t-21-119q0-111 66.5-197.5T400-790v84q-72 26-116 88.5T240-478q0 45 17 87.5t53 78.5l10 10v-98h80v240H160Zm400-10v-84q72-26 116-88.5T720-482q0-45-17-87.5T650-648l-10-10v98h-80v-240h240v80H690l16 14q49 49 71.5 106.5T800-482q0 111-66.5 197.5T560-170Z"/></svg>                    
                                     </a>
-                                    <a title="Xóa vĩnh viễn" href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal trash__remove__btn" id_trash="{{$subscription_plan->id}}" type_remove="subscription_plan">
+                                    <a title="Xóa vĩnh viễn" href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal trash__remove__btn" id_trash="{{$subscription_plan->id}}" type_trash="subscription_plan">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18ZM20,6H16V5a3,3,0,0,0-3-3H11A3,3,0,0,0,8,5V6H4A1,1,0,0,0,4,8H5V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V8h1a1,1,0,0,0,0-2ZM10,5a1,1,0,0,1,1-1h2a1,1,0,0,1,1,1V6H10Zm7,14a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V8H17Zm-3-1a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"/></svg>
                                     </a>
                                 </div>

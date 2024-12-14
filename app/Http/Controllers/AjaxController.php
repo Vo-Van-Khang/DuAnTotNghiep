@@ -28,15 +28,20 @@ class AjaxController extends Controller
                         "premium" => 0
                     ]);
 
-                    $user = DB::table("users")->where("role","admin")->first();
                     DB::table('notifications')->insert([
-                        'id_send_user' => $user->id,
                         'id_receive_user' => auth()->user()->id,
                         'content' => "{$subscription->subscription_plan->name} của bạn đã hết hạn, chúng tôi đã ngưng các đặc quyền của bạn!"
+                    ]);
+
+                    return response()->json([
+                        "success" => true
                     ]);
                 }
             }
         }
+        return response()->json([
+            "success" => false
+        ]);
     }
 
     public function nav(){
@@ -66,7 +71,12 @@ class AjaxController extends Controller
     }
 
     public function search($value){
-        $movies = Movies::where("title", "like", "%{$value}%")->limit(4)->get();
+        $movies = Movies::where("title", "like", "%{$value}%")
+        ->where('status',1)
+        ->where('isDeleted',0)
+        ->limit(4)
+        ->get();
+        
         return response()->json([
             "success" => true,
             "movies" => $movies
@@ -141,7 +151,6 @@ class AjaxController extends Controller
         $reply_comments = Reply_comments::with("user","user_reply")
         ->where("id_comment",$id)
         ->where("status",1)
-        ->where("isDeleted",0)
         ->get();
 
         $forbiddenWords = Comment_Filters::pluck('content')->toArray();
@@ -167,13 +176,11 @@ class AjaxController extends Controller
     }
 
     public function show__pay__history($id){
-        $payment = DB::table("payments")->where('id_sub',$id)->first();
-        $transactionID = strtotime($payment->date);
+        $payments = DB::table("payments")->where('id_sub',$id)->get();
         $user = auth()->user();
         return response()->json([
             "success" => true,
-            "payment" => $payment,
-            "transactionID" => $transactionID,
+            "payments" => $payments,
             "user" => $user
         ]);
     }

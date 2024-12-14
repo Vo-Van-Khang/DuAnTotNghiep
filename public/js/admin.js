@@ -243,6 +243,48 @@ function messageBySession() {
 }
 messageBySession();
 
+function lazy__image(){
+	const images = document.querySelectorAll("img:not(.not__lazy)");
+
+	// Tạo một IntersectionObserver duy nhất
+	const observer = new IntersectionObserver((entries, observer) => {
+		entries.forEach(entry => {
+			const img = entry.target;
+			
+			if (entry.isIntersecting) {
+				const realSrc = img.getAttribute("data-src"); // Lấy URL của ảnh thật
+				if (realSrc) {
+					img.src = realSrc; // Thay thế ảnh placeholder bằng ảnh thật
+				}
+				observer.unobserve(img); // Ngừng quan sát sau khi ảnh đã được tải
+			}
+		});
+	});
+
+	// Duyệt qua tất cả ảnh và thực hiện lazy load
+	images.forEach((img) => {
+		// Nếu ảnh chưa có data-src, thiết lập data-src và đặt ảnh placeholder
+		if (!img.getAttribute('data-src')) {
+			img.setAttribute("data-src", img.src); // Lưu URL của ảnh thật trong `data-src`
+			img.setAttribute("src", "/../images/storage/lazy_image.svg"); // Đặt ảnh placeholder
+		}
+
+		// Nếu ảnh chưa có kích thước, lấy kích thước của ảnh thật (nếu có)
+		if (!img.width) {
+			const realImage = new Image();
+			realImage.src = img.getAttribute("data-src"); // Lấy ảnh thật từ data-src
+			
+			realImage.onload = () => {
+				// Lấy kích thước ảnh thật và gán cho ảnh placeholder
+				img.width = realImage.width;
+			};
+		}
+
+		// Quan sát từng ảnh với IntersectionObserver
+		observer.observe(img);
+	});
+}
+lazy__image();
 
 const limitText = document.querySelectorAll(".limit__text");
 limitText.forEach((i)=>{
@@ -628,27 +670,9 @@ if(document.querySelector('#add__url') != null){
 		});
 
 		function delete__url() {
-			document.querySelector('#loader').style.display = 'flex';
 			let id__url = modal__remove__url__btn.getAttribute('id__url');
 			let type__url = modal__remove__url__btn.getAttribute('type__url');
-			// return console.log(document.querySelector(`.item__url[id__url="${id__url}"][type__url="${type__url}"]`));
-			fetch(`/admin/${type__url}/url/remove/${id__url}`,{
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-					'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-				}
-			})
-			.then(response => response.json())
-			.then(data => {
-				if(data.success){
-					document.querySelector(`.item__url[id__url="${id__url}"][type__url="${type__url}"]`).remove();
-					document.querySelector('#loader').style.display = 'none';
-				}
-			})
-			.catch(error => {
-				console.error(error);
-			});
+			document.querySelector(`.item__url[id__url="${id__url}"][type__url="${type__url}"]`).remove();
 		}
 
 		if(modal__remove__url__btn) modal__remove__url__btn.addEventListener('click', delete__url)
@@ -957,8 +981,6 @@ if(document.querySelector('.status__update__btn') != null){
 							document.querySelector('#loader').style.display = 'none';
 						}
 					}
-				}else{
-					console.log("Sửa không thành công");
 				}
 			})
 			.catch(error => {
@@ -982,8 +1004,15 @@ if (document.querySelector('.remove__btn__ajax') != null) {
     function adminRemove() {
         if (!id_remove || !type_remove) return;
 
-        document.querySelector('#loader').style.display = 'flex';
-
+		setTimeout(() => {
+			let item = document.querySelector(`.tr__remove[id_remove="${id_remove}"]`);
+			let item__reply = document.querySelectorAll(`#collapseReplyComment${id_remove}`);
+			if (item) item.remove();
+			item__reply.forEach(item => {
+				item.remove();
+			})
+		}, 500);
+		
         fetch(`/admin/${type_remove}/delete/${id_remove}`, {
             method: 'DELETE',
             headers: {
@@ -993,13 +1022,6 @@ if (document.querySelector('.remove__btn__ajax') != null) {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                let item = document.querySelector(`.tr__remove[id_remove="${id_remove}"]`);
-                if (item) item.remove();
-                document.querySelector('#loader').style.display = 'none';
-            } else {
-                console.log("Xóa không thành công");
-            }
             id_remove = null;
             type_remove = null;
         })
@@ -1064,7 +1086,10 @@ if (document.querySelector('.trash__restore__btn') != null) {
     function trashRestore() {
         if (!id_trash || !type_trash) return;
 
-        document.querySelector('#loader').style.display = 'flex';
+		setTimeout(() => {
+			let item = document.querySelector(`.tr__trash[id_trash="${id_trash}"][type_trash="${type_trash}"]`);
+        	if (item) item.remove();
+		}, 500);
 
         fetch(`/admin/trash/restore/${id_trash}`, {
             method: 'POST',
@@ -1076,13 +1101,6 @@ if (document.querySelector('.trash__restore__btn') != null) {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                let item = document.querySelector(`.tr__trash[id_trash="${id_trash}"][type_trash="${type_trash}"]`);
-                if (item) item.remove();
-                document.querySelector('#loader').style.display = 'none';
-            } else {
-                console.log("Phục hồi không thành công");
-            }
             id_trash = null;
             type_trash = null;
         })
@@ -1106,26 +1124,24 @@ if(document.querySelector('.trash__remove__btn') != null){
 	function trashRemove() {
 		if (!id_trash || !type_trash) return;
 
-		document.querySelector('#loader').style.display = 'flex';
-			fetch(`/admin/trash/${type_trash}/remove/${id_trash}`,{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-				}
-			})
-			.then(response => response.json())
-			.then(data =>{
-				if(data.success){
-					let item = document.querySelector(`.tr__trash[id_trash="${id_trash}"][type_trash="${type_trash}"]`);
-					if (item) item.remove(); document.querySelector('#loader').style.display = 'none';
-				}else{
-					console.log("Xóa không thành công");
-				}
-			})
-			.catch(error => {
-				console.error(error);
-			});
+		setTimeout(() => {
+			let item = document.querySelector(`.tr__trash[id_trash="${id_trash}"][type_trash="${type_trash}"]`);
+			if (item) item.remove();
+		}, 500);
+
+		fetch(`/admin/trash/${type_trash}/remove/${id_trash}`,{
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+			}
+		})
+		.then(response => response.json())
+		.then(data =>{
+		})
+		.catch(error => {
+			console.error(error);
+		});
 	}
     document.querySelector('#modal__remove__btn').addEventListener('click', trashRemove);
 }

@@ -83,8 +83,12 @@
                                         <div class="sign__group">
                                             <label class="sign__label" for="rights">Vai trò</label>
                                             <select class="js-example-basic-single" id="rights" name="role">
-                                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>Người dùng</option>
-                                                <option value="staff" {{ $user->role == 'staff' ? 'selected' : '' }}>Nhân viên</option>
+												@if ($user->role == 'admin')
+                                                	<option value="admin" selected>Admin</option>
+												@else
+													<option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>Người dùng</option>
+													<option value="staff" {{ $user->role == 'staff' ? 'selected' : '' }}>Nhân viên</option>
+												@endif
                                             </select>
                                         </div>
                                     </div>

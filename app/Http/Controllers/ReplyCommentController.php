@@ -17,10 +17,21 @@ class ReplyCommentController extends Controller
             "content" => request("comment__content"),
             "status" => 1
         ]);
+        
         $comment = DB::table("comments")->where("id", request('id__comment'))->first();
         $reply_comment = DB::table("reply_comments")->where("id", $id)->first();
         $user = DB::table("users")->where("id", auth()->user()->id)->first();
         $name_user = DB::table("users")->where("id", request('id__user__reply'))->value("name");
+
+        if(request('id__user__reply') != auth()->id()){
+            $id_user = auth()->user();
+            DB::table('notifications')->insert([
+                'id_receive_user' => request('id__user__reply'),
+                'id_movie' => $id_movie,
+                'content' => "{$id_user->name} đã trả lời bình luận của bạn"
+            ]);
+        }
+
         return response()->json([
             "success" => true,
             "comment" => $comment,

@@ -104,9 +104,16 @@ class UserController extends Controller
         $name = $request->input('name');
         $userUpdate = User::find(auth()->id());
         if ($request->hasFile('image')) {
-            $image = time().'.'.$request->image->extension();
+            if (!empty($userUpdate->image) && file_exists(public_path($userUpdate->image))) {
+                $oldImage = basename($userUpdate->image);
+                if ($oldImage !== 'user.jpg') {
+                    unlink(public_path($userUpdate->image));
+                }
+            }
+            $image = time() . '.' . $request->image->extension();
             $request->image->move(public_path('images/users'), $image);
-            $userUpdate->image = $image;
+            $imageName = "/images/users/" . $image;
+            $userUpdate->image = $imageName;
         }
         $userUpdate->name = $name;
         if($userUpdate->save()){
@@ -138,7 +145,7 @@ class UserController extends Controller
     }
 
     public function admin__employee__view(){
-        $users = db::table('users')->select('*')->where("isDeleted", 0)->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));
+        $users = db::table('users')->select('*')->where("isDeleted", 0)->get();
         return view('admins.user.employee', [
             "selected" => "user",
             'users' => $users
@@ -166,26 +173,31 @@ class UserController extends Controller
         return view('admins/user/update', ['user' => $userEdit,"selected" => "user"]);
     }
 
-    public function update(Validate $request){
-            $validated = $request->validated();
-            $id = $request->input('id');
-            $name = $request->input('name');
-            $status = $request->input('status');
-            $role = $request->input('role');
-            $userUpdate = User::find($id);
-            if ($request->hasFile('image')) {
-                $image = time().'.'.$request->image->extension();
-                $request->image->move(public_path('images/users'), $image);
-                $imageName = "/images/users/" . $image;
-                $userUpdate->image = $imageName;
+    public function update(Validate $request) {
+        $validated = $request->validated();
+        $id = $request->input('id');
+        $name = $request->input('name');
+        $status = $request->input('status');
+        $role = $request->input('role');
+        $userUpdate = User::find($id);
+        if ($request->hasFile('image')) {
+            if (!empty($userUpdate->image) && file_exists(public_path($userUpdate->image))) {
+                $oldImage = basename($userUpdate->image);
+                if ($oldImage !== 'user.jpg') {
+                    unlink(public_path($userUpdate->image));
+                }
             }
-
-            $userUpdate->name = $name;
-            $userUpdate->status = $status;
-            $userUpdate->role = $role;
-            if($userUpdate->save()){
-                return redirect('admin/user/list');
-            }
+            $image = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/users'), $image);
+            $imageName = "/images/users/" . $image;
+            $userUpdate->image = $imageName;
+        }
+        $userUpdate->name = $name;
+        $userUpdate->status = $status;
+        $userUpdate->role = $role;
+        if ($userUpdate->save()) {
+            return redirect('admin/user/list');
+        }
     }
     public function delete($id){
         $userDelete = User::find($id);
@@ -196,77 +208,81 @@ class UserController extends Controller
             ]);
         }
 
-}
+    }
 
-public function register(Request $request)
+    public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-        ], [
-            'name.required' => 'Vui lòng nhập tên của bạn.',
-            'name.string' => 'Tên phải là chuỗi ký tự.',
-            'name.max' => 'Tên không được vượt quá 255 ký tự.',
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed', 
+        'password_confirmation' => 'required|string|min:8', 
+        'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+    ], [
+        'name.required' => 'Vui lòng nhập tên của bạn.',
+        'name.string' => 'Tên phải là chuỗi ký tự.',
+        'name.max' => 'Tên không được vượt quá 255 ký tự.',
 
-            'email.required' => 'Vui lòng nhập email.',
-            'email.string' => 'Email phải là chuỗi ký tự.',
-            'email.email' => 'Email không hợp lệ.',
-            'email.max' => 'Email không được vượt quá 255 ký tự.',
-            'email.unique' => 'Email này đã tồn tại trong hệ thống.',
+        'email.required' => 'Vui lòng nhập email.',
+        'email.string' => 'Email phải là chuỗi ký tự.',
+        'email.email' => 'Email không hợp lệ.',
+        'email.max' => 'Email không được vượt quá 255 ký tự.',
+        'email.unique' => 'Email này đã tồn tại trong hệ thống.',
 
-            'password.required' => 'Vui lòng nhập mật khẩu.',
-            'password.string' => 'Mật khẩu phải là chuỗi ký tự.',
-            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+        'password.required' => 'Vui lòng nhập mật khẩu.',
+        'password.string' => 'Mật khẩu phải là chuỗi ký tự.',
+        'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+        'password.confirmed' => 'Mật khẩu xác nhận không khớp.', 
 
-            'image.image' => 'File phải là một hình ảnh.',
-            'image.mimes' => 'Hình ảnh phải có định dạng jpg, png, jpeg, gif, hoặc svg.',
-            'image.max' => 'Kích thước hình ảnh không được vượt quá 2MB.',
-        ]);
+        'password_confirmation.required' => 'Vui lòng nhập mật khẩu xác nhận.',
+        'password_confirmation.string' => 'Mật khẩu xác nhận phải là chuỗi ký tự.',
+        'password_confirmation.min' => 'Mật khẩu xác nhận phải có ít nhất 8 ký tự.',
 
-        $existingUser = DB::table('users')->where('email', $request->email)->first();
+        'image.image' => 'File phải là một hình ảnh.',
+        'image.mimes' => 'Hình ảnh phải có định dạng jpg, png, jpeg, gif, hoặc svg.',
+        'image.max' => 'Kích thước hình ảnh không được vượt quá 2MB.',
+    ]);
 
-        if ($existingUser) {
-            return back()->withErrors(['email' => 'Email này đã được đăng ký. Vui lòng thử một email khác.']);
-        }
+    $existingUser = DB::table('users')->where('email', $request->email)->first();
 
-        // Xử lý ảnh
-        if ($request->hasFile('image')) {
-            $image = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images/users'), $image);
-            $imageName = "/images/users/" . $image;
-        } else {
-            $imageName = '/images/users/user.jpg';
-        }
+    if ($existingUser) {
+        return back()->withErrors(['email' => 'Email này đã được đăng ký. Vui lòng thử một email khác.']);
+    }
 
-        if (!file_exists(public_path('images/users'))) {
-            mkdir(public_path('images/users'), 0755, true);
-        }
+    if ($request->hasFile('image')) {
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images/users'), $imageName);
+    } else {
+        $imageName = '/images/users/user.jpg';
+    }
 
-        $userId = DB::table('users')->insertGetId([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'image' => $imageName,
-            'role' => 'user',
-            'email_verified_at' => null,
-            'status' => 1,
-            'premium' => false,
-            'remember_token' => Str::random(10),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+    if (!file_exists(public_path('images/users'))) {
+        mkdir(public_path('images/users'), 0755, true);
+    }
 
-        $user = DB::table('users')->where('id', $userId)->first();
+    $userId = DB::table('users')->insertGetId([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'image' => $imageName,
+        'role' => 'user',
+        'email_verified_at' => null,
+        'status' => '1',
+        'premium' => false,
+        'remember_token' => Str::random(10),
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
 
-        try {
-            Mail::to($request->email)->send(new UserRegistered($user));
-        } catch (\Exception $e) {
-            return redirect()->route('login')->with('error', 'Đăng ký thành công nhưng không thể gửi email xác nhận.');
-        }
+    $user = DB::table('users')->where('id', $userId)->first();
 
-        return redirect()->route('login')->with('success', 'Đăng ký thành công, vui lòng kiểm tra email để xác nhận tài khoản.');
+    try {
+        Mail::to($request->email)->send(new UserRegistered($user));
+    } catch (\Exception $e) {
+        return redirect()->route('signin')->with('error', 'Đăng ký thành công nhưng không thể gửi email xác nhận.');
+    }
+
+    return redirect()->route('signin')->with('success', 'Đăng ký thành công, vui lòng kiểm tra email để xác nhận tài khoản.');
     }
     public function forgotPassword()
     {
@@ -344,20 +360,19 @@ public function register(Request $request)
 
     public function admin__status__update($id) {
         $ban = true;
-        $status = DB::table("users")->where("id", $id)->value("status");
+        $user = DB::table("users")->where("id", $id)->first();
         
-        if ($status == 0) {
+        if ($user->status == 0) {
             DB::table("users")->where("id", $id)->update([
                 "status" => 1
             ]);
             $ban = false;
 
-            $user = DB::table("users")->where("role","admin")->first();
-            if($user){
+            $admin = DB::table("users")->where("role","admin")->first();
+            if($admin){
                 DB::table('notifications')->insert([
-                    'id_send_user' => $user->id,
                     'id_receive_user' => $id,
-                    'content' => 'Chúng tôi đã mở cấm tài khoản của bạn, hãy văn minh lên nhé!'
+                    'content' => "Chúng tôi đã mở cấm tài khoản của bạn, hãy văn minh lên nhé!"
                 ]);
             }
         } else {
@@ -365,12 +380,11 @@ public function register(Request $request)
                 "status" => 0
             ]);
 
-            $user = DB::table("users")->where("role","admin")->first();
-            if($user){
+            $admin = DB::table("users")->where("role","admin")->first();
+            if($admin){
                 DB::table('notifications')->insert([
-                    'id_send_user' => $user->id,
                     'id_receive_user' => $id,
-                    'content' => 'Chúng tôi đã cấm tài khoản của bạn, bạn không thể sử dụng các chức năng bình luận!'
+                    'content' => "Chúng tôi đã cấm tài khoản của bạn, bạn không thể sử dụng các chức năng bình luận!"
                 ]);
             }
         }

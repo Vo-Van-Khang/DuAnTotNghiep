@@ -577,6 +577,7 @@ $(document).ready(function() {
         });
     }
     lazy__image();
+    
     if(document.querySelector('.header__form-input')){
         let debounceTimer;
         let input = document.querySelector('.header__form-input');
@@ -585,6 +586,17 @@ $(document).ready(function() {
         input.addEventListener("input", (e) => {
             if (e.target.value.trim().length > 0) {
                 clearTimeout(debounceTimer);
+
+                header__form__result.innerHTML = `
+                    <a>
+                        <div class="item">
+                            <div style="background-color:#223b65;width:80px;height:40px;border-radius:5px"></div>
+                            <p style="width:100%;height:100%;"><span style="background-color:#223b65;width:100%;height:10px;border-radius:5px"> </span><span style="background-color:#223b65;width:60%;height:10px;border-radius:5px"> </span></p>
+                        </div>
+                    </a>
+                `;
+                header__form__result.style.display = "flex";
+
                 debounceTimer = setTimeout(() => {
                     fetchMovies(e.target.value);
                 }, 300);
@@ -679,15 +691,23 @@ $(document).ready(function() {
                 if(data.isLogin){
                     if(data.notifications.length > 0){
                         data.notifications.forEach(notification => {
-                            const notificationItem = `
-                                    <li>
-                                        ${notification.content}
-                                        <p>
-                                            ${notification.send_user.name}
-                                            <span>${new Date(notification.created_at).toLocaleDateString('vi-VN')}</span>
-                                        </p>
-                                    </li>
-                            ` 
+                            const notificationItem = `${notification.id_movie ? `
+                                        <a href="/movie/${notification.id_movie}">
+                                            ${notification.content}
+                                            <p>
+                                                ${(notification.id_send_user) ? notification.send_user.name : "Hệ Thống"}
+                                                <span>${new Date(notification.created_at).toLocaleString('vi-VN')}</span>
+                                            </p>
+                                        </a>
+                                    ` : `
+                                        <li>
+                                            ${notification.content}
+                                            <p>
+                                                ${(notification.id_send_user) ? notification.send_user.name : "Hệ Thống"}
+                                                <span>${new Date(notification.created_at).toLocaleString('vi-VN')}</span>
+                                            </p>
+                                        </li>
+                                    `}`;
                             header__nav_menu_notification.innerHTML += notificationItem; 
                         })
                     }else{
@@ -734,8 +754,18 @@ $(document).ready(function() {
         const watch__later__button = document.querySelectorAll('.watch__later__button');
         watch__later__button.forEach((button) => {
             button.addEventListener('click', () => {
-                document.querySelector('#loader').style.display = 'flex';
                 let id = button.getAttribute('id_movie');
+
+                if(button.classList.contains('active')){
+                    button.classList.remove('active');
+                    button.disabled = true;
+                    button.title = "Thêm vào danh sách xem sau";
+                }else{
+                    button.classList.add('active')
+                    button.disabled = true;
+                    button.title = "Xoá khỏi xem sau";
+                }
+                
                 fetch(`/movie/watch_later/${id}`, {
                     method: 'POST',
                     headers: {
@@ -755,7 +785,7 @@ $(document).ready(function() {
                             button.title = "Xoá khỏi xem sau";
                         }
     
-                        document.querySelector('#loader').style.display = 'none';
+                        button.disabled = false;
                     } else {
                         console.log("fail");
                     }
@@ -798,9 +828,19 @@ $(document).ready(function() {
     if(document.querySelector('#like__button') != null){
         const like__button = document.querySelector('#like__button');
         like__button.addEventListener('click', () => {
-            
-            document.querySelector('#loader').style.display = 'flex';
+
             let id = document.querySelector("#information__movie").getAttribute('id_movie');
+
+            if(like__button.classList.contains('active')){
+                like__button.classList.remove('active');
+                like__button.disabled = true;
+                document.querySelector("#likes").innerHTML = Number(document.querySelector("#likes").textContent) - 1;
+            }else{
+                like__button.classList.add('active')
+                like__button.disabled = true;
+                document.querySelector("#likes").innerHTML = Number(document.querySelector("#likes").textContent) + 1;
+            }
+
             fetch(`/movie/like/${id}`, {
                 method: 'POST',
                 headers: {
@@ -820,9 +860,7 @@ $(document).ready(function() {
                         like__button.title = "Bỏ thích video này";
                         document.querySelector("#likes").innerText = data.likes;
                     }
-                    document.querySelector('#loader').style.display = 'none';
-                } else {
-                    console.log("fail");
+                    like__button.disabled = false;
                 }
             })
             .catch(error => {
@@ -835,8 +873,18 @@ $(document).ready(function() {
         const watch__later__button = document.querySelector('#watch__later__button');
         watch__later__button.addEventListener('click', () => {
     
-            document.querySelector('#loader').style.display = 'flex';
             let id = document.querySelector("#information__movie").getAttribute('id_movie');
+
+            if(watch__later__button.classList.contains('active')){
+                watch__later__button.classList.remove('active');
+                watch__later__button.disabled = true;
+                document.querySelector("#watch__later__text").innerText = "Xem sau";
+            }else{
+                watch__later__button.classList.add('active')
+                watch__later__button.disabled = true;
+                document.querySelector("#watch__later__text").innerText = "Đã thêm xem sau";
+            }
+
             fetch(`/movie/watch_later/${id}`, {
                 method: 'POST',
                 headers: {
@@ -858,9 +906,7 @@ $(document).ready(function() {
                         document.querySelector("#watch__later__text").innerText = "Đã thêm xem sau";
                     }
     
-                    document.querySelector('#loader').style.display = 'none';
-                } else {
-                    console.log("fail");
+                    watch__later__button.disabled = false;
                 }
             })
             .catch(error => {
@@ -883,8 +929,15 @@ $(document).ready(function() {
     
         function remove() {
             if (!id_remove || !type_remove) return;
-    
-            document.querySelector('#loader').style.display = 'flex';
+
+            let item = document.querySelector(`.item__remove[id_remove="${id_remove}"][type_remove="${type_remove}"]`);
+
+            setTimeout(() => {
+                if (type_remove === "comment" && item.nextElementSibling) {
+                    item.nextElementSibling.remove();
+                }
+                item.remove();
+            }, 500);
     
             fetch(`/${type_remove}/remove/${id_remove}`, {
                 method: 'DELETE',
@@ -906,15 +959,12 @@ $(document).ready(function() {
                         comment__count();                    
                     }
     
-                } else {
-                    console.log("Xóa không thành công.");
                 }
             })
             .catch(error => {
                 console.error("Lỗi khi xóa:", error);
             })
             .finally(() => {
-                document.querySelector('#loader').style.display = 'none';
                 id_remove = null;
                 type_remove = null;
             });
@@ -1275,7 +1325,6 @@ $(document).ready(function() {
     function lazy__load__comments(id) {
         const comments__list = document.querySelector(".comments__list");
         
-        // Gọi API để lấy bình luận theo trang
         fetch(`/movie/comments/lazy_load/${id}?page=${currentPage}&per_page=${perPage}`, {
             method: 'GET',
             headers: {
@@ -1286,7 +1335,6 @@ $(document).ready(function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Lặp qua các bình luận và thêm vào danh sách
                 data.comments.data.forEach(comment => {
                     const isOwner = data.user_id === comment.user.id; 
                     const commentItem = `
@@ -1368,6 +1416,25 @@ $(document).ready(function() {
                 let reply__comments__container = item.nextElementSibling;
                 let show__button = item.querySelector(".show__reply__comments");
                 let id = item.getAttribute("id_remove");
+
+                reply__comments__container.innerHTML = `
+                    <li class="comments__item comments__item--answer">
+                        <div class="comments__autor">
+                            <div>
+                                <div class="comments__avatar" style="background-color:#223b65;width:40px;height:40px;border-radius:50%"> </div>
+                                <span class="comments__name" style="background-color:#223b65;width:50px;height:20px;border-radius:5px">
+                                </span>
+                                <span class="comments__time"></span>
+                            </div>
+                        </div>
+                        <p class="comments__text">&nbsp;</p>
+                        <div class="comments__actions">
+                            <span class="show__reply__comments"></span>
+                            <button style="background-color:#223b65;width:30px;height:20px;border-radius:5px"></button>
+                        </div>
+                    </li>
+                `
+
                 fetch(`/comment/show__reply/${id}`,{
                     method: 'GET',
                     headers: {
@@ -1519,13 +1586,54 @@ $(document).ready(function() {
 
         // Gắn sự kiện click cho grades
         grades.forEach(grade => {
+            let firstClick = true;
             grade.addEventListener("click", () => {
+                if (firstClick && grade.value === "newest") {
+                    firstClick = false;
+                    return;
+                }
                 filter(filter__search, filter__genres, filter__years, grade);
             });
         });
     
         function filter(filter__search, filter__genres, filter__years, grade) {
             const filter__container = document.querySelector('.filter__container');
+
+            filter__container.innerHTML = `
+                                    <div class="col-6 col-sm-4 col-lg-3 col-xl-3">
+                                        <div class="card">
+                                            <div class="card__cover" style="background-color:#151f30;width:100%;height:170px;border-radius:5px">
+                                            </div>
+                                            <h3 class="card__title" style="background-color:#151f30;width:100%;height:20px;border-radius:5px">
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-3 col-xl-3">
+                                        <div class="card">
+                                            <div class="card__cover" style="background-color:#151f30;width:100%;height:170px;border-radius:5px">
+                                            </div>
+                                            <h3 class="card__title" style="background-color:#151f30;width:100%;height:20px;border-radius:5px">
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-3 col-xl-3">
+                                        <div class="card">
+                                            <div class="card__cover" style="background-color:#151f30;width:100%;height:170px;border-radius:5px">
+                                            </div>
+                                            <h3 class="card__title" style="background-color:#151f30;width:100%;height:20px;border-radius:5px">
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-sm-4 col-lg-3 col-xl-3">
+                                        <div class="card">
+                                            <div class="card__cover" style="background-color:#151f30;width:100%;height:170px;border-radius:5px">
+                                            </div>
+                                            <h3 class="card__title" style="background-color:#151f30;width:100%;height:20px;border-radius:5px">
+                                            </h3>
+                                        </div>
+                                    </div>
+            `
+
             fetch(`/movie/filter/ajax?filter__genres=${filter__genres.value}&filter__years=${filter__years.value}&grade=${grade.value}&search=${filter__search}`, {
                 method: 'GET',
                 headers: {
@@ -1541,42 +1649,41 @@ $(document).ready(function() {
                         data.movies.forEach((movie)=>{
                             let template = `
                                     <div class="col-6 col-sm-4 col-lg-3 col-xl-3">
-                                    <div class="card">
-        
-                                        <a href="/movie/${movie.id}" class="card__cover">
-                                            <img src="${movie.thumbnail}" alt="" />
-                                            <svg
-                                                width="22"
-                                                height="22"
-                                                viewBox="0 0 22 22"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    clip-rule="evenodd"
-                                                    d="M11 1C16.5228 1 21 5.47716 21 11C21 16.5228 16.5228 21 11 21C5.47716 21 1 16.5228 1 11C1 5.47716 5.47716 1 11 1Z"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    clip-rule="evenodd"
-                                                    d="M14.0501 11.4669C13.3211 12.2529 11.3371 13.5829 10.3221 14.0099C10.1601 14.0779 9.74711 14.2219 9.65811 14.2239C9.46911 14.2299 9.28711 14.1239 9.19911 13.9539C9.16511 13.8879 9.06511 13.4569 9.03311 13.2649C8.93811 12.6809 8.88911 11.7739 8.89011 10.8619C8.88911 9.90489 8.94211 8.95489 9.04811 8.37689C9.07611 8.22089 9.15811 7.86189 9.18211 7.80389C9.22711 7.69589 9.30911 7.61089 9.40811 7.55789C9.48411 7.51689 9.57111 7.49489 9.65811 7.49789C9.74711 7.49989 10.1091 7.62689 10.2331 7.67589C11.2111 8.05589 13.2801 9.43389 14.0401 10.2439C14.1081 10.3169 14.2951 10.5129 14.3261 10.5529C14.3971 10.6429 14.4321 10.7519 14.4321 10.8619C14.4321 10.9639 14.4011 11.0679 14.3371 11.1549C14.3041 11.1999 14.1131 11.3999 14.0501 11.4669Z"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </a>
-                                        <h3 class="card__title">
-                                            <a href="/movie/${movie.id}" >${movie.title}</a>
-                                        </h3>
-                                        <ul class="card__list">
-                                        <li>${movie.category.name}</li>
-                                            <li>${movie.release_year}</li>
-                                        </ul>
+                                        <div class="card">
+                                            <a href="/movie/${movie.id}" class="card__cover">
+                                                <img src="${movie.thumbnail}" alt="" />
+                                                <svg
+                                                    width="22"
+                                                    height="22"
+                                                    viewBox="0 0 22 22"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M11 1C16.5228 1 21 5.47716 21 11C21 16.5228 16.5228 21 11 21C5.47716 21 1 16.5228 1 11C1 5.47716 5.47716 1 11 1Z"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                    />
+                                                    <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M14.0501 11.4669C13.3211 12.2529 11.3371 13.5829 10.3221 14.0099C10.1601 14.0779 9.74711 14.2219 9.65811 14.2239C9.46911 14.2299 9.28711 14.1239 9.19911 13.9539C9.16511 13.8879 9.06511 13.4569 9.03311 13.2649C8.93811 12.6809 8.88911 11.7739 8.89011 10.8619C8.88911 9.90489 8.94211 8.95489 9.04811 8.37689C9.07611 8.22089 9.15811 7.86189 9.18211 7.80389C9.22711 7.69589 9.30911 7.61089 9.40811 7.55789C9.48411 7.51689 9.57111 7.49489 9.65811 7.49789C9.74711 7.49989 10.1091 7.62689 10.2331 7.67589C11.2111 8.05589 13.2801 9.43389 14.0401 10.2439C14.1081 10.3169 14.2951 10.5129 14.3261 10.5529C14.3971 10.6429 14.4321 10.7519 14.4321 10.8619C14.4321 10.9639 14.4011 11.0679 14.3371 11.1549C14.3041 11.1999 14.1131 11.3999 14.0501 11.4669Z"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                    />
+                                                </svg>
+                                            </a>
+                                            <h3 class="card__title">
+                                                <a href="/movie/${movie.id}" >${movie.title}</a>
+                                            </h3>
+                                            <ul class="card__list">
+                                            <li>${movie.category.name}</li>
+                                                <li>${movie.release_year}</li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </div>
                             `
                             filter__container.innerHTML += template;
                             lazy__image();
@@ -1599,6 +1706,12 @@ window.addEventListener("DOMContentLoaded",()=>{
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
         }
     })
     .catch(error => {
@@ -1626,6 +1739,33 @@ if(document.querySelector('.show__pay__history')){
     show__pay__history.forEach(e => {
         e.addEventListener('click',()=>{
             let id = e.getAttribute('id__subscription');
+
+            document.body.insertAdjacentHTML('beforeend', `
+                    <div class="pay__history">
+                        <div class="container">
+                            <h2>Thông tin thanh toán</h2>
+                            <table class="main__table">
+                                <thead>
+                                    <tr>
+                                        <th>NGÀY MUA</th>
+                                        <th>GIÁ GÓI</th>
+                                        <th>PHƯƠNG THỨC</th>
+                                        <th>MÃ GIAO DỊCH</th>
+                                        <th>MÃ ĐƠN HÀNG</th>
+                                    </tr>
+                                </thead>
+                                </tbody>
+                                    <td>Đang tải...</td>
+                                    <td>Đang tải...</td>
+                                    <td>Đang tải...</td>
+                                    <td>Đang tải...</td>
+                                    <td>Đang tải...</td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            `)
+
             fetch(`/show/pay__history/${id}`, {
                 method: 'GET',
                 headers: {
@@ -1636,34 +1776,53 @@ if(document.querySelector('.show__pay__history')){
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    document.querySelector('.pay__history').remove();
                     document.body.insertAdjacentHTML('beforeend', `
                             <div class="pay__history">
                                 <div class="container">
                                     <h2>Thông tin thanh toán</h2>
-                                    <div class="col-12 item">
-                                        <p>
-                                            Tài khoản:
-                                            <span>${data.user.email}</span>
-                                        </p>
-                                    </div>
-                                    <div class="col-12 item">
-                                        <p>
-                                            Ngày mua:
-                                            <span>${data.payment.date}</span>
-                                        </p>
-                                        <p>
-                                            Giá gói:
-                                            <span>${Number(data.payment.amount).toLocaleString('vi-VN') + " VND"}</span>
-                                        </p>
-                                        <p>
-                                            Phương thức:
-                                            <span>${data.payment.method}</span>
-                                        </p>
-                                        <p>
-                                            Mã giao dịch:
-                                            <span>${data.transactionID}</span>
-                                        </p>
-                                    </div>
+                                    <table class="main__table">
+                                        <thead>
+                                            <tr>
+                                                <th>NGÀY MUA</th>
+                                                <th>GIÁ GÓI</th>
+                                                <th>PHƯƠNG THỨC</th>
+                                                <th>MÃ GIAO DỊCH</th>
+                                            <th>MÃ ĐƠN HÀNG</th>
+                                            </tr>
+                                        </thead>
+                                        </tbody>
+                                            ${data.payments.map(payment => `
+                                                <tr>
+                                                    <td>
+                                                        <div class="main__table-text">
+                                                            ${payment.date}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="main__table-text">
+                                                            ${Number(payment.amount).toLocaleString('vi-VN')} VND
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="main__table-text">
+                                                            ${payment.method}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="main__table-text">
+                                                            ${payment.transactionID}
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="main__table-text">
+                                                            ${payment.order_ref}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                     `)

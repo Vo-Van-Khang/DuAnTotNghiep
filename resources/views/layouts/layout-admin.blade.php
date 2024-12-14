@@ -6,8 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<!-- CSS -->
-	<link rel="stylesheet" href="{{asset('css/bootstrap-reboot.min.css')}}">
-	<link rel="stylesheet" href="{{asset('css/bootstrap-grid.min.css')}}">
+	<link rel="stylesheet" href="{{secure_asset('css/bootstrap-reboot.min.css')}}">
+	<link rel="stylesheet" href="{{secure_asset('css/bootstrap-grid.min.css')}}">
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,14 +17,14 @@
 
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}">
-	<link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
-	<link rel="stylesheet" href="{{asset('css/admin.css')}}">
+	<link rel="stylesheet" href="{{secure_asset('css/magnific-popup.css')}}">
+	<link rel="stylesheet" href="{{secure_asset('css/select2.min.css')}}">
+	<link rel="stylesheet" href="{{secure_asset('css/admin.css')}}">
 
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<!-- Favicons -->
-	<link rel="icon" type="image/png" href="{{asset('images/storage/logo.png')}}" sizes="32x32">
-	<link rel="apple-touch-icon" href="{{asset('images/storage/logo.png')}}">
+	<link rel="icon" type="image/png" href="{{secure_asset('images/storage/logo.png')}}" sizes="32x32">
+	<link rel="apple-touch-icon" href="{{secure_asset('images/storage/logo.png')}}">
 
 	<meta name="description" content="">
 	<meta name="keywords" content="">
@@ -39,7 +39,7 @@
 		<div class="header__content">
 			<!-- logo tiêu đề -->
 			<a href="{{route("index")}}" class="header__logo">
-				<img src="{{asset('images/storage/logo.png')}}" alt="">
+				<img src="{{secure_asset('images/storage/logo.png')}}" alt="">
 			</a>
 			<!-- kết thúc logo tiêu đề -->
 
@@ -58,7 +58,7 @@
 	<div class="sidebar">
 		<!-- logo thanh bên -->
 		<a href="/" class="sidebar__logo">
-			<img src="{{asset('images/storage/logo.png')}}" alt="">
+			<img src="{{secure_asset('images/storage/logo.png')}}" alt="">
 		</a>
 		<!-- kết thúc logo thanh bên -->
 
@@ -126,20 +126,13 @@
 			</li>
 
 			<li class="sidebar__nav-item">
-				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "comment"])
-					data-toggle="collapse" href="#collapseMenuComments" role="button" aria-expanded="false"
-					aria-controls="collapseMenu">
+				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "comment"]) href="{{route('admin.comment.list')}}" >
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 						<path
 							d="M8,11a1,1,0,1,0,1,1A1,1,0,0,0,8,11Zm4,0a1,1,0,1,0,1,1A1,1,0,0,0,12,11Zm4,0a1,1,0,1,0,1,1A1,1,0,0,0,16,11ZM12,2A10,10,0,0,0,2,12a9.89,9.89,0,0,0,2.26,6.33l-2,2a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,22h9A10,10,0,0,0,12,2Zm0,18H5.41l.93-.93a1,1,0,0,0,.3-.71,1,1,0,0,0-.3-.7A8,8,0,1,1,12,20Z" />
 					</svg>
 					<span>Bình luận</span>
 				</a>
-				<ul @class(['collapse sidebar__menu', 'showComments' => $selected == "comment"])
-					id="collapseMenuComments">
-					<li><a href="{{route('admin.comment.list')}}">Danh sách</a></li>
-					<li style="display: none"></li>
-				</ul>
 			</li>
 
 			<li class="sidebar__nav-item">
@@ -159,17 +152,11 @@
 			</li>
 
 			<li class="sidebar__nav-item">
-				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "statistic"])
-					data-toggle="collapse" href="#collapseMenuStatistic" role="button" aria-expanded="false"
-					aria-controls="collapseMenu"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
+				<a @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "statistic"]) href="{{route('admin.statistic.list')}}">
+					<svg xmlns="http://www.w3.org/2000/svg" height="24px"
 						viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
 						<path d="M640-160v-280h160v280H640Zm-240 0v-640h160v640H400Zm-240 0v-440h160v440H160Z" />
 					</svg><span>Thống kê</span></a>
-				<ul @class(['collapse sidebar__menu', 'show' => $selected == "statistic"]) id="collapseMenuStatistic">
-					<li><a href="{{route('admin.statistic.list')}}">Danh sách</a></li>
-					<li style="display: none"></li>
-					
-				</ul>
 			</li>
 
 			<li class="sidebar__nav-item">
@@ -209,11 +196,10 @@
 			</li>
 
 			<li class="sidebar__nav-item">
-				<a href="{{route("admin.trash.list")}}" @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "trash"])><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-						width="24px" fill="#e8eaed">
-						<path
-							d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-					</svg><span>Thùng rác</span></a>
+				<a href="{{route("admin.trash.list")}}" @class(['sidebar__nav-link', 'sidebar__nav-link--active' => $selected == "trash"])>
+					<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"> <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" /> </svg>
+					<span>Thùng rác</span>
+				</a>
 			</li>
 		</ul>
 		<!-- kết thúc thanh điều hướng bên -->
@@ -231,12 +217,12 @@
 	</div>
 	@include('layouts.shared.loader')
 	<!-- JS -->
-	<script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
-	<script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>
-	<script src="{{asset("js/jquery.magnific-popup.min.js")}}"></script>
-	<script src="{{asset("js/smooth-scrollbar.js")}}"></script>
-	<script src="{{asset("js/select2.min.js")}}"></script>
-	<script src="{{asset("js/admin.js")}}"></script>
+	<script src="{{secure_asset("js/jquery-3.5.1.min.js")}}"></script>
+	<script src="{{secure_asset("js/bootstrap.bundle.min.js")}}"></script>
+	<script src="{{secure_asset("js/jquery.magnific-popup.min.js")}}"></script>
+	<script src="{{secure_asset("js/smooth-scrollbar.js")}}"></script>
+	<script src="{{secure_asset("js/select2.min.js")}}"></script>
+	<script src="{{secure_asset("js/admin.js")}}"></script>
 </body>
 
 </html>

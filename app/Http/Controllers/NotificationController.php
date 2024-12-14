@@ -14,6 +14,7 @@ class NotificationController extends Controller
 
     public function listNotifications(){
     $notifications = Notifications::with('send_user', 'receive_user')
+    ->whereNotNull('id_send_user')
     ->where("isDeleted", 0)
     ->selectRaw('
         MAX(id) as id,

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use illuminate\Database\Eloquent\hasfactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Comment extends Model
 {
@@ -24,5 +24,8 @@ class Comment extends Model
         return $query->where('isDeleted', 0);
     }
     // Thiết lập quan hệ với Movie và User (nếu cần)
-    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -34,25 +34,25 @@
 
                     <div class="col-6">
                         <div class="footer__nav">
-                            <a href="live.html"
-                                >Truyền hình trực tiếp</a
+                            <a href="{{route('about')}}"
+                                >Thông tin website</a
                             >
-                            <a href="live.html">Tin tức trực tiếp</a>
-                            <a href="live.html">Thể thao trực tiếp</a>
-                            <a href="live.html"
-                                >Thư viện phát trực tuyến</a
+                            <a href="{{route('about')}}">Đum Đúm Web</a>
+                            <a href="{{route('about')}}">Câu chuyện</a>
+                            <a href="{{route('about')}}"
+                                >Trải nghiệm</a
                             >
                         </div>
                     </div>
 
                     <div class="col-6">
                         <div class="footer__nav">
-                            <a href="category.html"
-                                >Chương trình truyền hình</a
+                            <a href="#"
+                                >Phim hay</a
                             >
-                            <a href="category.html">Phim</a>
-                            <a href="category.html">Trẻ em</a>
-                            <a href="category.html">Bộ sưu tập</a>
+                            <a href="#">Chất lượng</a>
+                            <a href="#">Sắc nét</a>
+                            <a href="#">Nhiều ưu đãi</a>
                         </div>
                     </div>
                 </div>
@@ -63,10 +63,10 @@
             >
                 <h6 class="footer__title">Trợ giúp</h6>
                 <div class="footer__nav">
-                    <a href="privacy.html">Tài khoản & Thanh toán</a>
-                    <a href="privacy.html">Gói & Giá cả</a>
-                    <a href="privacy.html">Thiết bị được hỗ trợ</a>
-                    <a href="privacy.html"> Khả năng tiếp cận</a>
+                    <a href="{{route('privacy')}}">Tài khoản & Thanh toán</a>
+                    <a href="{{route('privacy')}}">Gói & Giá cả</a>
+                    <a href="{{route('privacy')}}">Thiết bị được hỗ trợ</a>
+                    <a href="{{route('privacy')}}"> Khả năng tiếp cận</a>
                 </div>
             </div>
         </div>
@@ -80,8 +80,7 @@
                     <small class="footer__copyright"
                         >© Đum Đúm. Created by
                         <a
-                            href="https://themeforest.net/user/dmitryvolkov/portfolio"
-                            target="_blank"
+                            href="#"
                             >DumDumTeam</a
                         >.</small
                     >

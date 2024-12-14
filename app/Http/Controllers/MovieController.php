@@ -38,6 +38,7 @@ class MovieController extends Controller
         ->select('source')
         ->where("type", 'movie')
         ->where('media_id', $id)
+        ->orderByRaw("FIELD(source, 'server 1', 'server 2', 'server 3')")
         ->distinct()  // Lấy các giá trị khác nhau
         ->get();
 
@@ -73,6 +74,8 @@ class MovieController extends Controller
         $similars = DB::table("movies")
         ->select("*")
         ->where("id_category", $id_category->id_category)
+        ->where('status',1)
+        ->where('isDeleted',0)
         ->get();
 
         $categories =  DB::table("categories")
@@ -105,9 +108,9 @@ class MovieController extends Controller
         ]);
     }
     public function index(){
-        $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->get();
+        $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->orderBy("created_at","desc")->get();
         $slides = Slides::with('movie')->where('status', 1)->where('isDeleted', 0)->get();
-        $subscription_plans = Subscription_plans::get();
+        $subscription_plans = Subscription_plans::where('isDeleted',0)->limit(3)->get();
         $categories = DB::table("categories")->limit(3)->get();
 
         $watch_later_movies = [];
@@ -117,7 +120,7 @@ class MovieController extends Controller
                 ->pluck("id_movie")
                 ->toArray();
         }
-        return view('/clients/HomePage', [
+        return view('clients.HomePage', [
             'movies' => $movies, 
             'slides' => $slides, 
             'subscription_plans' => $subscription_plans, 
@@ -347,7 +350,7 @@ class MovieController extends Controller
             'country' => $request->input('country'),
             'status' => $request->input('status'),
             'duration' => $request->input('duration'),
-            'isSeries' => request('isSeries')
+            'isSeries' => $request->input('isSeries')
         ]);
     
         // Lấy danh sách URL hiện có
@@ -369,11 +372,17 @@ class MovieController extends Controller
         // Cập nhật hoặc chèn URL mới
         foreach ($urls as $index => $url) {
             if (isset($url_ids[$index]) && in_array($url_ids[$index], $existingUrls->pluck('id')->toArray())) {
-                // Cập nhật URL nếu $url_id tồn tại
-                $oldVideoPath = parse_url(DB::table('urls')->where("id",$url_ids[$index])->value("url"),PHP_URL_PATH);
-                if (Storage::disk('s3')->exists($oldVideoPath)) {
-                    Storage::disk('s3')->delete($oldVideoPath);
+                // Kiểm tra xem URL có thay đổi hay không
+                $existingUrl = DB::table('urls')->where("id", $url_ids[$index])->first();
+                if ($existingUrl && $existingUrl->url !== $url) {
+                    // Nếu URL đã thay đổi, xóa video cũ khỏi S3
+                    $oldVideoPath = parse_url($existingUrl->url, PHP_URL_PATH);
+                    if (Storage::disk('s3')->exists($oldVideoPath)) {
+                        Storage::disk('s3')->delete($oldVideoPath);
+                    }
                 }
+    
+                // Cập nhật URL mới
                 DB::table('urls')->where('id', $url_ids[$index])->update([
                     'url' => $url,
                     'resolution' => $resolutions[$index],
@@ -393,7 +402,7 @@ class MovieController extends Controller
                     'media_id' => $id,
                 ]);
             }
-        }        
+        }
     
         return response()->json([
             'success' => true,
@@ -403,7 +412,6 @@ class MovieController extends Controller
     }
     
     
-
     public function admin__url__add(){
         $url = request('video');
         if(request()->hasFile('video') && request()->file('video')->isValid()){
@@ -419,7 +427,7 @@ class MovieController extends Controller
     }
 
     public function admin__remove__all__url(){
-        $urls = request()->input('urls'); 
+        $urls = request()->input('urls',[]); 
 
         $existingUrls = DB::table('urls')->whereIn('url', $urls)->pluck('url')->toArray();
 

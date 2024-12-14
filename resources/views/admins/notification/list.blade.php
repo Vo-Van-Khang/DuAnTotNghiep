@@ -42,7 +42,7 @@
 								@endif
 							</td>
 							<td>
-								<div class="main__table-text">{{ $notification->content }}</div>
+								<div class="main__table-text limit__text">{{ $notification->content }}</div>
 							</td>
 							<td>
 								<div class="main__table-text">{{ $notification->created_at }}</div>

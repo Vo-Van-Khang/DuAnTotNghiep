@@ -58,6 +58,9 @@
                                                 <div>
                                                     <img class="sign__image" src="{{asset($slide->image)}}" alt="">
                                                     <input type="file" name="thumbnail" class="sign__input">
+                                                    @error('thumbnail')
+                                                        <span style="color: #df4a32">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>

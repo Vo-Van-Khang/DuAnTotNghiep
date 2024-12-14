@@ -133,6 +133,12 @@ class TrashController extends Controller
             "success" => true
         ]);
     }
+    public function admin__subscription_plan__remove($id_remove){
+        DB::table("subscription_plans")->where("id",$id_remove)->delete();
+        return response()->json([
+            "success" => true
+        ]);
+    }
     public function admin__notification__remove($id_remove){
         $notificationToDelete = Notifications::find($id_remove);
 

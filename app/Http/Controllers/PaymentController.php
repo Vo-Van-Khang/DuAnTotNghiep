@@ -143,7 +143,7 @@ class PaymentController extends Controller
     public function payment__return(Request $request, $id_plan)
     {
         $vnp_HashSecret = "S9N8HBWL018SAE8XC9N1RUS281OF2UW1";
-        $vnp_SecureHash = $request->input('vnp_SecureHash');  // Dùng $request thay vì $_GET
+        $vnp_SecureHash = $request->input('vnp_SecureHash'); 
         $inputData = array();
 
         // Lọc các tham số của VNPAY từ request
@@ -163,13 +163,6 @@ class PaymentController extends Controller
 
         // Kiểm tra tính hợp lệ của hash
         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
-        // dd([
-        //     $request->all(),
-        //     $inputData,
-        //     "goc"=> $vnp_SecureHash,
-        //     "moi" => $secureHash,
-        //     "link" => $hashData
-        // ]);
         if ($secureHash == $vnp_SecureHash) {
             if ($request->input('vnp_ResponseCode') == '00') {
                 // Kiểm tra xem gói cước có tồn tại không
@@ -206,6 +199,8 @@ class PaymentController extends Controller
                     'amount' => $subscriptionPlan->price,
                     'date' => now(),
                     'method' => 'VNPAY',
+                    'transactionID' => $request->input('vnp_TransactionNo'),
+                    'order_ref' => $request->input('vnp_TxnRef'),
                     'status' => 'paid',
                     'id_user' => auth()->id(),
                 ]);
@@ -216,9 +211,7 @@ class PaymentController extends Controller
                 // Gửi email
                 Mail::to(auth()->user()->email)->send(new PaymentSuccessMail(auth()->user(), $subscriptionPlan));
                 
-                $user = DB::table("users")->where("role","admin")->first();
                 DB::table('notifications')->insert([
-                    'id_send_user' => $user->id,
                     'id_receive_user' => auth()->user()->id,
                     'content' => "{$subscriptionPlan->name} đã được thanh toán thành công! Cảm ơn bạn đã sử dụng dịch vụ"
                 ]);

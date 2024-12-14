@@ -21,7 +21,7 @@
                             </ul>
                         </div>
                         <button title="Thêm vào danh sách xem sau" 
-                                class="home__add watch__later__button {{ in_array($slide->movie->id, $watch_later_movies) ? 'active' : '' }}" 
+                                class="home__add watch__later__button {{ in_array($slide->movie->id, $watch_later_movies) ? 'active' : '' }} {{(!auth()->check() ? 'isLogin__false' : '')}}" 
                                 id_movie="{{ $slide->movie->id }}" 
                                 type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
@@ -454,6 +454,13 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <a href="{{route('subscription')}}" class="catalog__more" type="button">
+                            Xem thêm
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>

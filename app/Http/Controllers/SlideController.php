@@ -12,7 +12,9 @@ use App\Http\Controllers\Controller;
 class SlideController extends Controller
 {
     public function admin__view(){
-        $slides = Slides::with('movie')->where("isDeleted",0)->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));
+        $slides = Slides::with('movie')
+        ->where("isDeleted",0)
+        ->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));
         // dd($slides);
         return view('admins.slides.list', [
             "slides" => $slides,
@@ -21,7 +23,11 @@ class SlideController extends Controller
     }
 
     public function admin__add(){
-        $movies = DB::table("movies")->get();
+        $movies = DB::table("movies")
+        ->where('isDeleted',0)
+        ->where('status',1)
+        ->get();
+
         return view('admins.slides.add', [
             "movies" => $movies,
             "selected" => "slide"
@@ -29,7 +35,10 @@ class SlideController extends Controller
     }
 
     public function admin__update__form($id){
-        $movies = DB::table("movies")->get();
+        $movies = DB::table("movies")
+        ->where('isDeleted',0)
+        ->where('status',1)
+        ->get();
         $slide = Slides::with('movie')->find($id);
         return view('admins.slides.update', [
             "movies" => $movies,

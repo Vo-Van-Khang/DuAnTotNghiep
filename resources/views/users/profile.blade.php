@@ -8,7 +8,7 @@
                 <div class="profile">
                     <div class="profile__user">
                         <div class="profile__avatar">
-                            <img src="{{    auth()->user()->image}}" alt="" />
+                            <img src="{{auth()->user()->image}}" alt="" />
                         </div>
                         <div class="profile__meta">
                             <h3>{{auth()->user()->name}}</h3>
@@ -458,9 +458,9 @@
                                                     <label
                                                         class="sign__label"
                                                         for="firstname"
-                                                        >Ảnh hiện tại : </label
+                                                        >Ảnh hiện tại: </label
                                                     >
-                                                    <img id="current_image"
+                                                    <img id="current_image" style="margin-left: 20px"
                                                     src=" {{ $user->image }}"
                                                     alt="Ảnh hiện tại của người dùng" width="60">
                                                 </div>

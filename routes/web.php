@@ -26,7 +26,7 @@ Route::middleware(['checkRoleMiddleware'])->group(function () {
     Route::get('/admin/movie/add', [MovieController::class,'admin__add'])->name("admin.movie.add");
     Route::post('/admin/movie/add', [MovieController::class,'admin__create'])->name("admin.movie.add");
     Route::get('/admin/movie/update/{id}', [MovieController::class,'admin__update__form'])->name("admin.movie.update");
-    Route::post('/admin/movie/update/{id}', [MovieController::class,'admin__update'])->name("admin.movie.update");
+    Route::post('/admin/movie/update/{id}', [MovieController::class,'admin__update']);
     Route::delete('/admin/movie/delete/{id}', [MovieController::class,'admin__delete']);
     Route::post('/admin/movie/status/update/{id}',[MovieController::class,'admin__status__update']);
     Route::delete('/admin/movie/url/remove/{id}',[MovieController::class,'admin__remove__url']);
@@ -154,6 +154,7 @@ Route::post('/movie/watch_later/{id}', [WatchLaterController::class, 'watch_late
 
 Route::delete('/watch_later/remove/{id}', [WatchLaterController::class,'remove_by_id']);
 Route::delete('/history/remove/{id}', [HistoryController::class,'remove_by_id']);
+Route::delete('/like/remove/{id}', [LikeController::class,'remove_by_id']);
 
 Route::get('/movie/ajax/{id}', [AjaxController::class,'movie']);
 Route::get('/movie/comments_count/{id}', [AjaxController::class,'comments_count']);

@@ -47,15 +47,17 @@ class EpisodeController extends Controller
         $similars = DB::table("movies")
         ->select("*")
         ->where("id_category", $id_category->id_category)
+        ->where('status',1)
+        ->where('isDeleted',0)
         ->get();
 
-        if(true){
+        if(auth()->check()){
             $check_watch_later = DB::table("watch_laters")->where("id_movie",$movie->id)->where("id_user",auth()->user()->id)->count();
         }else{
             $check_watch_later = 0;
         } 
 
-        if(true){
+        if(auth()->check()){
             $check_like = DB::table("likes")->where("id_movie",$movie->id)->where("id_user",auth()->user()->id)->count();
         }else{
             $check_like = 0;
@@ -70,10 +72,9 @@ class EpisodeController extends Controller
         $categories = DB::table("categories")
         ->get();
 
-        $comments = Comments::with("user, reply_comments")
-        ->with("reply_comments")
-        ->where("id_movie",$id_movie)
-        ->orderBy("created_at","desc");
+        $comments = Comments::with("user", "reply_comments")
+        ->where("id_movie", $id_movie)
+        ->orderBy("created_at", "desc");
         $comments_count =  $comments->count();
         $comments =  $comments->paginate(5);
 
