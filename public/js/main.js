@@ -471,9 +471,7 @@ $(document).ready(function() {
     ==============================*/
  
     
-    window.addEventListener('load',()=>{
-        document.querySelector('#loader').style.display = "none";
-    })
+    
     
     if(document.querySelector(".page-404__btn")){
         document.querySelector(".page-404__btn").addEventListener("click",()=>{
@@ -1839,4 +1837,8 @@ document.addEventListener('click',(e)=>{
     if(e.target.closest('.pay__history') && !e.target.closest('.container')){
         e.target.closest('.pay__history').remove();
     }
+})
+
+window.addEventListener('load',()=>{
+    document.querySelector('#loader').style.display = "none";
 })

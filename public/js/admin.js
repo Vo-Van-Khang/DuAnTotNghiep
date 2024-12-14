@@ -200,9 +200,7 @@ $(document).ready(function () {
 	});
 
 });
-window.addEventListener('load',()=>{
-    document.querySelector('#loader').style.display = "none";
-})
+
 if(document.querySelector('form') != null){
 	document.querySelector('form').addEventListener('submit', function(event) {
 		document.querySelector('#loader').style.display = 'flex';
@@ -1004,15 +1002,6 @@ if (document.querySelector('.remove__btn__ajax') != null) {
     function adminRemove() {
         if (!id_remove || !type_remove) return;
 
-		setTimeout(() => {
-			let item = document.querySelector(`.tr__remove[id_remove="${id_remove}"]`);
-			let item__reply = document.querySelectorAll(`#collapseReplyComment${id_remove}`);
-			if (item) item.remove();
-			item__reply.forEach(item => {
-				item.remove();
-			})
-		}, 500);
-		
         fetch(`/admin/${type_remove}/delete/${id_remove}`, {
             method: 'DELETE',
             headers: {
@@ -1022,12 +1011,23 @@ if (document.querySelector('.remove__btn__ajax') != null) {
         })
         .then(response => response.json())
         .then(data => {
-            id_remove = null;
-            type_remove = null;
+            
         })
         .catch(error => {
             console.error(error);
         });
+
+		setTimeout(() => {
+			let item = document.querySelector(`.tr__remove[id_remove="${id_remove}"]`);
+			let item__reply = document.querySelectorAll(`#collapseReplyComment${id_remove}`);
+			if (item) item.remove();
+			item__reply.forEach(item => {
+				item.remove();
+			})
+			id_remove = null;
+			type_remove = null;
+		}, 500);
+
     }
 
     document.querySelector('#modal__remove__btn').addEventListener('click', adminRemove);
@@ -1086,11 +1086,6 @@ if (document.querySelector('.trash__restore__btn') != null) {
     function trashRestore() {
         if (!id_trash || !type_trash) return;
 
-		setTimeout(() => {
-			let item = document.querySelector(`.tr__trash[id_trash="${id_trash}"][type_trash="${type_trash}"]`);
-        	if (item) item.remove();
-		}, 500);
-
         fetch(`/admin/trash/restore/${id_trash}`, {
             method: 'POST',
             headers: {
@@ -1101,12 +1096,18 @@ if (document.querySelector('.trash__restore__btn') != null) {
         })
         .then(response => response.json())
         .then(data => {
-            id_trash = null;
-            type_trash = null;
+           
         })
         .catch(error => {
             console.error(error);
         });
+
+		setTimeout(() => {
+			let item = document.querySelector(`.tr__trash[id_trash="${id_trash}"][type_trash="${type_trash}"]`);
+        	if (item) item.remove();
+			id_trash = null;
+            type_trash = null;
+		}, 500);
     }
 
     document.querySelector('#modal__restore__btn').addEventListener('click', trashRestore);
@@ -1124,11 +1125,6 @@ if(document.querySelector('.trash__remove__btn') != null){
 	function trashRemove() {
 		if (!id_trash || !type_trash) return;
 
-		setTimeout(() => {
-			let item = document.querySelector(`.tr__trash[id_trash="${id_trash}"][type_trash="${type_trash}"]`);
-			if (item) item.remove();
-		}, 500);
-
 		fetch(`/admin/trash/${type_trash}/remove/${id_trash}`,{
 			method: 'POST',
 			headers: {
@@ -1142,6 +1138,13 @@ if(document.querySelector('.trash__remove__btn') != null){
 		.catch(error => {
 			console.error(error);
 		});
+
+		setTimeout(() => {
+			let item = document.querySelector(`.tr__trash[id_trash="${id_trash}"][type_trash="${type_trash}"]`);
+			if (item) item.remove();
+			id_trash = null;
+            type_trash = null;
+		}, 500);
 	}
     document.querySelector('#modal__remove__btn').addEventListener('click', trashRemove);
 }
@@ -1350,3 +1353,6 @@ if(document.querySelector('.paginator__paginator')){
 
 	})
 }
+window.addEventListener('load',()=>{
+    document.querySelector('#loader').style.display = "none";
+})

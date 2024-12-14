@@ -6,8 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<!-- CSS -->
-	<link rel="stylesheet" href="{{secure_asset('css/bootstrap-reboot.min.css')}}">
-	<link rel="stylesheet" href="{{secure_asset('css/bootstrap-grid.min.css')}}">
+	<link rel="stylesheet" href="{{asset('css/bootstrap-reboot.min.css')}}">
+	<link rel="stylesheet" href="{{asset('css/bootstrap-grid.min.css')}}">
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,14 +17,14 @@
 
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<link rel="stylesheet" href="{{secure_asset('css/magnific-popup.css')}}">
-	<link rel="stylesheet" href="{{secure_asset('css/select2.min.css')}}">
-	<link rel="stylesheet" href="{{secure_asset('css/admin.css')}}">
+	<link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}">
+	<link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+	<link rel="stylesheet" href="{{asset('css/admin.css')}}">
 
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<!-- Favicons -->
-	<link rel="icon" type="image/png" href="{{secure_asset('images/storage/logo.png')}}" sizes="32x32">
-	<link rel="apple-touch-icon" href="{{secure_asset('images/storage/logo.png')}}">
+	<link rel="icon" type="image/png" href="{{asset('images/storage/logo.png')}}" sizes="32x32">
+	<link rel="apple-touch-icon" href="{{asset('images/storage/logo.png')}}">
 
 	<meta name="description" content="">
 	<meta name="keywords" content="">
@@ -39,7 +39,7 @@
 		<div class="header__content">
 			<!-- logo tiêu đề -->
 			<a href="{{route("index")}}" class="header__logo">
-				<img src="{{secure_asset('images/storage/logo.png')}}" alt="">
+				<img src="{{asset('images/storage/logo.png')}}" alt="">
 			</a>
 			<!-- kết thúc logo tiêu đề -->
 
@@ -58,7 +58,7 @@
 	<div class="sidebar">
 		<!-- logo thanh bên -->
 		<a href="/" class="sidebar__logo">
-			<img src="{{secure_asset('images/storage/logo.png')}}" alt="">
+			<img src="{{asset('images/storage/logo.png')}}" alt="">
 		</a>
 		<!-- kết thúc logo thanh bên -->
 
@@ -217,12 +217,12 @@
 	</div>
 	@include('layouts.shared.loader')
 	<!-- JS -->
-	<script src="{{secure_asset("js/jquery-3.5.1.min.js")}}"></script>
-	<script src="{{secure_asset("js/bootstrap.bundle.min.js")}}"></script>
-	<script src="{{secure_asset("js/jquery.magnific-popup.min.js")}}"></script>
-	<script src="{{secure_asset("js/smooth-scrollbar.js")}}"></script>
-	<script src="{{secure_asset("js/select2.min.js")}}"></script>
-	<script src="{{secure_asset("js/admin.js")}}"></script>
+	<script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
+	<script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>
+	<script src="{{asset("js/jquery.magnific-popup.min.js")}}"></script>
+	<script src="{{asset("js/smooth-scrollbar.js")}}"></script>
+	<script src="{{asset("js/select2.min.js")}}"></script>
+	<script src="{{asset("js/admin.js")}}"></script>
 </body>
 
 </html>

@@ -8,23 +8,23 @@
         />
 
         <!-- CSS -->
-        <link rel="stylesheet" href="{{secure_asset("css/bootstrap-reboot.min.css")}}" />
-        <link rel="stylesheet" href="{{secure_asset("css/bootstrap-grid.min.css")}}" />
-        <link rel="stylesheet" href="{{secure_asset("css/owl.carousel.min.css")}}" />
-        <link rel="stylesheet" href="{{secure_asset("css/slider-radio.css")}}" />
-        <link rel="stylesheet" href="{{secure_asset("css/select2.min.css")}}" />
-        <link rel="stylesheet" href="{{secure_asset("css/magnific-popup.css")}}" />
-        <link rel="stylesheet" href="{{secure_asset("css/plyr.css")}}" />
-        <link rel="stylesheet" href="{{secure_asset("css/main.css")}}" />
+        <link rel="stylesheet" href="{{asset("css/bootstrap-reboot.min.css")}}" />
+        <link rel="stylesheet" href="{{asset("css/bootstrap-grid.min.css")}}" />
+        <link rel="stylesheet" href="{{asset("css/owl.carousel.min.css")}}" />
+        <link rel="stylesheet" href="{{asset("css/slider-radio.css")}}" />
+        <link rel="stylesheet" href="{{asset("css/select2.min.css")}}" />
+        <link rel="stylesheet" href="{{asset("css/magnific-popup.css")}}" />
+        <link rel="stylesheet" href="{{asset("css/plyr.css")}}" />
+        <link rel="stylesheet" href="{{asset("css/main.css")}}" />
 
         <!-- Favicons -->
         <link
             rel="icon"
             type="image/png"
-            href="{{secure_asset("images/storage/logo.png")}}"
+            href="{{asset("images/storage/logo.png")}}"
             sizes="32x32"
         />
-        <link rel="apple-touch-icon" href="{{secure_asset("images/storage/logo.png")}}" />
+        <link rel="apple-touch-icon" href="{{asset("images/storage/logo.png")}}" />
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -43,7 +43,7 @@
                             <form action="{{route('login')}}" method="POST" class="sign__form">
                                 @csrf
                                 <a href="{{route("index")}}" class="sign__logo">
-                                    <img src="{{secure_asset("images/storage/logo.png")}}" alt="" />
+                                    <img src="{{asset("images/storage/logo.png")}}" alt="" />
                                 </a>
 
                                 <div class="sign__group">
@@ -109,14 +109,14 @@
             @include('layouts.shared.message')
         </div>
         <!-- JS -->
-        <script src="{{secure_asset("js/jquery-3.5.1.min.js")}}"></script>
-        <script src="{{secure_asset("js/bootstrap.bundle.min.js")}}"></script>
-        <script src="{{secure_asset("js/owl.carousel.min.js")}}"></script>
-        <script src="{{secure_asset("js/slider-radio.js")}}"></script>
-        <script src="{{secure_asset("js/select2.min.js")}}"></script>
-        <script src="{{secure_asset("js/smooth-scrollbar.js")}}"></script>
-        <script src="{{secure_asset("js/jquery.magnific-popup.min.js")}}"></script>
-        <script src="{{secure_asset("js/plyr.min.js")}}"></script>
-        <script src="{{secure_asset("js/main.js")}}"></script>
+        <script src="{{asset("js/jquery-3.5.1.min.js")}}"></script>
+        <script src="{{asset("js/bootstrap.bundle.min.js")}}"></script>
+        <script src="{{asset("js/owl.carousel.min.js")}}"></script>
+        <script src="{{asset("js/slider-radio.js")}}"></script>
+        <script src="{{asset("js/select2.min.js")}}"></script>
+        <script src="{{asset("js/smooth-scrollbar.js")}}"></script>
+        <script src="{{asset("js/jquery.magnific-popup.min.js")}}"></script>
+        <script src="{{asset("js/plyr.min.js")}}"></script>
+        <script src="{{asset("js/main.js")}}"></script>
     </body>
 </html>
