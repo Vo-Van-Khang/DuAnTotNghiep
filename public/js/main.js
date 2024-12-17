@@ -479,11 +479,7 @@ $(document).ready(function() {
         })
     }
     
-    if(document.querySelector('form') != null){
-        document.querySelector('form').addEventListener('submit', function(event) {
-            document.querySelector('#loader').style.display = 'flex';
-        });
-    }
+    
     
     function messageBySession() {
         if(sessionStorage.getItem("message")){
@@ -838,7 +834,6 @@ $(document).ready(function() {
                 like__button.disabled = true;
                 document.querySelector("#likes").innerHTML = Number(document.querySelector("#likes").textContent) + 1;
             }
-
             fetch(`/movie/like/${id}`, {
                 method: 'POST',
                 headers: {
@@ -849,15 +844,6 @@ $(document).ready(function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    if(data.check > 0){
-                        like__button.className = "";
-                        like__button.title = "Thích video này";
-                        document.querySelector("#likes").innerText = data.likes;
-                    }else{
-                        like__button.className = "active";
-                        like__button.title = "Bỏ thích video này";
-                        document.querySelector("#likes").innerText = data.likes;
-                    }
                     like__button.disabled = false;
                 }
             })
@@ -1288,33 +1274,35 @@ $(document).ready(function() {
         });
     }
     
-    function movie__ajax(id) {
-        const views = document.querySelector('.views__movie');
-        fetch(`/movie/ajax/${id}`,{
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.querySelector('#likes').innerText = data.likes;
-                views.innerText = data.views;
-            }
-        })
-        .catch(error => {
-            console.error(error);
-        });
-    }
+    // function movie__ajax(id) {
+    //     console.log("movie ajax");
+    //     const views = document.querySelector('.views__movie');
+    //     fetch(`/movie/ajax/${id}`,{
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         if (data.success) {
+    //             document.querySelector('#likes').innerText = data.likes;
+    //             views.innerText = data.views;
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.error(error);
+    //     });
+    // }
     
-    if(document.querySelector(".comments__list")){
-        setInterval(()=>{
-            let id = document.querySelector(".comments__list").getAttribute('id_movie')
-            movie__ajax(id);
-        },2000)
-    }
+    // if(document.querySelector(".comments__list")){
+    //     setInterval(()=>{
+    //         let id = document.querySelector(".comments__list").getAttribute('id_movie');
+    //         movie__ajax(id);
+    //         console.log("interval");
+    //     },2000)
+    // }
     
     let currentPage = 1; // Trang hiện tại
     const perPage = 5; // Số lượng bình luận mỗi trang
@@ -1842,3 +1830,9 @@ document.addEventListener('click',(e)=>{
 window.addEventListener('load',()=>{
     document.querySelector('#loader').style.display = "none";
 })
+
+if(document.querySelector('form.sign__form') != null){
+    document.querySelector('form.sign__form').addEventListener('submit', function() {
+        document.querySelector('#loader').style.display = 'flex';
+    });
+}

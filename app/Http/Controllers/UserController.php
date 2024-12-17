@@ -252,6 +252,7 @@ class UserController extends Controller
     if ($request->hasFile('image')) {
         $imageName = time() . '.' . $request->image->extension();
         $request->image->move(public_path('images/users'), $imageName);
+        $imageName = '/images/users/' .  $imageName;
     } else {
         $imageName = '/images/users/user.jpg';
     }
@@ -279,10 +280,10 @@ class UserController extends Controller
     try {
         Mail::to($request->email)->send(new UserRegistered($user));
     } catch (\Exception $e) {
-        return redirect()->route('signin')->with('error', 'Đăng ký thành công nhưng không thể gửi email xác nhận.');
+        return redirect()->route('login')->with('error', 'Đăng ký thành công nhưng không thể gửi email xác nhận.');
     }
 
-    return redirect()->route('signin')->with('success', 'Đăng ký thành công, vui lòng kiểm tra email để xác nhận tài khoản.');
+    return redirect()->route('login')->with('success', 'Đăng ký thành công, vui lòng kiểm tra email để xác nhận tài khoản.');
     }
     public function forgotPassword()
     {
@@ -305,7 +306,7 @@ class UserController extends Controller
 
         Mail::to($email)->send(new ResetPasswordMail($resetUrl));
 
-        return back()->with('success', 'Mã xác nhận đã được gửi. Vui lòng kiểm tra email của bạn.');
+        return redirect()->route('login')->with('success', 'Mã xác nhận đã được gửi. Vui lòng kiểm tra email của bạn.');
     }
 
 
@@ -418,10 +419,12 @@ class UserController extends Controller
             'email' => $request->email,
             'content' => $request->content,
         ];
-        // dd($details->name);
+        // dd($details);
         // Gửi email
         Mail::to('dumdumteam.dev@gmail.com')->send(new ContactMail($details));
+        session()->flash('success', 'Email đã được gửi thành công!');
+        // dd(session()->all());
 
-        return back()->with('success', 'Email đã được gửi thành công!');
+        return redirect()->route('contact');
     }
 }

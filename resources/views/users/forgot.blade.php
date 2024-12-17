@@ -21,10 +21,10 @@
         <link
             rel="icon"
             type="image/png"
-            href="{{asset("images/logo.png")}}"
+            href="{{asset("images/storage/logo.png")}}"
             sizes="32x32"
         />
-        <link rel="apple-touch-icon" href="{{asset("images/logo.png")}}" />
+        <link rel="apple-touch-icon" href="{{asset("images/storage/logo.png")}}" />
 
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -51,16 +51,6 @@
                                         name="email"
                                         class="sign__input"
                                         placeholder="Email" />
-                                </div>
-    
-                                <div class="sign__group sign__group--checkbox">
-                                    <input
-                                        id="remember"
-                                        name="remember"
-                                        type="checkbox"
-                                        checked="checked" />
-                                    <label for="remember">Tôi đồng ý với
-                                        <a href="privacy.html">Chính sách bảo mật</a></label>
                                 </div>
     
                                 <button class="sign__btn" type="submit">

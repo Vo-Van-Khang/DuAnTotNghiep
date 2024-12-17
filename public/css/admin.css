@@ -313,6 +313,7 @@ body::-webkit-scrollbar-thumb {
 .sidebar__user-img img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 .sidebar__user-title {
   display: flex;

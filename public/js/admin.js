@@ -940,6 +940,7 @@ if(document.querySelector('.status__update__btn') != null){
 			.then(response => response.json())
 			.then(data =>{
 				if(data.success){
+					console.log(type_status, status__item__update);
 					if(type_status != "user"){
 						if(type_status != "reply_comment"){
 							if(data.show){

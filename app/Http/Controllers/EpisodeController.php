@@ -22,7 +22,7 @@ class EpisodeController extends Controller
         ->distinct()
         ->get();
 
-        $server_selected = "server 1";
+        $server_selected = $urls = DB::table("urls")->where("media_id", $id_episode)->first()->source;
         if(request("server")){
             $server_selected = request("server");
         }

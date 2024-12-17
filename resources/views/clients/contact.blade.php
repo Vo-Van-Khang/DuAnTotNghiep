@@ -46,11 +46,9 @@
                                     name="name"
                                     class="sign__input"
                                     placeholder="Tên của bạn"
-                                    value="{{old('name')}}"
+                                    value="{{(auth()->check()) ? auth()->user()->name : ""}}"
+                                    readonly
                                 />
-                                @error('name')
-									<span style="color: #df4a32">{{$message}}</span>
-								@enderror
                             </div>
                         </div>
 
@@ -61,11 +59,9 @@
                                     name="email"
                                     class="sign__input"
                                     placeholder="Email của bạn"
-                                    value="{{old('email')}}"
+                                    value="{{(auth()->check()) ? auth()->user()->email : ""}}"
+                                    readonly
                                 />
-                                @error('email')
-									<span style="color: #df4a32">{{$message}}</span>
-								@enderror
                             </div>
                         </div>
 

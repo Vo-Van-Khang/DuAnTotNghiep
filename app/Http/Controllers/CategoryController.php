@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Validate;
+use App\Models\Movies;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -11,8 +12,8 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     public function category($id){
-        $category = Categories::with("movies")->where("id",$id)->first();
-        return view('clients.category', ['category' =>$category]);
+        $movies = Movies::where("id_category",$id)->where("isDeleted",0)->where('status',1)->get();
+        return view('clients.category', ['movies' =>$movies]);
     }
     public function get(){
         $data = Categories::with("movies")

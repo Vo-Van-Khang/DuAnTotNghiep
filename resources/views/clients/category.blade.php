@@ -20,7 +20,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="row row--grid">
-                        @foreach ($category->movies as $movie)
+                    @if ($movies->count())
+                        @foreach ($movies as $movie)
                             <div class="col-6 col-sm-4 col-lg-3 col-xl-3">
                                 <div class="card">
 
@@ -50,7 +51,7 @@
                                         </svg>
                                     </a>
                                     <h3 class="card__title">
-                                        <a href="/detail" >{{$movie->title}}</a>
+                                        <a href="{{route('movie',$movie->id)}}" >{{$movie->title}}</a>
                                     </h3>
                                     <ul class="card__list">
                                     <li>{{$movie->category ? $movie->category->name : 'Không có danh mục'}}</li>
@@ -61,7 +62,9 @@
                                 </div>
                             </div>
                         @endforeach
-
+                    @else
+                        <p style="width:100%;margin:20px 0 0;color:#fff;text-align:center">Không có dữ liệu</p>
+                    @endif
                     </div>
                 </div>
             </div>

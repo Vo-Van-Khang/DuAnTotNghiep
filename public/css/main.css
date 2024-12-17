@@ -5540,7 +5540,7 @@ body::-webkit-scrollbar-thumb {
     align-items: flex-start;
 }
 
-.footer__nav a {
+.footer__nav a,.footer__nav p {
     font-size: 14px;
     line-height: 21px;
     margin-bottom: 10px;

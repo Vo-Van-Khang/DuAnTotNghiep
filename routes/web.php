@@ -121,7 +121,7 @@ Route::middleware(['checkRoleMiddleware'])->group(function () {
 //CLIENT
 Route::get("/", [MovieController::class, 'index'])->name('index');
 Route::view('/about', 'clients.about')->name("about");
-Route::view('/contact', 'clients.contact')->name("contact");
+Route::view('/contact', 'clients.contact')->middleware('auth')->name("contact");
 Route::post('/contact', [UserController::class, 'contact'])->name("contact");
 Route::get('/subscription', [PaymentController::class , 'get'])->middleware('auth')->name("subscription");
 Route::post('/subscription/payment', [PaymentController::class , 'payment'])->name("subscription.payment");

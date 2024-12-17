@@ -42,7 +42,7 @@ class MovieController extends Controller
         ->distinct()  // Lấy các giá trị khác nhau
         ->get();
 
-        $server_selected = "server 1";
+        $server_selected = $urls = DB::table("urls")->where("media_id", $id)->first()->source;
         if(request("server")){
             $server_selected = request("server");
         }
@@ -109,7 +109,14 @@ class MovieController extends Controller
     }
     public function index(){
         $movies = Movies::with('category')->where("status", 1)->where("isDeleted", 0)->orderBy("created_at","desc")->get();
-        $slides = Slides::with('movie')->where('status', 1)->where('isDeleted', 0)->get();
+        $slides = Slides::with('movie')
+        ->where('status', 1)
+        ->where('isDeleted', 0)
+        ->whereHas('movie', function ($query) {
+            $query->where('status', 1);
+            $query->where('isDeleted', 0);
+        })
+        ->get();
         $subscription_plans = Subscription_plans::where('isDeleted',0)->limit(3)->get();
         $categories = DB::table("categories")->limit(3)->get();
 

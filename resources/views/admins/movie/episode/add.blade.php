@@ -50,7 +50,7 @@
                             <div class="row">
                                 <div class="col-12 d-flex" style="padding-right: 0">
                                     <h2 class="sign__title" style="width: fit-content;margin-right:auto">Đường dẫn</h2>
-                                    <button class="btn add__button" style="height: fit-content" id="add__url" type="button">
+                                    <button class="btn add__button" style="height: fit-content" id="add__url" type="button" disabled>
                                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
                                     </button>
                                 </div>
@@ -58,11 +58,6 @@
                                     <div class="row item__url" type__url="episode">
                                         <div class="col-12 d-flex">
                                             <h4 class="sign__title-small">Đường dẫn 1</h4>
-                                            <button class="btn remove__url__item" type="button" disabled>
-                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                                                    <path d="M200-440v-80h560v80H200Z"/>
-                                                </svg>
-                                            </button>
                                         </div>
                                         <div class="col-12 col-md-6 col-lg-12 col-xl-12">
                                             <div class="sign__group">

@@ -47,12 +47,10 @@
 
                     <div class="col-6">
                         <div class="footer__nav">
-                            <a href="#"
-                                >Phim hay</a
-                            >
-                            <a href="#">Chất lượng</a>
-                            <a href="#">Sắc nét</a>
-                            <a href="#">Nhiều ưu đãi</a>
+                            <p>Phim hay</p>
+                            <p>Chất lượng</p>
+                            <p>Sắc nét</p>
+                            <p>Nhiều ưu đãi</p>
                         </div>
                     </div>
                 </div>
@@ -79,11 +77,8 @@
                     </div>
                     <small class="footer__copyright"
                         >© Đum Đúm. Created by
-                        <a
-                            href="#"
-                            >DumDumTeam</a
-                        >.</small
-                    >
+                        <a>DumDumTeam</a>.
+                    </small>
                 </div>
             </div>
         </div>
