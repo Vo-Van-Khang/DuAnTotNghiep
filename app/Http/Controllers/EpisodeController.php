@@ -75,7 +75,7 @@ class EpisodeController extends Controller
         $comments = Comments::with("user", "reply_comments")
         ->where("id_movie", $id_movie)
         ->orderBy("created_at", "desc");
-        $comments_count =  $comments->count();
+        $comments_count =  $comments->where('status',1)->count();
         $comments =  $comments->paginate(5);
 
         $watch_later_movies = [];

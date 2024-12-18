@@ -209,7 +209,7 @@
                             </td>
                             
                             <td>
-                                <div class="main__table-text">{{$subscription_plan->duration}}</div>
+                                <div class="main__table-text">{{$subscription_plan->duration}} Ngày</div>
                             </td>
 
                             <td>

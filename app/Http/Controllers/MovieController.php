@@ -85,7 +85,7 @@ class MovieController extends Controller
         $comments = Comments::with("user", "reply_comments")
         ->where("id_movie", $id)
         ->orderBy("created_at", "desc");
-        $comments_count =  $comments->count();
+        $comments_count =  $comments->where('status',1)->count();
         $comments =  $comments->paginate(5);
         // dd($comments_count);
         $episode_focus = new stdClass();

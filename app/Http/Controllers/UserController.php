@@ -135,8 +135,8 @@ class UserController extends Controller
 
     public function changePassword(){
         request()->validate([
-            'password' => 'required|confirmed|min:5',
-            'current_password' => 'required|min:5',
+            'password' => 'required|confirmed|min:8',
+            'current_password' => 'required|min:8',
         ],[
             'password.required' => 'Mật khẩu là bắt buộc.',
             'password.confirmed' => 'Mật khẩu của bạn không khớp nhau.',
