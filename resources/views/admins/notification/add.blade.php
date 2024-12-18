@@ -32,6 +32,9 @@
 											<div class="sign__group">
 												<label class="sign__label" for="content">Nội dung</label>
 												<textarea id="content" class="sign__input" name="content"></textarea>
+												@error('content')
+													<span style="color: #df4a32">{{$message}}</span>
+												@enderror
 											</div>
 										</div>
 										<!-- <div class="col-12 col-md-6 col-lg-12 col-xl-6">

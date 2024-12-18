@@ -90,6 +90,14 @@ class MovieController extends Controller
         // dd($comments_count);
         $episode_focus = new stdClass();
         $episode_focus->episode = 1;
+ 
+        $watch_later_movies = [];
+        if (auth()->check()) {
+            $watch_later_movies = DB::table("watch_laters")
+                ->where("id_user", auth()->user()->id)
+                ->pluck("id_movie")
+                ->toArray();
+        }
 
         return view("clients.movie",[
             "movie"=>$movie,
@@ -104,7 +112,8 @@ class MovieController extends Controller
             "comments" => $comments,
             "episode_focus" => $episode_focus,
             "check_like" => $check_like,
-            "check_watch_later" => $check_watch_later
+            "check_watch_later" => $check_watch_later,
+            "watch_later_movies" => $watch_later_movies
         ]);
     }
     public function index(){

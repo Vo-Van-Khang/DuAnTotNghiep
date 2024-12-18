@@ -13,7 +13,7 @@
             <div class="col-12 col-xl-6">
                 <ul class="breadcrumb">
                     <li class="breadcrumb__item">
-                        <a href="index.html">Trang chủ</a>
+                        <a href="{{route('index')}}">Trang chủ</a>
                     </li>
                     <li
                     class="breadcrumb__item breadcrumb__item--active"

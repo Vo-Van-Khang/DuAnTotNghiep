@@ -50,12 +50,16 @@
                             </div>
                             <div class="sign__group">
                                 <input type="password" name="password" class="sign__input" placeholder="Mật khẩu mới" required>
-                                
+                                @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             
                             <div class="sign__group">
                                 <input type="password" name="password_confirmation" class="sign__input" placeholder="Xác nhận mật khẩu mới" required>
-                                
+                                @error('password_confirmation')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             
 
@@ -71,12 +75,8 @@
                                 <label for="remember">Tôi đồng ý với
                                     <a href="privacy.html">Chính sách bảo mật</a></label>
                             </div>
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                                @error('password_confirmation')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                            
+                                
                             <button class="sign__btn" type="submit">
                                 Gửi
                             </button>

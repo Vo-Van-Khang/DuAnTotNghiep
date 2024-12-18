@@ -101,6 +101,18 @@ class UserController extends Controller
     }
 
     public function userUpdate(Request $request){
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ], [
+            'name.required' => 'Vui lòng nhập tên của bạn.',
+            'name.string' => 'Tên phải là chuỗi ký tự.',
+            'name.max' => 'Tên không được vượt quá 255 ký tự.',
+
+            'image.image' => 'File phải là một hình ảnh.',
+            'image.mimes' => 'Hình ảnh phải có định dạng jpg, png, jpeg, gif, hoặc svg.',
+            'image.max' => 'Kích thước hình ảnh không được vượt quá 2MB.',
+        ]);
         $name = $request->input('name');
         $userUpdate = User::find(auth()->id());
         if ($request->hasFile('image')) {
@@ -139,7 +151,7 @@ class UserController extends Controller
                 return redirect()->back()->with('success', 'Thay đổi mật khẩu thành công!');
             }
         } else {
-            return redirect()->back()->with('error', 'Mật khẩu cũ không đúng!');
+            return redirect()->back()->withErrors(['current_password' => 'Mật khẩu cũ không đúng!']);
         }
 
     }
@@ -173,8 +185,19 @@ class UserController extends Controller
         return view('admins/user/update', ['user' => $userEdit,"selected" => "user"]);
     }
 
-    public function update(Validate $request) {
-        $validated = $request->validated();
+    public function update(Request $request) {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ], [
+            'name.required' => 'Vui lòng nhập tên của bạn.',
+            'name.string' => 'Tên phải là chuỗi ký tự.',
+            'name.max' => 'Tên không được vượt quá 255 ký tự.',
+
+            'image.image' => 'File phải là một hình ảnh.',
+            'image.mimes' => 'Hình ảnh phải có định dạng jpg, png, jpeg, gif, hoặc svg.',
+            'image.max' => 'Kích thước hình ảnh không được vượt quá 2MB.',
+        ]);
         $id = $request->input('id');
         $name = $request->input('name');
         $status = $request->input('status');

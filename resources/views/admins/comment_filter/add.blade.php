@@ -32,7 +32,10 @@
                                     <div class="col-12 col-md-6 col-lg-12 col-xl-6">
                                         <div class="sign__group">
                                             <label class="sign__label">Nội dung</label>
-                                            <input type="text" name="content" class="sign__input" placeholder="Nhập nội dung" value="{{ old('content') }}" required>
+                                            <input type="text" name="content" class="sign__input" placeholder="Nhập nội dung" value="{{ old('content') }}">
+                                            @error('content')
+                                                <span style="color: #df4a32">{{$message}}</span>
+                                            @enderror
                                         </div>
                                     </div>
 

@@ -41,6 +41,12 @@ class NotificationController extends Controller
 
 function addNotification(Request $request)
 {
+    $request->validate([
+        'content' => 'required|max:255',
+    ], [
+        'content.required' => 'Nội dung là bắt buộc.',
+        'content.max' => 'Nội dung không được vượt quá 255 ký tự.'
+    ]);
     $id_send_user = Auth::id(); 
     $content = $request->input('content');
 

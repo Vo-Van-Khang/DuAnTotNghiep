@@ -770,18 +770,7 @@ $(document).ready(function() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-    
-                        if(data.check > 0){
-                            button.classList = "home__add watch__later__button";
-                            button.title = "Thêm vào danh sách xem sau";
-                        }else{
-                            button.classList = "home__add watch__later__button active";
-                            button.title = "Xoá khỏi xem sau";
-                        }
-    
                         button.disabled = false;
-                    } else {
-                        console.log("fail");
                     }
                 })
                 .catch(error => {
@@ -1572,17 +1561,12 @@ $(document).ready(function() {
 
         // Gắn sự kiện click cho grades
         grades.forEach(grade => {
-            let firstClick = true;
             grade.addEventListener("click", () => {
-                if (firstClick && grade.value === "newest") {
-                    firstClick = false;
-                    return;
-                }
                 filter(filter__search, filter__genres, filter__years, grade);
             });
         });
-    
         function filter(filter__search, filter__genres, filter__years, grade) {
+           
             const filter__container = document.querySelector('.filter__container');
 
             filter__container.innerHTML = `
@@ -1619,6 +1603,7 @@ $(document).ready(function() {
                                         </div>
                                     </div>
             `
+            
 
             fetch(`/movie/filter/ajax?filter__genres=${filter__genres.value}&filter__years=${filter__years.value}&grade=${grade.value}&search=${filter__search}`, {
                 method: 'GET',

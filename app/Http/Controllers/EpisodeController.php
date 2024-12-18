@@ -78,6 +78,14 @@ class EpisodeController extends Controller
         $comments_count =  $comments->count();
         $comments =  $comments->paginate(5);
 
+        $watch_later_movies = [];
+        if (auth()->check()) {
+            $watch_later_movies = DB::table("watch_laters")
+                ->where("id_user", auth()->user()->id)
+                ->pluck("id_movie")
+                ->toArray();
+        }
+
         return view("clients.movie",[
             "movie"=>$movie,
             "servers"=>$servers,
@@ -91,7 +99,8 @@ class EpisodeController extends Controller
             "comments_count" => $comments_count,
             "comments" => $comments,
             "check_like" => $check_like,
-            "check_watch_later" => $check_watch_later
+            "check_watch_later" => $check_watch_later,
+            "watch_later_movies" => $watch_later_movies
         ]);
     }
     public function admin__add($id_movie){

@@ -9,7 +9,7 @@ class CommentFilterController extends Controller
 {
     public function listAdmin()
     {
-        $commentFilters = Comment_Filters::paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));; 
+        $commentFilters = Comment_Filters::orderBy('created_at','desc')->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));; 
         return view('admins.comment_filter.list', ['commentFilters' => $commentFilters, "selected" => "comment_filter"]);
     }
 
@@ -24,9 +24,11 @@ class CommentFilterController extends Controller
     {
         // Validate the input
         $request->validate([
-            'content' => 'required|string|max:255',
+            'content' => 'required|max:255',
+        ],[
+            'content.required' => 'Nội dung là bắt buộc.',
+            'content.max' => 'Nội dung phải ít hơn hoặc bằng 255 kí tự.',
         ]);
-
         // Create the new comment filter
         Comment_Filters::create([
             'content' => $request->content,
@@ -50,37 +52,3 @@ class CommentFilterController extends Controller
     }
     
 }
-// public function store(Request $request, CommentFilterController $commentFilterController)
-//     {
-//         // Validate the incoming request
-//         $request->validate([
-//             'content' => 'required|string|max:255',
-//         ]);
-
-//         // Filter the comment content
-//         $filteredContent = $commentFilterController->filterCommentContent($request->content);
-
-//         // Create and save the comment with the filtered content
-//         Comment::create([
-//             'content' => $filteredContent,
-//             'user_id' => auth()->id(), // Assuming you are storing the logged-in user's ID
-//         ]);
-
-//         // Redirect back with a success message
-//         return redirect()->back()->with('success', 'Comment added successfully!');
-//     }
-
-//     public function filterCommentContent($content)
-//     {
-//         // Retrieve all filtered words from comment_filters table
-//         $filteredWords = Comment_Filters::pluck('content')->toArray();
-
-//         // Replace any filtered word in the comment with '***'
-//         foreach ($filteredWords as $word) {
-//             if (stripos($content, $word) !== false) {
-//                 $content = str_ireplace($word, '***', $content);
-//             }
-//         }
-
-//         return $content;
-//     }

@@ -5,7 +5,7 @@
 		<!-- tiêu đề chính -->
 		<div class="col-12">
 			<div class="main__title">
-				<h2>Danh mục</h2>
+				<h2>Thanh toán</h2>
 
 			</div>
 		</div>
@@ -35,7 +35,7 @@
 								<div class="main__table-text">{{ $subscription->name }}</div>
 							</td>
 							<td>
-								<div class="main__table-text">{{ $subscription->duration }}</div>
+								<div class="main__table-text">{{ $subscription->duration }} Ngày</div>
 							</td>
 							<td>
 								<div class="main__table-text">{{$subscription->price ? number_format($subscription->price, 0, ',', '.') : '0'}} VND</div>

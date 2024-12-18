@@ -25,19 +25,28 @@
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
 												<label class="sign__label" for="username">Tên gói</label>
-												<input id="username" type="text" class="sign__input" name="name">
+												<input id="username" type="text" class="sign__input" name="name" value="{{old('name')}}">
+												@error('name')
+													<span style="color: #df4a32">{{$message}}</span>
+												@enderror
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
 												<label class="sign__label" for="price">Số ngày</label>
-												<input id="price" type="number" class="sign__input" name="duration">
+												<input id="price" type="number" class="sign__input" name="duration" value="{{old('duration')}}">
+												@error('duration')
+													<span style="color: #df4a32">{{$message}}</span>
+												@enderror
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
 												<label class="sign__label" for="price">Giá</label>
-												<input id="price" type="number" class="sign__input" name="price">
+												<input id="price" type="number" class="sign__input" name="price" value="{{old('price')}}">
+												@error('price')
+													<span style="color: #df4a32">{{$message}}</span>
+												@enderror
 											</div>
 										</div>
 										<div class="col-12">

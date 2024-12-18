@@ -122,7 +122,7 @@
                         </td>
 
                         <td>
-                            @if ($user->status == 0)
+                            @if ($user->status == 1)
                             <div class="main__table-text main__table-text--green">Hoạt động</div>
 
                             @else
@@ -132,7 +132,7 @@
                         </td>
 
                         <td>
-                            @if ($user->premium == 0)
+                            @if ($user->premium == 1)
                             <div class="main__table-text main__table-text--green">Có</div>
 
                             @else

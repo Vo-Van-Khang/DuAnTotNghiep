@@ -65,6 +65,9 @@
                                         <div class="sign__group">
                                             <label class="sign__label" for="new_image">Chọn ảnh mới:</label>
                                             <input id="new_image" type="file" name="image" class="sign__input">
+											@error('image')
+												<span style="color: #df4a32">{{$message}}</span>
+											@enderror
                                         </div>
                                     </div>
 

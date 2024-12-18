@@ -47,10 +47,13 @@
     
                                 <div class="sign__group">
                                     <input
-                                        type="email"
+                                        type="test"
                                         name="email"
                                         class="sign__input"
                                         placeholder="Email" />
+                                        @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
     
                                 <button class="sign__btn" type="submit">
@@ -58,9 +61,7 @@
                                 </button>
                                 <span class="sign__text">Bạn không muốn đổi mật khẩu
                                 <a href="{{ route('login') }}">Đăng nhập!</a></span>
-                                @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror <span class="sign__text">Chúng tôi sẽ gửi xác nhận vào Email của
+                                <span class="sign__text">Chúng tôi sẽ gửi xác nhận vào Email của
                                     bạn</span>
                             </form>
                             <!-- end authorization form -->

@@ -28,18 +28,27 @@
 											<div class="sign__group">
 												<label class="sign__label" for="username">Tên gói</label>
 												<input id="username" type="text" value="{{ $subscription->name }}" class="sign__input" name="name">
+												@error('name')
+													<span style="color: #df4a32">{{$message}}</span>
+												@enderror
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
 												<label class="sign__label" for="price">Số ngày</label>
 												<input id="price" type="number" value="{{ $subscription->duration }}" class="sign__input" name="duration">
+												@error('duration')
+													<span style="color: #df4a32">{{$message}}</span>
+												@enderror
 											</div>
 										</div>
 										<div class="col-12 col-md-6 col-lg-12 col-xl-6">
 											<div class="sign__group">
 												<label class="sign__label" for="price">Giá</label>
 												<input id="price" type="number" value="{{ $subscription->price }}" class="sign__input" name="price">
+												@error('price')
+													<span style="color: #df4a32">{{$message}}</span>
+												@enderror
 											</div>
 										</div>
 										<div class="col-12">

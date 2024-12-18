@@ -425,6 +425,9 @@
                                                         class="sign__input"
                                                         value="{{$user->name}}"
                                                     />
+                                                    @error('name')
+                                                        <p class="error" style="color:#df4a32;">{{$message}}</p>
+                                                    @enderror
                                                 </div>
                                             </div>
 
@@ -482,8 +485,10 @@
                                                         type="file"
                                                         name="image"
                                                         class="sign__input"
-
                                                     />
+                                                    @error('image')
+                                                        <p class="error" style="color:#df4a32;">{{$message}}</p>
+                                                    @enderror
                                                 </div>
                                             </div>
 

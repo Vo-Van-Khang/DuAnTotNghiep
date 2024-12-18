@@ -14,6 +14,7 @@ class SlideController extends Controller
     public function admin__view(){
         $slides = Slides::with('movie')
         ->where("isDeleted",0)
+        ->orderBy('id','desc')
         ->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));
         // dd($slides);
         return view('admins.slides.list', [

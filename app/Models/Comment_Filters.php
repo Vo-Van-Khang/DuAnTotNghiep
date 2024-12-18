@@ -16,6 +16,6 @@ class Comment_Filters extends Model
         'content',
     ];
 
-    public $timestamps = true; // Enable timestamps for created_at and updated_at columns
+    public $timestamps = false; 
 }
 

@@ -30,8 +30,23 @@ class PaymentController extends Controller
         ->paginate(request()->input('per_page', 8), ['*'], 'page', request()->input('page', 1));
         return view('admins.payment.list', ['subscriptions' => $subscriptions], ["selected" => "pay"]);
     }
-    function addpayment()
+    function addpayment(Request $request)
     {
+        $request->validate([
+            'name' => 'required|max:255',
+            'duration' => 'required|min:1|integer|max:365',
+            'price' => 'required|min:0|integer',
+        ], [
+            'name.required' => 'Tên gói là bắt buộc.',
+            'name.max' => 'Tên gói không được vượt quá 255 ký tự.',
+            'duration.required' => 'Số ngày là bắt buộc.',
+            'duration.min' => 'Số ngày phải lớn hơn 0.',
+            'duration.integer' => 'Số ngày phải là số nguyên dương.',
+            'duration.max' => 'Số ngày phải nhỏ hơn hoặc bằng 365.',
+            'price.required' => 'Giá gói là bắt buộc.',
+            'price.min' => 'Giá gói không được âm.',
+            'price.integer' => 'Giá gói phải là số nguyên dương.',
+        ]);
         $name = $_POST['name'];
         $duration = $_POST['duration'];
         $price = $_POST['price'];
@@ -48,6 +63,21 @@ class PaymentController extends Controller
     }
 
     public function update(Request $request, $id){
+        $request->validate([
+            'name' => 'required|max:255',
+            'duration' => 'required|min:1|integer|max:365',
+            'price' => 'required|min:0|integer',
+        ], [
+            'name.required' => 'Tên gói là bắt buộc.',
+            'name.max' => 'Tên gói không được vượt quá 255 ký tự.',
+            'duration.required' => 'Số ngày là bắt buộc.',
+            'duration.min' => 'Số ngày phải lớn hơn 0.',
+            'duration.integer' => 'Số ngày phải là số nguyên dương.',
+            'duration.max' => 'Số ngày phải nhỏ hơn hoặc bằng 365.',
+            'price.required' => 'Giá gói là bắt buộc.',
+            'price.min' => 'Giá gói không được âm.',
+            'price.integer' => 'Giá gói phải là số nguyên dương.',
+        ]);
         $name = $request->input('name');
         $duration = $request->input('duration');
         $price = $request->input('price');
